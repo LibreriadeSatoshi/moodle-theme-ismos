@@ -20,17 +20,14 @@ a {
     outline-offset: 2px;
 }
 
-// Buttons: 4 px corners, no pills, no shadows.
+// Buttons: 4 px corners, no pills, no shadows. Rings draw on :focus-visible only.
 .btn {
     border-radius: 4px;
     box-shadow: none;
     font-weight: 500;
 
-    &:focus,
-    &:focus-visible {
+    &:focus {
         box-shadow: none;
-        outline: 2px solid var(--ismos-focus);
-        outline-offset: 2px;
     }
 }
 
@@ -80,8 +77,11 @@ a {
     }
 
     &:focus {
-        border: 2px solid var(--ismos-border-strong);
         box-shadow: none;
+    }
+
+    &:focus-visible {
+        border: 2px solid var(--ismos-border-strong);
         outline: 2px solid var(--ismos-focus);
         outline-offset: 2px;
     }
@@ -91,8 +91,7 @@ a {
     }
 }
 
-.is-invalid,
-.form-control.is-invalid {
+.is-invalid {
     border: 2px solid var(--ismos-alert);
     background-image: none;
 }
@@ -102,6 +101,11 @@ a {
     color: var(--ismos-alert);
     font-size: 15px;
     line-height: 22px;
+
+    &::before {
+        @include ismos-icon("triangle");
+        margin-inline-end: 6px;
+    }
 }
 
 // Cards: a 1 px hairline, never a shadow.
@@ -146,18 +150,57 @@ a {
     }
 }
 
-// Alerts: container, border and icon carry the status, never colour alone.
+// Alerts: container, border and icon carry the status, never colour alone. No green.
 .alert {
     background: var(--ismos-surface);
     border: 1px solid var(--ismos-hairline);
     border-radius: 4px;
     color: var(--ismos-text);
+
+    &::before {
+        margin-inline-end: 8px;
+        vertical-align: -3px;
+    }
 }
 
-.alert-danger,
+.alert-info {
+    background: var(--ismos-logwood-50);
+    border: 0;
+    color: var(--ismos-logwood-800);
+
+    &::before {
+        @include ismos-icon("square-i");
+    }
+}
+
+.alert-success {
+    background: var(--ismos-paper);
+    border: 1.5px solid var(--ismos-indigo);
+    color: var(--ismos-indigo);
+
+    &::before {
+        @include ismos-icon("check");
+    }
+}
+
 .alert-warning {
+    background: var(--ismos-weld);
+    border: 1.5px solid var(--ismos-ink);
+    color: var(--ismos-ink);
+
+    &::before {
+        @include ismos-icon("triangle");
+    }
+}
+
+.alert-danger {
+    background: var(--ismos-paper);
     border: 2px solid var(--ismos-alert);
     color: var(--ismos-alert);
+
+    &::before {
+        @include ismos-icon("triangle");
+    }
 }
 
 // Progress: a 6 px bar on its track.

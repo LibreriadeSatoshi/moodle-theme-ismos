@@ -40,6 +40,9 @@ final class scss_test extends \advanced_testcase {
         $this->assertStringContainsString('--ismos-focus:', $flat);
         $this->assertStringContainsString('font-family:"literata"', $flat);
         $this->assertStringContainsString('ibmplexsans-latin.woff2', $flat);
+        $this->assertMatchesRegularExpression('/\.invalid-feedback::?before[^{}]*\{[^}]*mask:/', $flat);
+        $this->assertStringContainsString('--ismos-indigo:#2a2550', $flat);
+        $this->assertMatchesRegularExpression('/\.alert-success\{[^}]*color:var\(--ismos-indigo\)/', $flat);
         $this->assertStringNotContainsString('fonts.googleapis.com', $css);
 
         // The compiled sheet also carries other plugins' own styles.css (some use gradients), so the
