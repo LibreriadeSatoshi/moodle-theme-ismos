@@ -127,11 +127,22 @@ final class course_card_test extends \advanced_testcase {
 
     public function test_link_name_comes_from_title_and_description_from_summary(): void {
         $course = $this->getDataGenerator()->create_course(['summary' => 'About it']);
+        $uid = card::export($this->element($course))['uid'];
         $html = $this->render($course);
-        $this->assertStringContainsString('aria-labelledby="ismos-card-title-' . $course->id . '"', $html);
-        $this->assertStringContainsString('id="ismos-card-title-' . $course->id . '"', $html);
-        $this->assertStringContainsString('aria-describedby="ismos-card-text-' . $course->id . '"', $html);
-        $this->assertStringContainsString('id="ismos-card-text-' . $course->id . '"', $html);
+        $this->assertMatchesRegularExpression('/aria-labelledby="(ismos-card-' . $course->id . '-[^"\s]+)-title"/', $html);
+        preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m);
+        $this->assertStringContainsString('aria-describedby="' . $m[1] . '-text"', $html);
+        $this->assertStringContainsString('id="' . $m[1] . '-text"', $html);
+        $this->assertStringNotContainsString($m[1] . '-hidden', $html);
+        $this->assertNotSame($uid, card::export($this->element($course))['uid']);
+    }
+
+    public function test_hidden_label_is_part_of_the_link_name(): void {
+        $course = $this->getDataGenerator()->create_course(['visible' => 0]);
+        $html = $this->render($course);
+        preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m);
+        $this->assertStringContainsString('aria-labelledby="' . $m[1] . '-title ' . $m[1] . '-hidden"', $html);
+        $this->assertStringContainsString('id="' . $m[1] . '-hidden"', $html);
     }
 
     public function test_long_title_is_not_truncated(): void {

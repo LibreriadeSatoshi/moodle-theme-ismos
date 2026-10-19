@@ -21,11 +21,7 @@
     }
 
     > .ismos-coursebox {
-        background: none;
-        border: 0;
-        margin: 0;
         min-inline-size: 0;
-        padding: 0;
     }
 }
 
@@ -135,9 +131,14 @@
     padding-block-start: 12px;
 }
 
-.ismos-coursebox.coursebox {
+// The id selectors outrank Boost's "#frontpage-available-course-list .coursebox" box rules.
+.ismos-coursebox.coursebox,
+#frontpage-available-course-list .ismos-coursebox.coursebox,
+#frontpage-course-list .ismos-coursebox.coursebox,
+.course-search-result .ismos-coursebox.coursebox {
     background: none;
     border: 0;
+    border-radius: 0;
     margin: 0;
     padding: 0;
 }

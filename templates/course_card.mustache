@@ -21,6 +21,7 @@
 
     Context variables required for this template:
     * id - Course id
+    * uid - Unique id prefix for this render
     * hidden - Whether the course is hidden from students
     * hiddenlabel - Text for the hidden marker
     * url - Course URL
@@ -35,6 +36,7 @@
     Example context (json):
     {
         "id": 2,
+        "uid": "ismos-card-2-abc",
         "hidden": true,
         "hiddenlabel": "Hidden from students",
         "url": "https://example.com/course/view.php?id=2",
@@ -50,12 +52,12 @@
         "facts": ["Starts Monday, 2 November 2026"]
     }
 }}
-<a class="ismos-card{{#hidden}} ismos-card--hidden{{/hidden}}" href="{{{url}}}" aria-labelledby="ismos-card-title-{{id}}"{{#summary}} aria-describedby="ismos-card-text-{{id}}"{{/summary}}>
+<a class="ismos-card{{#hidden}} ismos-card--hidden{{/hidden}}" href="{{{url}}}" aria-labelledby="{{uid}}-title{{#hidden}} {{uid}}-hidden{{/hidden}}"{{#summary}} aria-describedby="{{uid}}-text"{{/summary}}>
     <span class="ismos-card__bar" aria-hidden="true"></span>
     {{#label}}<span class="ismos-card__label">{{label}}</span>{{/label}}
-    {{#hidden}}<span class="ismos-card__hidden">{{hiddenlabel}}</span>{{/hidden}}
-    <h3 class="ismos-card__title" id="ismos-card-title-{{id}}">{{{title}}}</h3>
-    {{#summary}}<p class="ismos-card__text" id="ismos-card-text-{{id}}">{{summary}}</p>{{/summary}}
+    {{#hidden}}<span class="ismos-card__hidden" id="{{uid}}-hidden">{{hiddenlabel}}</span>{{/hidden}}
+    <h3 class="ismos-card__title" id="{{uid}}-title">{{{title}}}</h3>
+    {{#summary}}<p class="ismos-card__text" id="{{uid}}-text">{{summary}}</p>{{/summary}}
     {{#hasteachers}}
     <span class="ismos-card__teachers">
         {{#teachers}}

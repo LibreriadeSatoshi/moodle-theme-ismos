@@ -38,6 +38,7 @@ final class card {
 
         return [
             'id' => (int) $course->id,
+            'uid' => 'ismos-card-' . $course->id . '-' . \html_writer::random_id(),
             'hidden' => !$course->visible,
             'hiddenlabel' => get_string('hiddenfromstudents'),
             'url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
