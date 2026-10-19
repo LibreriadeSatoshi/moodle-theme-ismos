@@ -1,0 +1,77 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ismos/course_info
+
+    Public course information: label, title, complete summary, contacts, dates, custom fields and one primary action.
+
+    Example context (json):
+    {
+        "title": "Running a Bitcoin node",
+        "hidden": false,
+        "hiddenlabel": "Hidden from students",
+        "label": "Freedom tech",
+        "image": {"url": "https://example.com/cover.webp", "width": 800, "height": 533},
+        "imagealt": "Running a Bitcoin node",
+        "summary": "<p>Install, sync and secure a full node on your own hardware.</p>",
+        "hasteachers": true,
+        "teachers": [
+            {"name": "Ada Lovelace", "pictureurl": "https://example.com/u/f1.jpg", "initials": "AL"},
+            {"name": "Grace Hopper", "pictureurl": null, "initials": "GH"}
+        ],
+        "hasdates": true,
+        "startdate": "Thursday, 5 November 2026",
+        "enddate": "Thursday, 26 November 2026",
+        "customfields": "",
+        "courseurl": "https://example.com/course/view.php?id=2"
+    }
+}}
+<article class="ismos-courseinfo" aria-labelledby="ismos-courseinfo-title">
+    <span class="ismos-courseinfo__bar" aria-hidden="true"></span>
+    {{#label}}<span class="ismos-courseinfo__label">{{label}}</span>{{/label}}
+    {{#hidden}}<span class="ismos-courseinfo__label">{{hiddenlabel}}</span>{{/hidden}}
+    <h1 class="ismos-courseinfo__title" id="ismos-courseinfo-title">{{{title}}}</h1>
+
+    {{#image}}
+    <img class="ismos-courseinfo__cover" src="{{{url}}}" alt="{{imagealt}}" width="{{width}}" height="{{height}}" loading="eager">
+    {{/image}}
+
+    {{#summary}}<div class="ismos-courseinfo__summary">{{{summary}}}</div>{{/summary}}
+
+    {{#hasteachers}}
+    <ul class="ismos-courseinfo__teachers">
+        {{#teachers}}
+        <li class="ismos-courseinfo__teacher">
+            {{#pictureurl}}<img class="ismos-avatar ismos-avatar--lg" src="{{{pictureurl}}}" alt="" width="64" height="64" loading="lazy">{{/pictureurl}}
+            {{^pictureurl}}<span class="ismos-avatar ismos-avatar--lg ismos-avatar--initials" aria-hidden="true">{{initials}}</span>{{/pictureurl}}
+            <span>{{name}}</span>
+        </li>
+        {{/teachers}}
+    </ul>
+    {{/hasteachers}}
+
+    {{#hasdates}}
+    <dl class="ismos-courseinfo__dates">
+        {{#startdate}}<div><dt>{{#str}}startdate, moodle{{/str}}</dt><dd>{{startdate}}</dd></div>{{/startdate}}
+        {{#enddate}}<div><dt>{{#str}}enddate, moodle{{/str}}</dt><dd>{{enddate}}</dd></div>{{/enddate}}
+    </dl>
+    {{/hasdates}}
+
+    {{#customfields}}<div class="ismos-courseinfo__fields">{{{customfields}}}</div>{{/customfields}}
+
+    <a class="btn btn-primary ismos-courseinfo__action" href="{{{courseurl}}}">{{#str}}gotocourse, theme_ismos{{/str}}</a>
+</article>

@@ -1,0 +1,137 @@
+// Public course information page (/course/info.php): a single reading column.
+
+// Same content column as the front page: no Boost width limit, the column sets the edge.
+body#page-course-info {
+    #page.drawers .main-inner {
+        margin-inline: 0;
+        max-inline-size: none;
+        padding-inline: 0;
+    }
+
+    #region-main-box,
+    #region-main {
+        max-inline-size: none;
+    }
+
+    #page-content {
+        padding-inline: 0;
+    }
+
+    // Boost pads [role=main] by 15 px; the column already sets the edge.
+    div[role="main"] {
+        padding-inline: 0;
+    }
+}
+
+.ismos-courseinfo {
+    @include ismos-column;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 32px 48px;
+}
+
+.ismos-courseinfo__bar {
+    @include ismos-bar(32px);
+}
+
+.ismos-courseinfo__label {
+    @include ismos-label;
+    margin-block-end: -16px; // Sits 8 px above the title inside the 24 px rhythm.
+}
+
+.ismos-courseinfo__title {
+    color: var(--ismos-text-heading);
+    font-family: var(--ismos-font-serif);
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 34px;
+    margin: 0;
+    max-inline-size: 680px;
+    overflow-wrap: anywhere;
+
+    @media (min-width: 640px) {
+        font-size: 36px;
+        line-height: 42px;
+    }
+}
+
+// Uncropped: the file's own proportions, no corners.
+.ismos-courseinfo__cover {
+    block-size: auto;
+    border-radius: 0;
+    display: block;
+    max-inline-size: 100%;
+}
+
+.ismos-courseinfo__summary {
+    max-inline-size: 680px;
+
+    > :first-child {
+        margin-block-start: 0;
+    }
+
+    > :last-child {
+        margin-block-end: 0;
+    }
+
+    img {
+        block-size: auto;
+        max-inline-size: 100%;
+    }
+}
+
+.ismos-courseinfo__teachers {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ismos-courseinfo__teacher {
+    align-items: center;
+    display: flex;
+    font-weight: 500;
+    gap: 16px;
+}
+
+.ismos-avatar--lg {
+    block-size: 64px;
+    inline-size: 64px;
+
+    &.ismos-avatar--initials {
+        font-size: 18px;
+    }
+}
+
+.ismos-courseinfo__dates {
+    border-block-start: 1px solid var(--ismos-hairline);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    margin: 0;
+    max-inline-size: 680px;
+    padding-block-start: 16px;
+
+    dt {
+        @include ismos-label;
+    }
+
+    dd {
+        font-family: var(--ismos-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 20px;
+        margin: 0;
+    }
+}
+
+.ismos-courseinfo__fields {
+    max-inline-size: 680px;
+}
+
+.ismos-courseinfo__action {
+    align-self: flex-start;
+}

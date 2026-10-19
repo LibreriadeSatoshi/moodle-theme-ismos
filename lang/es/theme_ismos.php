@@ -33,6 +33,7 @@ $string['courses'] = 'Cursos';
 $string['coursesheading'] = 'Elige por dónde empezar';
 $string['darkmode'] = 'Modo oscuro';
 $string['frontpagesettings'] = 'Página de inicio';
+$string['gotocourse'] = 'Ir al curso';
 $string['herocta'] = 'Ver los cursos';
 $string['herolabel'] = 'Escuela de Bitcoin y Lightning';
 $string['herolead'] = 'Cohortes en vivo y cursos a tu ritmo. No necesitas saber nada todavía.';

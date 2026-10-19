@@ -56,6 +56,68 @@ class course_renderer extends \core_course_renderer {
     }
 
     /**
+     * Public course information page (/course/info.php): the whole summary, every contact and an
+     * uncropped cover. Any other page type (the enrolment page, for one) keeps core's box.
+     *
+     * @param \stdClass $course
+     * @return string
+     */
+    public function course_info_box(\stdClass $course) {
+        if ($this->page->pagetype !== 'course-info') {
+            return parent::course_info_box($course);
+        }
+        $element = new \core_course_list_element($course);
+        $chelper = new \coursecat_helper();
+        $context = \context_course::instance($course->id);
+        $category = \core_course_category::get($course->category, IGNORE_MISSING, true);
+        $fullname = $chelper->get_course_formatted_name($element);
+        $dateformat = get_string('strftimedaydate', 'core_langconfig');
+
+        $image = null;
+        foreach ($element->get_course_overviewfiles() as $file) {
+            if ($file->is_valid_image() && ($info = $file->get_imageinfo())) {
+                $image = [
+                    'url' => \moodle_url::make_pluginfile_url(
+                        $file->get_contextid(),
+                        $file->get_component(),
+                        $file->get_filearea(),
+                        null,
+                        $file->get_filepath(),
+                        $file->get_filename()
+                    )->out(false),
+                    'width' => $info['width'],
+                    'height' => $info['height'],
+                ];
+                break;
+            }
+        }
+
+        $customfields = '';
+        if ($element->has_custom_fields()) {
+            $handler = \core_course\customfield\course_handler::create();
+            $customfields = $handler->display_custom_fields_data($element->get_custom_fields());
+        }
+        $teachers = \theme_ismos\local\card::teachers($element, 50);
+
+        return $this->render_from_template('theme_ismos/course_info', [
+            'title' => $fullname,
+            'hidden' => !$course->visible,
+            'hiddenlabel' => get_string('hiddenfromstudents'),
+            'label' => $category ? format_string($category->name, true, ['context' => $category->get_context(), 'escape' => false]) : '',
+            'image' => $image,
+            'imagealt' => html_entity_decode(strip_tags($fullname), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'summary' => $chelper->get_course_formatted_summary($element, ['overflowdiv' => false, 'noclean' => false]),
+            'hasteachers' => !empty($teachers),
+            'teachers' => $teachers,
+            'hasdates' => $course->startdate || $course->enddate,
+            'startdate' => $course->startdate ? userdate($course->startdate, $dateformat) : '',
+            'enddate' => $course->enddate ? userdate($course->enddate, $dateformat) : '',
+            'customfields' => $customfields,
+            'courseurl' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
+        ]);
+    }
+
+    /**
      * Front page part: every part gets a Plex Mono label and an h2 (the hero is the h1).
      *
      * The available courses part is headed "Choose where to start"; the category tree takes the
