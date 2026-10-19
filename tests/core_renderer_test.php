@@ -165,30 +165,79 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
+     * Install a fake second language pack in the data directory and reset the string manager.
+     *
+     * @return string the directory created, to be removed by the caller
+     */
+    private function install_fake_language(): string {
+        global $CFG;
+        $dir = $CFG->dataroot . '/lang/es';
+        check_dir_exists($dir);
+        file_put_contents(
+            $dir . '/langconfig.php',
+            "<?php\n\$string['thislanguage'] = 'Español';\n\$string['thislanguageint'] = 'Spanish';\n"
+        );
+        purge_all_caches();
+        get_string_manager(true);
+        return $dir;
+    }
+
+    /**
      * The language menu is built for logged-in visitors too, and is empty with a single language.
      */
     public function test_lang_menu_for_logged_in_users(): void {
         global $CFG;
+        $this->resetAfterTest(true);
         $out = $this->ismos_renderer();
         $this->setUser($this->getDataGenerator()->create_user());
+        $CFG->langmenu = 1;
+
+        // Controlled single language: the language list is restricted to English.
+        $CFG->langlist = 'en';
+        purge_all_caches();
+        get_string_manager(true);
         $this->assertSame('', $out->ismos_lang_menu());
 
-        // Install a second language pack in the data directory.
-        $CFG->langmenu = 1;
-        purge_all_caches();
-        $dir = $CFG->dataroot . '/lang/es';
-        check_dir_exists($dir);
-        file_put_contents($dir . '/langconfig.php', "<?php\n\$string['thislanguage'] = 'Español';\n\$string['thislanguageint'] = 'Spanish';\n");
+        $dir = $this->install_fake_language();
+        try {
+            $CFG->langlist = '';
+            purge_all_caches();
         get_string_manager(true);
-        $html = $out->ismos_lang_menu();
-        $this->assertStringContainsString('class="langmenu"', $html);
-        $this->assertStringContainsString('Español', $html);
+            $html = $out->ismos_lang_menu();
+            $this->assertStringContainsString('class="langmenu"', $html);
+            $this->assertStringContainsString('Español', $html);
 
-        $navbar = $out->render_from_template('theme_boost/navbar', [
-            'output' => $out,
-            'config' => (object) ['homeurl' => $CFG->wwwroot],
-            'sitename' => 'ISMOS',
-        ]);
-        $this->assertStringContainsString('class="langmenu"', $navbar);
+            $navbar = $out->render_from_template('theme_boost/navbar', [
+                'output' => $out,
+                'config' => (object) ['homeurl' => $CFG->wwwroot],
+                'sitename' => 'ISMOS',
+            ]);
+            $this->assertStringContainsString('class="langmenu"', $navbar);
+        } finally {
+            remove_dir($dir);
+            purge_all_caches();
+        get_string_manager(true);
+        }
+    }
+
+    /**
+     * Turning the language menu off on the site wins over installed packs.
+     */
+    public function test_lang_menu_off_returns_nothing(): void {
+        global $CFG;
+        $this->resetAfterTest(true);
+        $out = $this->ismos_renderer();
+        $dir = $this->install_fake_language();
+        try {
+            $CFG->langlist = '';
+            $CFG->langmenu = 0;
+            purge_all_caches();
+        get_string_manager(true);
+            $this->assertSame('', $out->ismos_lang_menu());
+        } finally {
+            remove_dir($dir);
+            purge_all_caches();
+        get_string_manager(true);
+        }
     }
 }
