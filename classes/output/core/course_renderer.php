@@ -56,7 +56,10 @@ class course_renderer extends \core_course_renderer {
     }
 
     /**
-     * Front page part: the available courses get the ISMOS label and heading (an h2, the hero is the h1).
+     * Front page part: every part gets a Plex Mono label and an h2 (the hero is the h1).
+     *
+     * The available courses part is headed "Choose where to start"; the category tree takes the
+     * "Course categories" heading; any other part keeps the heading core gives it. The skip link stays.
      *
      * @param string $skipdivid
      * @param string $contentsdivid
@@ -65,21 +68,46 @@ class course_renderer extends \core_course_renderer {
      * @return string
      */
     protected function frontpage_part($skipdivid, $contentsdivid, $header, $contents) {
-        if ($contentsdivid !== 'frontpage-available-course-list' || strval($contents) === '') {
-            return parent::frontpage_part($skipdivid, $contentsdivid, $header, $contents);
+        if (strval($contents) === '') {
+            return '';
         }
-        $heading = get_string('coursesheading', 'theme_ismos');
+        $label = get_string('courses', 'theme_ismos');
+        if ($contentsdivid === 'frontpage-available-course-list') {
+            $header = get_string('coursesheading', 'theme_ismos');
+        } else if ($contentsdivid === 'frontpage-category-combo') {
+            $header = get_string('categories');
+        } else if ($contentsdivid === 'site-news-forum') {
+            $label = get_string('sitenews', 'theme_ismos');
+        }
         $output = \html_writer::link(
             '#' . $skipdivid,
-            get_string('skipa', 'access', \core_text::strtolower($heading)),
+            get_string('skipa', 'access', \core_text::strtolower(strip_tags($header))),
             ['class' => 'skip-block skip aabtn']
         );
-        $output .= \html_writer::start_tag('div', ['id' => $contentsdivid]);
-        $output .= \html_writer::span(get_string('courses', 'theme_ismos'), 'ismos-label d-block');
-        $output .= $this->heading($heading);
+        $output .= \html_writer::start_tag('div', ['id' => $contentsdivid, 'class' => 'ismos-frontpage-part']);
+        $output .= \html_writer::span($label, 'ismos-label d-block');
+        $output .= $this->output->heading($header);
         $output .= $contents;
         $output .= \html_writer::end_tag('div');
         $output .= \html_writer::tag('span', '', ['class' => 'skip-block-to', 'id' => $skipdivid]);
         return $output;
+    }
+
+    /**
+     * Course search form; on the front page it is a part like the others, with a label and an h2.
+     *
+     * @param string $value
+     * @return string
+     */
+    public function course_search_form($value = '') {
+        $form = parent::course_search_form($value);
+        if ($this->page->pagetype !== 'site-index') {
+            return $form;
+        }
+        return \html_writer::div(
+            \html_writer::span(get_string('courses', 'theme_ismos'), 'ismos-label d-block') .
+            $this->output->heading(get_string('searchcourses')) . $form,
+            'ismos-frontpage-part ismos-frontpage-search'
+        );
     }
 }

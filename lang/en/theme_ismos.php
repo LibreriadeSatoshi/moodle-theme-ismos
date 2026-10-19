@@ -39,6 +39,7 @@ $string['herolead'] = 'Live cohorts and self-paced courses. You don\'t need to k
 $string['herosignup'] = 'Create an account';
 $string['herotitle'] = 'Learn to run your own money, one lesson at a time.';
 $string['pluginname'] = 'ISMOS';
+$string['sitenews'] = 'Site news';
 $string['testimonials'] = 'Testimonials';
 $string['testimonials_desc'] = 'One testimonial per line, written as: quote | name. The name is whatever follows the last " | " on the line. Leave empty to hide the section.';
 $string['testimonialsheading'] = 'What our students say';

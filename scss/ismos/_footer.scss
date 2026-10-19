@@ -1,7 +1,7 @@
 // Footer: Ink ground, Paper type, mark and address in Plex Mono, language menu.
 #page-footer.ismos-footer {
     background-color: var(--ismos-ink);
-    border-block-start: 6px solid var(--ismos-paper);
+    border-block-start: 1px solid var(--ismos-logwood-700);
     color: var(--ismos-paper);
     margin-block-start: 48px;
     padding-block: 32px;
@@ -17,8 +17,18 @@
         outline-offset: 2px;
     }
 
+    // Rows sit on the same 1200 px content column as the page, 32 px margin (16 px on mobile).
     .ismos-footer-inner {
         align-items: center;
+        box-sizing: border-box;
+        margin-inline: auto;
+        max-inline-size: 1200px;
+        padding-inline: 16px;
+
+        @media (min-width: 640px) {
+            padding-inline: 32px;
+        }
+
         display: flex;
         flex-wrap: wrap;
         gap: 16px 24px;

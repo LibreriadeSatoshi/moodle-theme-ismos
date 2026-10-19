@@ -60,7 +60,7 @@ class frontpage implements \renderable, \templatable {
         $categories = [];
         foreach (\core_course_category::top()->get_children() as $category) {
             $categories[] = [
-                'name' => $category->get_formatted_name(),
+                'name' => $category->get_formatted_name(['escape' => false]),
                 'url' => (new \moodle_url('/course/index.php', ['categoryid' => $category->id]))->out(false),
             ];
         }

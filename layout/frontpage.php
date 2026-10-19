@@ -45,8 +45,9 @@ $primarymenu = $primary->export_for_template($renderer);
 // The hero is the page heading, so the site name heading of the standard header is not printed.
 // Only the page actions (edit switch, settings menu) are kept for people who can edit the page.
 $headeractions = $OUTPUT->page_heading_button();
-$settingsmenu = $PAGE->include_region_main_settings_in_header_actions() ? '' : $OUTPUT->region_main_settings_menu();
-$headeractions .= $settingsmenu;
+// As in Boost's drawers layout: the settings menu goes here only when it is not in the header actions or secondary navigation.
+$buildsettingsmenu = !$PAGE->include_region_main_settings_in_header_actions() && !$PAGE->has_secondary_navigation();
+$headeractions .= $buildsettingsmenu ? $OUTPUT->region_main_settings_menu() : '';
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), 'escape' => false]),
