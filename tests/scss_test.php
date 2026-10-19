@@ -84,6 +84,18 @@ final class scss_test extends \advanced_testcase {
             '/\.ismos-navbar:is\(#usernavigation,\.primary-navigation\):is\(\.dropdown-menu,[^{]*\):focus-visible[^{]*\{[^}]*outline:2pxsolidvar\(--ismos-focus\)/',
             $flat
         );
+        // The restore rule that names .dropdown-menu sets the overlay text colour, and links keep their underline.
+        $this->assertMatchesRegularExpression('/\.dropdown-menu,[^{]*\{color:var\(--ismos-text\)\}/', $flat);
+        $this->assertMatchesRegularExpression('/\.dropdown-menu,[^{]*\.popover-region-container\)a\{[^}]*text-decoration:underline/', $flat);
+        $this->assertMatchesRegularExpression('/\.dropdown-menu,[^{]*\)\.btn-primary[^{]*\{color:var\(--ismos-on-action\)/', $flat);
+        $this->assertMatchesRegularExpression(
+            '/\.ismos-navbar#usernavigation\.popover-region-container\{[^}]*background-color:var\(--ismos-overlay-bg\)/',
+            $flat
+        );
+        $this->assertMatchesRegularExpression(
+            '/\.popover-region-container\.popover-region-footer-container[^{]*\{[^}]*background-color:var\(--ismos-overlay-bg\)/',
+            $flat
+        );
         // The bar-level Weld ring is not applied to menu contents without that restore.
         $this->assertStringContainsString('.ismos-navbar:focus-visible', str_replace('.navbar.fixed-top', '', $flat));
     }

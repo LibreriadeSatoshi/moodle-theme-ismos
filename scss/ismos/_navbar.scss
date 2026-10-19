@@ -138,10 +138,25 @@
 
     a {
         color: var(--ismos-link);
+        text-decoration: underline;
+    }
+
+    // Menu rows and buttons are not text links: no underline.
+    a.dropdown-item,
+    a.nav-link,
+    a.btn,
+    a.list-group-item {
+        text-decoration: none;
+    }
+
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:focus {
+        color: var(--ismos-on-action);
     }
 
     .nav-link,
-    .btn,
+    .btn:not(.btn-primary),
     .dropdown-item,
     .dropdown-toggle,
     a.dropdown-item,
@@ -167,6 +182,44 @@
     .btn.btn:focus-visible {
         outline: 2px solid var(--ismos-focus);
         outline-offset: 2px;
+    }
+}
+
+// Notifications and messages popovers: Boost paints these white at compile time, so give them the overlay
+// ground and edge through tokens, which flip with the mode.
+.navbar.fixed-top.ismos-navbar #usernavigation .popover-region-container {
+    background-color: var(--ismos-overlay-bg);
+    border-color: var(--ismos-overlay-edge);
+    color: var(--ismos-text);
+
+    .popover-region-header-container,
+    .popover-region-footer-container {
+        background-color: var(--ismos-overlay-bg);
+        border-color: var(--ismos-overlay-edge);
+        color: var(--ismos-text);
+    }
+
+    .content-item-container {
+        border-color: var(--ismos-overlay-edge);
+        color: var(--ismos-text);
+
+        &.unread {
+            background-color: var(--ismos-surface-raised);
+        }
+
+        &:hover,
+        &:focus {
+            background-color: var(--ismos-surface-raised);
+            color: var(--ismos-text);
+
+            .timestamp {
+                color: var(--ismos-text-muted);
+            }
+        }
+    }
+
+    .timestamp {
+        color: var(--ismos-text-muted);
     }
 }
 
