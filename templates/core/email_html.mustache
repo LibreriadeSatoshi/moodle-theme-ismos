@@ -37,6 +37,10 @@
     * body
     * prefix
 
+    Body link colour comes from the style block below, so it is enhancement only:
+    some clients strip style blocks and core gives no hook to inline styles
+    inside {{{body}}}.
+
     Example context (json):
     {
         "prefix": "[Prefix Text]",
@@ -57,21 +61,21 @@
         <td align="center" style="padding:24px 16px;">
             <table role="presentation" class="ismos-email-wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#ffffff;">
                 <tr>
-                    <td style="padding:0 0 16px 0;border-bottom:1px solid #dfd8fb;font-family:'IBM Plex Sans',Georgia,system-ui,sans-serif;">
+                    <td style="padding:0 0 16px 0;border-bottom:1px solid #dfd8fb;font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
                         <a href="{{{sitewwwroot}}}" style="color:#000000;text-decoration:none;">
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td valign="middle" style="padding:0 8px 0 0;line-height:0;">
                                         <img src="{{{sitewwwroot}}}/theme/ismos/pix/email-logo.png" width="18" height="18" alt="ISMOS" style="display:block;border:0;width:18px;height:18px;">
                                     </td>
-                                    <td valign="middle" style="font-family:'IBM Plex Sans',Georgia,system-ui,sans-serif;font-size:15px;line-height:24px;font-weight:bold;letter-spacing:0.02em;color:#000000;">ISMOS</td>
+                                    <td valign="middle" style="font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;font-weight:bold;letter-spacing:0.02em;color:#000000;">ISMOS</td>
                                 </tr>
                             </table>
                         </a>
                     </td>
                 </tr>
                 <tr>
-                    <td class="ismos-email-body" style="padding:24px 0;font-family:'IBM Plex Sans',Georgia,system-ui,sans-serif;font-size:17px;line-height:28px;color:#000000;background-color:#ffffff;">
+                    <td class="ismos-email-body" style="padding:24px 0;font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:28px;color:#000000;background-color:#ffffff;">
                         {{{body}}}
                     </td>
                 </tr>

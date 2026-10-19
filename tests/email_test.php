@@ -34,6 +34,7 @@ final class email_test extends \advanced_testcase {
         global $CFG, $PAGE, $SITE;
         $this->resetAfterTest();
         $CFG->theme = 'ismos';
+        $SITE->fullname = 'Tom <b>&amp; Co';
         \theme_reset_all_caches();
         $PAGE->set_course($SITE);
         $PAGE->set_url('/');
@@ -51,8 +52,11 @@ final class email_test extends \advanced_testcase {
         $this->assertStringContainsString('/theme/ismos/pix/email-logo.png', $html);
         $this->assertStringContainsString('Hello', $html);
         $this->assertStringContainsString('ISMOS.XYZ', $html);
-        $this->assertStringContainsString($SITE->fullname, $html);
+        $this->assertStringContainsString('<a href="' . $CFG->wwwroot . '"', $html);
+        $this->assertStringContainsString('alt="ISMOS"', $html);
         $this->assertStringContainsString('max-width:600px', str_replace(' ', '', $html));
+        $this->assertStringContainsString('Tom &lt;b&gt;&amp;amp; Co', $html);
+        $this->assertStringNotContainsString('Tom <b>', $html);
         $this->assertStringNotContainsString('theme_scholastica', $html);
         $this->assertStringNotContainsString('scholastica', strtolower($html));
     }
