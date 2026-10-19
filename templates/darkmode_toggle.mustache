@@ -21,14 +21,17 @@
 
     Context variables required for this template:
     * checked - bool, true when Hacker mode is on for the person
+    * persist - bool, true when the choice may be saved (logged in, not a guest). When false the toggle
+      switches the view for the session only and never calls the server.
 
     Example context (json):
     {
-        "checked": false
+        "checked": false,
+        "persist": true
     }
 }}
 <button type="button" class="btn btn-secondary" role="switch" aria-checked="{{#checked}}true{{/checked}}{{^checked}}false{{/checked}}"
-        data-action="theme_ismos/toggle-darkmode">
+        data-action="theme_ismos/toggle-darkmode" data-persist="{{#persist}}1{{/persist}}{{^persist}}0{{/persist}}">
     {{#str}}darkmode, theme_ismos{{/str}}
 </button>
 {{#js}}

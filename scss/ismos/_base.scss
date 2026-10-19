@@ -73,7 +73,7 @@ a {
 .form-control,
 .custom-select,
 .form-select {
-    background-color: var(--ismos-surface);
+    background-color: var(--ismos-input-bg);
     border: 1.5px solid var(--ismos-border-input);
     border-radius: 4px;
     color: var(--ismos-text);
@@ -117,7 +117,7 @@ a {
 
 // Cards: a 1 px hairline, never a shadow.
 .card {
-    background: var(--ismos-surface-raised);
+    background: var(--ismos-card-bg);
     border: 1px solid var(--ismos-hairline);
     border-radius: 4px;
     box-shadow: none;

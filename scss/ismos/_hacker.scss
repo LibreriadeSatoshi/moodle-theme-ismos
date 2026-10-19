@@ -1,0 +1,77 @@
+// Hacker mode surface overrides. Boost bakes $body-bg (white) into several selectors at compile time and
+// the footer uses .bg-white, so the page chrome is mapped to the tokens here. Dark scopes only.
+@mixin ismos-hacker-surfaces {
+    #page,
+    #page-wrapper,
+    #region-main,
+    #page-footer,
+    .bg-white,
+    .bg-body,
+    .bg-light,
+    .navbar,
+    .secondary-navigation,
+    .moremenu,
+    .moremenu .nav-tabs,
+    .stickyfooter,
+    .drawer,
+    [data-region="drawer"],
+    .message-app,
+    .modal-header,
+    .modal-footer,
+    .popover,
+    .list-group-item,
+    .dropdown-menu {
+        background-color: var(--ismos-surface) !important; // stylelint-disable-line declaration-no-important
+        color: var(--ismos-text);
+    }
+
+    .block,
+    .card,
+    .card-header,
+    .card-footer,
+    #region-main .generalbox,
+    .que .info,
+    .que .formulation {
+        background-color: var(--ismos-surface-raised);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    .dropdown-menu,
+    .popover,
+    .modal-content {
+        background-color: var(--ismos-overlay-bg) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .border,
+    .border-top,
+    .border-bottom,
+    .nav-tabs,
+    hr {
+        border-color: var(--ismos-hairline) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .text-muted,
+    .text-body-secondary {
+        color: var(--ismos-text-muted) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: var(--ismos-text-heading);
+    }
+}
+
+.ismos-mode-dark {
+    @include ismos-hacker-surfaces;
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto {
+        @include ismos-hacker-surfaces;
+    }
+}

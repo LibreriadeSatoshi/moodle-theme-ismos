@@ -22,6 +22,7 @@
  */
 
 import {setUserPreference} from 'core_user/repository';
+import Notification from 'core/notification';
 
 const SELECTOR = '[data-action="theme_ismos/toggle-darkmode"]';
 const MODES = ['ismos-mode-light', 'ismos-mode-dark', 'ismos-mode-auto'];
@@ -47,6 +48,7 @@ const isDark = () => {
  */
 const syncToggles = () => {
     const dark = isDark();
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     document.querySelectorAll(SELECTOR).forEach((toggle) => {
         toggle.setAttribute('aria-checked', dark ? 'true' : 'false');
     });
@@ -78,6 +80,9 @@ export const init = () => {
         document.body.classList.remove(...MODES);
         document.body.classList.add(makeDark ? 'ismos-mode-dark' : 'ismos-mode-light');
         syncToggles();
-        setUserPreference('darkmode-on', makeDark ? 1 : 0);
+        // Guests and logged-out visitors switch the view for this page only; nothing is saved.
+        if (toggle.dataset.persist !== '0') {
+            setUserPreference('darkmode-on', makeDark ? 1 : 0).catch(Notification.exception);
+        }
     });
 };

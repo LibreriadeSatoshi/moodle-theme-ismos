@@ -44,6 +44,10 @@
     --ismos-border-input: var(--ismos-logwood-700);
     --ismos-border-strong: var(--ismos-ink);
     --ismos-disabled: var(--ismos-logwood-600);
+    --ismos-card-bg: var(--ismos-paper);
+    --ismos-input-bg: var(--ismos-paper);
+    --ismos-surface-rgb: 255, 255, 255;
+    --ismos-text-rgb: 0, 0, 0;
     --ismos-action-hover: var(--ismos-logwood-950);
     --ismos-overlay-bg: var(--ismos-paper);
     --ismos-overlay-edge: var(--ismos-logwood-200);
@@ -62,6 +66,21 @@
     --ismos-warning-text: var(--ismos-ink);
     --ismos-warning-border: var(--ismos-ink);
     --ismos-danger-bg: var(--ismos-paper);
+
+    // Bootstrap 5 reads these; redeclared in each scope so var() resolves against that scope's tokens.
+    --bs-body-bg: var(--ismos-surface);
+    --bs-body-bg-rgb: var(--ismos-surface-rgb);
+    --bs-body-color: var(--ismos-text);
+    --bs-body-color-rgb: var(--ismos-text-rgb);
+    --bs-emphasis-color: var(--ismos-text-heading);
+    --bs-heading-color: var(--ismos-text-heading);
+    --bs-secondary-color: var(--ismos-text-muted);
+    --bs-secondary-bg: var(--ismos-surface-raised);
+    --bs-tertiary-color: var(--ismos-text-muted);
+    --bs-tertiary-bg: var(--ismos-surface-raised);
+    --bs-border-color: var(--ismos-hairline);
+    --bs-link-color: var(--ismos-link);
+    --bs-link-hover-color: var(--ismos-link-hover);
 
     // Fonts.
     --ismos-font-serif: "Literata", georgia, serif;
@@ -98,6 +117,10 @@
     --ismos-border-input: var(--ismos-logwood-400);
     --ismos-border-strong: var(--ismos-paper);
     --ismos-disabled: var(--ismos-logwood-400);
+    --ismos-card-bg: var(--ismos-logwood);
+    --ismos-input-bg: var(--ismos-logwood);
+    --ismos-surface-rgb: 0, 0, 0;
+    --ismos-text-rgb: 255, 255, 255;
     --ismos-overlay-bg: var(--ismos-logwood);
     --ismos-overlay-edge: var(--ismos-logwood-400);
     --ismos-modal-edge: var(--ismos-logwood-400);
@@ -113,6 +136,20 @@
     --ismos-warning-text: var(--ismos-ink);
     --ismos-warning-border: var(--ismos-weld);
     --ismos-danger-bg: var(--ismos-ink);
+    // Bootstrap 5 reads these; redeclared in each scope so var() resolves against that scope's tokens.
+    --bs-body-bg: var(--ismos-surface);
+    --bs-body-bg-rgb: var(--ismos-surface-rgb);
+    --bs-body-color: var(--ismos-text);
+    --bs-body-color-rgb: var(--ismos-text-rgb);
+    --bs-emphasis-color: var(--ismos-text-heading);
+    --bs-heading-color: var(--ismos-text-heading);
+    --bs-secondary-color: var(--ismos-text-muted);
+    --bs-secondary-bg: var(--ismos-surface-raised);
+    --bs-tertiary-color: var(--ismos-text-muted);
+    --bs-tertiary-bg: var(--ismos-surface-raised);
+    --bs-border-color: var(--ismos-hairline);
+    --bs-link-color: var(--ismos-link);
+    --bs-link-hover-color: var(--ismos-link-hover);
 }
 
 .ismos-mode-dark {
