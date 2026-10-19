@@ -1,0 +1,135 @@
+// Course card: one link, no image but the teacher's photo (or initials).
+
+// Listing container: 3 / 2 / 1 columns. Core's .coursebox wrapper stays, stripped of its own box.
+.courses {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+
+    @media (min-width: 640px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    // Paging bars and "more" links span the whole row.
+    > :not(.coursebox) {
+        grid-column: 1 / -1;
+    }
+
+    > .coursebox {
+        background: none;
+        border: 0;
+        margin: 0;
+        min-inline-size: 0;
+        padding: 0;
+    }
+}
+
+.ismos-card {
+    background: var(--ismos-surface);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    block-size: 100%;
+    box-sizing: border-box;
+    color: var(--ismos-text);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        color: var(--ismos-text);
+        text-decoration: none;
+    }
+
+    &:hover {
+        border-color: var(--ismos-text);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
+.ismos-card__bar {
+    @include ismos-bar(32px);
+}
+
+.ismos-card__label {
+    @include ismos-label;
+}
+
+.ismos-card__title {
+    color: var(--ismos-text-heading);
+    font-family: var(--ismos-font-serif);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 28px;
+    margin: 0;
+    overflow-wrap: anywhere; // Titles are never truncated.
+}
+
+.ismos-card__text {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    font-size: 15px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    line-height: 24px;
+    margin: 0;
+    overflow: hidden;
+}
+
+.ismos-card__teachers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ismos-card__teacher {
+    align-items: center;
+    color: var(--ismos-text);
+    display: flex;
+    font-size: 15px;
+    font-weight: 500;
+    gap: 8px;
+    line-height: 24px;
+}
+
+.ismos-avatar {
+    block-size: 32px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--ismos-hairline);
+    flex: none;
+    inline-size: 32px;
+    object-fit: cover;
+}
+
+.ismos-avatar--initials {
+    background: var(--ismos-logwood-100);
+    box-shadow: none;
+    color: var(--ismos-ink);
+    display: inline-grid;
+    font-family: var(--ismos-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    place-items: center;
+}
+
+.ismos-card__facts {
+    border-block-start: 1px solid var(--ismos-hairline);
+    color: var(--ismos-text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    font-family: var(--ismos-font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    gap: 4px 16px;
+    padding-block-start: 12px;
+}

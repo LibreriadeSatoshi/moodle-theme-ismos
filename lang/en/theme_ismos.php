@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['address'] = 'ISMOS.XYZ';
+$string['cardstarts'] = 'Starts {$a}';
 $string['choosereadme'] = 'The ISMOS theme: a quiet, high-contrast Boost child theme for study.';
 $string['configtitle'] = 'ISMOS settings';
 $string['darkmode'] = 'Dark mode';
