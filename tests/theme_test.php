@@ -37,15 +37,28 @@ final class theme_test extends \advanced_testcase {
     }
 
     /**
-     * Required strings exist in English and Spanish.
+     * Required strings exist in English and Spanish, and Spanish is translated.
      *
      * @covers \core_string_manager::get_string
      */
     public function test_strings_exist_in_english_and_spanish(): void {
         $this->resetAfterTest();
+        $sm = get_string_manager();
         foreach (['pluginname', 'choosereadme'] as $key) {
-            $this->assertNotEmpty(get_string($key, 'theme_ismos'));
+            $this->assertTrue($sm->string_exists($key, 'theme_ismos'), "Missing string $key");
         }
-        $this->assertNotEmpty(get_string_manager()->get_string('pluginname', 'theme_ismos', null, 'es'));
+        $en = 'The ISMOS theme: a quiet, high-contrast Boost child theme for study.';
+        $this->assertSame($en, get_string('choosereadme', 'theme_ismos'));
+
+        // Moodle only reads a plugin's non-English strings from an installed language pack, so check the
+        // bundled Spanish file directly.
+        $string = [];
+        require(__DIR__ . '/../lang/es/theme_ismos.php');
+        foreach (['pluginname', 'choosereadme'] as $key) {
+            $this->assertArrayHasKey($key, $string);
+            $this->assertNotSame('', $string[$key]);
+            $this->assertStringNotContainsString('[[', $string[$key]);
+        }
+        $this->assertNotSame($en, $string['choosereadme']);
     }
 }

@@ -36,8 +36,5 @@ docker exec -w /var/www/html moodle-ismos-theme-php vendor/bin/phpunit --testsui
 Re-run `init.php` after adding or changing plugins (version or file list) when PHPUnit
 reports the environment was initialised for a different version.
 
-To install the theme into the site database (CLI lives in `admin/cli`, outside `public/`):
 
-```sh
-docker exec -w /var/www/html moodle-ismos-theme-php php admin/cli/upgrade.php --non-interactive
-```
+Do not run `admin/cli/upgrade.php` from this container: the site DB is shared with the main checkout. Tests only need `php public/admin/tool/phpunit/cli/init.php` (or `util.php --buildcomponentconfigs`).
