@@ -1,0 +1,57 @@
+// ISMOS design tokens, light values. Dark values are added under .ismos-mode-dark by a later task.
+:root {
+    // Palette.
+    --ismos-ink: #000;
+    --ismos-paper: #fff;
+    --ismos-mauveine: #4d01e0;
+    --ismos-indigo: #2a2550;
+    --ismos-logwood: #251d3a;
+    --ismos-logwood-950: #251d3a;
+    --ismos-logwood-900: #453867;
+    --ismos-logwood-800: #544281;
+    --ismos-logwood-700: #6b55a2;
+    --ismos-logwood-600: #8369c4;
+    --ismos-logwood-500: #9f87e1;
+    --ismos-logwood-400: #af9bec;
+    --ismos-logwood-300: #cabdf7;
+    --ismos-logwood-200: #dfd8fb;
+    --ismos-logwood-100: #efecfd;
+    --ismos-logwood-50: #f8f6fe;
+    --ismos-madder: #f70;
+    --ismos-madder-800: #8b3d00;
+    --ismos-weld: #ffd23f;
+    --ismos-mauveine-200: #bfc3ff;
+    --ismos-mauveine-300: #9293ff;
+
+    // Roles.
+    --ismos-surface: var(--ismos-paper);
+    --ismos-surface-raised: var(--ismos-logwood-50);
+    --ismos-text: var(--ismos-ink);
+    --ismos-text-heading: var(--ismos-ink);
+    --ismos-text-muted: var(--ismos-logwood-800);
+    --ismos-link: var(--ismos-mauveine);
+    --ismos-link-hover: var(--ismos-logwood-800);
+    --ismos-action: var(--ismos-ink);
+    --ismos-on-action: var(--ismos-paper);
+    --ismos-hairline: var(--ismos-logwood-200);
+    --ismos-rule-strong: var(--ismos-ink);
+    --ismos-bar: var(--ismos-mauveine);
+    --ismos-track: var(--ismos-logwood-200);
+    --ismos-focus: var(--ismos-mauveine);
+    --ismos-alert: var(--ismos-madder-800);
+    --ismos-block: var(--ismos-mauveine);
+    --ismos-on-block: var(--ismos-paper);
+    --ismos-border-input: var(--ismos-logwood-700);
+    --ismos-border-strong: var(--ismos-ink);
+    --ismos-disabled: var(--ismos-logwood-600);
+
+    // Fonts.
+    --ismos-font-serif: "Literata", georgia, serif;
+    --ismos-font-sans: "IBM Plex Sans", system-ui, sans-serif;
+    --ismos-font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --ismos-font-brand: "Bricolage Grotesque", "IBM Plex Sans", sans-serif;
+
+    // Shadows (menus and modals only).
+    --ismos-shadow-float: 0 2px 8px rgba(0, 0, 0, .1);
+    --ismos-shadow-modal: 0 8px 24px rgba(0, 0, 0, .16);
+}

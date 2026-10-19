@@ -1,0 +1,172 @@
+// Light look: links, buttons, forms, focus, cards, tables, alerts, progress.
+body {
+    background: var(--ismos-surface);
+    color: var(--ismos-text);
+}
+
+a {
+    color: var(--ismos-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+        color: var(--ismos-link-hover);
+        text-decoration: underline;
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--ismos-focus);
+    outline-offset: 2px;
+}
+
+// Buttons: 4 px corners, no pills, no shadows.
+.btn {
+    border-radius: 4px;
+    box-shadow: none;
+    font-weight: 500;
+
+    &:focus,
+    &:focus-visible {
+        box-shadow: none;
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
+.btn-primary {
+    background-color: var(--ismos-action);
+    border-color: var(--ismos-action);
+    color: var(--ismos-on-action);
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: var(--ismos-logwood-950);
+        border-color: var(--ismos-logwood-950);
+        color: var(--ismos-on-action);
+    }
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+    background: transparent;
+    border: 2px solid var(--ismos-text);
+    color: var(--ismos-text);
+
+    &:hover {
+        background: var(--ismos-surface-raised);
+        color: var(--ismos-text);
+    }
+}
+
+.badge,
+.rounded-pill {
+    border-radius: 4px;
+}
+
+// Forms.
+.form-control,
+.custom-select,
+.form-select {
+    background-color: var(--ismos-surface);
+    border: 1.5px solid var(--ismos-border-input);
+    border-radius: 4px;
+    color: var(--ismos-text);
+    min-height: 48px;
+
+    &:hover {
+        border-color: var(--ismos-border-strong);
+    }
+
+    &:focus {
+        border: 2px solid var(--ismos-border-strong);
+        box-shadow: none;
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+
+    &:disabled {
+        color: var(--ismos-disabled);
+    }
+}
+
+.is-invalid,
+.form-control.is-invalid {
+    border: 2px solid var(--ismos-alert);
+    background-image: none;
+}
+
+.invalid-feedback,
+.form-control-feedback {
+    color: var(--ismos-alert);
+    font-size: 15px;
+    line-height: 22px;
+}
+
+// Cards: a 1 px hairline, never a shadow.
+.card {
+    background: var(--ismos-surface);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    box-shadow: none;
+
+    &:hover {
+        border-color: var(--ismos-text);
+    }
+}
+
+// Menus and modals are the only things that float.
+.dropdown-menu {
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    box-shadow: var(--ismos-shadow-float);
+}
+
+.modal-content {
+    border-radius: 8px;
+    box-shadow: var(--ismos-shadow-modal);
+}
+
+// Tables.
+.table {
+    color: var(--ismos-text);
+
+    th,
+    td {
+        border-color: var(--ismos-hairline);
+    }
+
+    thead th {
+        border-bottom: 2px solid var(--ismos-rule-strong);
+    }
+
+    &.table-striped tbody tr:nth-of-type(odd) {
+        background-color: var(--ismos-surface-raised);
+    }
+}
+
+// Alerts: container, border and icon carry the status, never colour alone.
+.alert {
+    background: var(--ismos-surface);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    color: var(--ismos-text);
+}
+
+.alert-danger,
+.alert-warning {
+    border: 2px solid var(--ismos-alert);
+    color: var(--ismos-alert);
+}
+
+// Progress: a 6 px bar on its track.
+.progress {
+    background: var(--ismos-track);
+    border-radius: 0;
+    height: 6px;
+}
+
+.progress-bar {
+    background-color: var(--ismos-bar);
+}

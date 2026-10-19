@@ -1,0 +1,113 @@
+// Type scale (03 Specification) and the label and bar devices.
+
+// Section label: Plex Mono uppercase, 0.14em tracking.
+@mixin ismos-label {
+    font-family: var(--ismos-font-mono);
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ismos-text-muted);
+}
+
+// The 6 px bar device.
+@mixin ismos-bar($width: 32px) {
+    display: block;
+    height: 6px;
+    width: $width;
+    background: var(--ismos-bar);
+}
+
+body {
+    font-family: var(--ismos-font-sans);
+    font-size: 17px;
+    line-height: 28px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    font-family: var(--ismos-font-serif);
+    font-weight: 400;
+    color: var(--ismos-text-heading);
+    text-transform: none;
+}
+
+h1,
+.h1 {
+    font-size: 27px;
+    line-height: 32px;
+}
+
+h2,
+.h2 {
+    font-size: 24px;
+    line-height: 30px;
+}
+
+h3,
+.h3 {
+    font-size: 21px;
+    line-height: 28px;
+    font-weight: 500;
+}
+
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    font-size: 17px;
+    line-height: 28px;
+    font-weight: 500;
+}
+
+@media (min-width: 768px) {
+    h1,
+    .h1 {
+        font-size: 36px;
+        line-height: 42px;
+    }
+
+    h2,
+    .h2 {
+        font-size: 28px;
+        line-height: 34px;
+    }
+}
+
+.lead {
+    font-size: 19px;
+    line-height: 30px;
+    font-weight: 400;
+}
+
+small,
+.small,
+.text-muted {
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.text-muted {
+    color: var(--ismos-text-muted) !important; // Boost sets it with !important on the utility.
+}
+
+.ismos-label {
+    @include ismos-label;
+}
+
+.ismos-bar {
+    @include ismos-bar;
+}

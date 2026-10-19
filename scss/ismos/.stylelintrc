@@ -1,0 +1,24 @@
+{
+    "customSyntax": "postcss-scss",
+    "rules": {
+        "block-no-empty": true,
+        "color-no-invalid-hex": true,
+        "declaration-block-no-duplicate-properties": true,
+        "indentation": 4,
+        "no-eol-whitespace": true,
+        "property-no-unknown": true,
+        "function-name-case": "lower",
+        "function-linear-gradient-no-nonstandard-direction": true,
+        "property-disallowed-list": [
+            "margin-left",
+            "margin-right",
+            "padding-left",
+            "padding-right",
+            "left",
+            "right"
+        ],
+        "declaration-property-value-disallowed-list": {
+            "text-align": ["left", "right"]
+        }
+    }
+}

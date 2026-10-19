@@ -1,0 +1,64 @@
+// Self-hosted fonts, served from theme/ismos/fonts by Moodle's font.php. No Google Fonts.
+@font-face {
+    font-family: "Literata";
+    font-style: normal;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url("[[font:theme|Literata-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "Literata";
+    font-style: italic;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url("[[font:theme|Literata-Italic-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url("[[font:theme|IBMPlexSans-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    font-style: italic;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url("[[font:theme|IBMPlexSans-Italic-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "IBM Plex Mono";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("[[font:theme|IBMPlexMono-Regular-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "IBM Plex Mono";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("[[font:theme|IBMPlexMono-Medium-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "IBM Plex Mono";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("[[font:theme|IBMPlexMono-SemiBold-latin.woff2]]") format("woff2");
+}
+
+@font-face {
+    font-family: "Bricolage Grotesque";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("[[font:theme|BricolageGrotesque-latin.woff2]]") format("woff2");
+}

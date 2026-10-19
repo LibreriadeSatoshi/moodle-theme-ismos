@@ -39,13 +39,33 @@ function theme_ismos_get_main_scss_content(theme_config $theme): string {
 }
 
 /**
- * Returns SCSS to prepend (variables). Filled in by later tasks.
+ * Returns SCSS to prepend: Bootstrap variables set from the ISMOS tokens.
  *
  * @param theme_config $theme The theme config object.
  * @return string
  */
 function theme_ismos_get_pre_scss(theme_config $theme): string {
-    return '';
+    $vars = [
+        'primary' => '#000000',
+        'link-color' => '#4D01E0',
+        'body-color' => '#000000',
+        'body-bg' => '#FFFFFF',
+        'border-color' => '#DFD8FB',
+        'danger' => '#8B3D00',
+        'border-radius' => '4px',
+        'border-radius-lg' => '8px',
+        'border-radius-sm' => '4px',
+        'enable-shadows' => 'false',
+        'font-family-sans-serif' => '"IBM Plex Sans", system-ui, sans-serif',
+        'font-size-base' => '1.0625rem',
+        'line-height-base' => '1.647',
+        'headings-font-family' => '"Literata", Georgia, serif',
+    ];
+    $scss = '';
+    foreach ($vars as $name => $value) {
+        $scss .= "\${$name}: {$value};\n";
+    }
+    return $scss;
 }
 
 /**
