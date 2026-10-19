@@ -50,6 +50,9 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--bs-body-bg:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark#region-main[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.bg-white[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.main-inner[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#topofscroll[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
+        $this->assertMatchesRegularExpression('/button\.btn\[data-action="theme_ismos\/toggle-darkmode"\]\{[^}]*background-color:(?:transparent|#fff0);[^}]*color:var\(--ismos-paper\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-auto#region-main[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.list-group-item\.active\{[^}]*border-inline-start:2pxsolidvar\(--ismos-bar\)[^}]*font-weight:600/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--bs-body-bg-rgb:var\(--ismos-surface-rgb\)/', $flat);

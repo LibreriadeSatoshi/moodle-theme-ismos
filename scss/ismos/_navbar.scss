@@ -250,9 +250,9 @@
 }
 
 // Dark mode toggle in the bar: compact Paper outline, Plex Mono label.
-.ismos-navbar [data-action="theme_ismos/toggle-darkmode"] {
-    background: transparent;
-    border: 1px solid var(--ismos-paper);
+.navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+    background-color: transparent;
+    border: 1.5px solid var(--ismos-paper);
     border-radius: 4px;
     color: var(--ismos-paper);
     font-family: "IBM Plex Mono", ui-monospace, monospace;
@@ -263,9 +263,15 @@
     text-transform: uppercase;
     white-space: nowrap;
 
-    &:hover {
+    &:hover,
+    &:focus {
         background-color: var(--ismos-logwood-950);
         color: var(--ismos-paper);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-weld);
+        outline-offset: 2px;
     }
 
     &[aria-checked="true"] {
@@ -327,7 +333,7 @@
         }
     }
 
-    .ismos-navbar [data-action="theme_ismos/toggle-darkmode"] {
+    .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
         padding-inline: 8px;
     }
 }
