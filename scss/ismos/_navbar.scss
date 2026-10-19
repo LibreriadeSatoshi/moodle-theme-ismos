@@ -1,0 +1,215 @@
+// Top bar: Ink ground with Paper type in both modes (Ink and Paper tokens do not change with the mode).
+.navbar.fixed-top.ismos-navbar {
+    background-color: var(--ismos-ink);
+    border-block-end: 1px solid var(--ismos-logwood-700);
+    color: var(--ismos-paper);
+
+    :focus-visible,
+    .btn.btn:focus-visible {
+        outline: 2px solid var(--ismos-weld);
+        outline-offset: 2px;
+    }
+
+    a,
+    .nav-link,
+    .btn,
+    .dropdown-toggle {
+        color: var(--ismos-paper);
+        text-decoration: none;
+    }
+
+    .navbar-toggler-icon {
+        // Boost's hamburger is a dark data-URI; draw it in Paper.
+        filter: invert(1);
+    }
+
+    .divider {
+        background-color: var(--ismos-logwood-700);
+        border-color: var(--ismos-logwood-700) !important;
+    }
+
+    .icon,
+    a .icon {
+        color: var(--ismos-paper);
+    }
+}
+
+// Wordmark: the placed mark and the word, Bricolage Grotesque 500, 0.04em.
+.ismos-wordmark {
+    gap: 8px;
+
+    .ismos-mark {
+        display: block;
+        flex: none;
+        height: 20px;
+        width: 20px;
+    }
+
+    .ismos-wordmark-text {
+        font-family: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+        font-size: 1.25rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        line-height: 1;
+    }
+}
+
+// Primary navigation on Ink.
+.ismos-navbar .primary-navigation {
+    .navigation .nav-link {
+        border-block-start: 3px solid transparent;
+        color: var(--ismos-paper);
+        font-weight: 500;
+
+        &:hover,
+        &:focus {
+            background-color: var(--ismos-logwood-950);
+            border-color: transparent;
+            text-decoration: underline;
+        }
+
+        &.active,
+        &[aria-current="true"] {
+            background-color: transparent;
+            border-block-start-color: var(--ismos-paper);
+        }
+    }
+}
+
+// Right side: icon buttons are 44 px targets, Plex Mono labels.
+.ismos-navbar #usernavigation {
+    align-items: center;
+    gap: 4px;
+
+    .nav-link,
+    .usermenu .dropdown-toggle,
+    .langmenu .dropdown-toggle {
+        border-radius: 4px;
+        min-block-size: 44px;
+        min-inline-size: 44px;
+
+        &:hover,
+        &:focus {
+            background-color: var(--ismos-logwood-950);
+            color: var(--ismos-paper);
+        }
+    }
+
+    .langmenu .dropdown-toggle {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.8125rem;
+        justify-content: center;
+    }
+
+    // "Log in" button: Paper on Ink.
+    .usermenu .login {
+        padding-inline-start: 0 !important;
+
+        a {
+            align-items: center;
+            background-color: var(--ismos-paper);
+            border-radius: 4px;
+            color: var(--ismos-ink);
+            display: inline-flex;
+            font-weight: 500;
+            min-block-size: 44px;
+            padding-inline: 16px;
+            text-decoration: none;
+
+            &:hover {
+                background-color: var(--ismos-logwood-100);
+                color: var(--ismos-ink);
+                text-decoration: underline;
+            }
+        }
+    }
+
+    // Count badge keeps a word-free Madder 800 box with Paper type.
+    .count-container {
+        background-color: var(--ismos-madder-800);
+        color: var(--ismos-paper);
+    }
+}
+
+// Dark mode toggle in the bar: compact Paper outline, Plex Mono label.
+.ismos-navbar [data-action="theme_ismos/toggle-darkmode"] {
+    background: transparent;
+    border: 1px solid var(--ismos-paper);
+    border-radius: 4px;
+    color: var(--ismos-paper);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    min-block-size: 44px;
+    padding-inline: 12px;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: var(--ismos-logwood-950);
+        color: var(--ismos-paper);
+    }
+
+    &[aria-checked="true"] {
+        background-color: var(--ismos-paper);
+        color: var(--ismos-ink);
+    }
+}
+
+// The rewards icon from local_btcrewards: a 44 px icon button next to Boost's popover icons.
+.ismos-navbar .rui-topbar-special-btn {
+    align-items: center;
+    border-radius: 4px;
+    color: var(--ismos-paper);
+    display: inline-flex;
+    justify-content: center;
+    min-block-size: 44px;
+    min-inline-size: 44px;
+    text-decoration: none;
+
+    svg {
+        block-size: 24px;
+        inline-size: 24px;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: var(--ismos-logwood-950);
+        color: var(--ismos-paper);
+    }
+}
+
+// 360 px: nothing may push the bar wider than the screen.
+@media (max-width: 575.98px) {
+    .navbar.fixed-top.ismos-navbar {
+        .container-fluid {
+            flex-wrap: nowrap;
+            padding-inline: 8px;
+        }
+
+        .navbar-brand {
+            margin-inline-end: 4px !important;
+        }
+
+        .ismos-wordmark-text {
+            // Mark only on the narrowest screens; the link keeps its name for assistive technology.
+            block-size: 1px;
+            inline-size: 1px;
+            overflow: hidden;
+            position: absolute;
+        }
+    }
+
+    .ismos-navbar #usernavigation {
+        gap: 0;
+        min-inline-size: 0;
+
+        .divider {
+            display: none;
+        }
+    }
+
+    .ismos-navbar [data-action="theme_ismos/toggle-darkmode"] {
+        padding-inline: 8px;
+    }
+}

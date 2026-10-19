@@ -1,0 +1,87 @@
+// Footer: Ink ground, Paper type, mark and address in Plex Mono, language menu.
+#page-footer.ismos-footer {
+    background-color: var(--ismos-ink);
+    border-block-start: 6px solid var(--ismos-paper);
+    color: var(--ismos-paper);
+    margin-block-start: 48px;
+    padding-block: 32px;
+
+    a,
+    a:hover {
+        color: var(--ismos-paper);
+        text-decoration: underline;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--ismos-weld);
+        outline-offset: 2px;
+    }
+
+    .ismos-footer-inner {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px 24px;
+        justify-content: space-between;
+    }
+
+    .ismos-footer-brand {
+        align-items: center;
+        display: flex;
+        gap: 12px;
+    }
+
+    .ismos-mark {
+        block-size: 20px;
+        display: block;
+        inline-size: 20px;
+    }
+
+    .ismos-footer-address {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .ismos-footer-lang {
+        select,
+        .custom-select,
+        .form-select {
+            background-color: var(--ismos-ink);
+            border: 1px solid var(--ismos-paper);
+            border-radius: 4px;
+            color: var(--ismos-paper);
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 0.8125rem;
+            min-block-size: 44px;
+        }
+
+        label {
+            color: var(--ismos-paper);
+        }
+    }
+
+    .ismos-footer-links {
+        align-items: flex-start;
+        border-block-start: 1px solid var(--ismos-logwood-700);
+        font-size: 0.9375rem;
+        margin-block-start: 24px;
+        padding-block-start: 24px;
+    }
+
+    .footer-section > div {
+        padding-block-end: 4px;
+    }
+
+    .footer-dark {
+        margin-block-start: 24px;
+    }
+
+    // Boost helpers that assume a light ground.
+    .text-muted,
+    .text-secondary {
+        color: var(--ismos-logwood-200) !important;
+    }
+}

@@ -182,7 +182,7 @@ $THEME->yuicssmodules = [];
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 $THEME->requiredblocks = '';
 $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
-$THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
+$THEME->iconsystem = '\\theme_ismos\\output\\icon_system_fontawesome';
 $THEME->haseditswitch = true;
 $THEME->usescourseindex = true;
 // By default, all boost based themes do not need their titles displayed.

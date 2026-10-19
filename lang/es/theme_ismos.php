@@ -24,7 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['address'] = 'ISMOS.XYZ';
 $string['choosereadme'] = 'El tema de ISMOS: un tema hijo de Boost, sobrio y de alto contraste, para estudiar.';
 $string['configtitle'] = 'Ajustes de ISMOS';
 $string['darkmode'] = 'Modo oscuro';
 $string['pluginname'] = 'ISMOS';
+$string['wordmark'] = 'ISMOS';
