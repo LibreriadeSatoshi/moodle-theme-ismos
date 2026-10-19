@@ -17,7 +17,7 @@
 {{!
     @template theme_ismos/course_card
 
-    ISMOS course card. The whole card is one link; it holds no other interactive element and no course image.
+    ISMOS course card. The whole card is one link; it holds no other interactive element. The course cover, when there is one, is decorative.
 
     Context variables required for this template:
     * id - Course id
@@ -26,6 +26,7 @@
     * hiddenlabel - Text for the hidden marker
     * url - Course URL
     * title - Formatted course name
+    * image - Optional cover: url, width, height, prioritise (eager and high fetch priority for the first on the page)
     * label - Category name
     * summary - Plain text summary
     * hasteachers - Whether there are teachers
@@ -41,6 +42,7 @@
         "hiddenlabel": "Hidden from students",
         "url": "https://example.com/course/view.php?id=2",
         "title": "Running a Bitcoin node",
+        "image": {"url": "https://example.com/cover.webp", "width": 800, "height": 450, "prioritise": false},
         "label": "Freedom tech",
         "summary": "Install, sync and secure a full node on your own hardware.",
         "hasteachers": true,
@@ -53,6 +55,7 @@
     }
 }}
 <a class="ismos-card{{#hidden}} ismos-card--hidden{{/hidden}}" href="{{{url}}}" aria-labelledby="{{uid}}-title{{#hidden}} {{uid}}-hidden{{/hidden}}"{{#summary}} aria-describedby="{{uid}}-text"{{/summary}}>
+    {{#image}}<img class="ismos-card__cover" src="{{{url}}}" alt="" width="{{width}}" height="{{height}}" {{#prioritise}}loading="eager" fetchpriority="high"{{/prioritise}}{{^prioritise}}loading="lazy" decoding="async"{{/prioritise}}>{{/image}}
     <span class="ismos-card__bar" aria-hidden="true"></span>
     {{#label}}<span class="ismos-card__label">{{label}}</span>{{/label}}
     {{#hidden}}<span class="ismos-card__hidden" id="{{uid}}-hidden">{{hiddenlabel}}</span>{{/hidden}}

@@ -28,7 +28,7 @@ final class card {
      * Export a course for the card template.
      *
      * @param \core_course_list_element $course
-     * @return array url, title, label, summary, teachers and facts
+     * @return array url, title, label, image, summary, teachers and facts
      */
     public static function export(\core_course_list_element $course): array {
         $context = \context_course::instance($course->id);
@@ -44,12 +44,41 @@ final class card {
             'url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
             'title' => format_string($course->fullname, true, ['context' => $context]),
             'label' => $category ? format_string($category->name, true, ['context' => $category->get_context(), 'escape' => false]) : '',
+            'image' => self::cover($course),
             'summary' => self::summary($course, $context),
             'hasteachers' => !empty($teachers),
             'teachers' => $teachers,
             'facts' => $facts,
             'hasfacts' => !empty($facts),
         ];
+    }
+
+    /**
+     * The course's own cover (first valid overview image) with its real dimensions.
+     *
+     * No generated pattern and no default image: a course without a cover has none.
+     *
+     * @param \core_course_list_element $course
+     * @return array|null url, width and height, or null
+     */
+    public static function cover(\core_course_list_element $course): ?array {
+        foreach ($course->get_course_overviewfiles() as $file) {
+            if ($file->is_valid_image() && ($info = $file->get_imageinfo())) {
+                return [
+                    'url' => \moodle_url::make_pluginfile_url(
+                        $file->get_contextid(),
+                        $file->get_component(),
+                        $file->get_filearea(),
+                        null,
+                        $file->get_filepath(),
+                        $file->get_filename()
+                    )->out(false),
+                    'width' => $info['width'],
+                    'height' => $info['height'],
+                ];
+            }
+        }
+        return null;
     }
 
     /**

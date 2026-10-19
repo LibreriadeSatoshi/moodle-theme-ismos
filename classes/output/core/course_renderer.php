@@ -24,10 +24,15 @@ namespace theme_ismos\output\core;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_renderer extends \core_course_renderer {
+    /** @var bool Whether this request already gave a card cover the eager, high priority load. */
+    protected bool $coverprioritised = false;
+
     /**
      * Render one course of a listing as a card.
      *
      * Keeps the .coursebox wrapper and data attributes core scripts and behat look for.
+     *
+     * Cover images: the first one rendered gets eager loading and high fetch priority.
      *
      * Deliberate departure from core: every display mode (collapsed, auto, expanded) renders the same
      * full card. The collapsed "more info" toggle and the enrolment icons are dropped, because a card
@@ -48,9 +53,15 @@ class course_renderer extends \core_course_renderer {
             $course = new \core_course_list_element($course);
         }
         $classes = trim('coursebox ismos-coursebox ' . $additionalclasses);
+        $data = \theme_ismos\local\card::export($course);
+        if ($data['image'] !== null) {
+            // Only the first image of the page is likely above the fold; the rest load lazily.
+            $data['image']['prioritise'] = !$this->coverprioritised;
+            $this->coverprioritised = true;
+        }
         return \html_writer::tag(
             'div',
-            $this->output->render_from_template('theme_ismos/course_card', \theme_ismos\local\card::export($course)),
+            $this->output->render_from_template('theme_ismos/course_card', $data),
             ['class' => $classes, 'data-courseid' => $course->id, 'data-type' => self::COURSECAT_TYPE_COURSE]
         );
     }
@@ -73,24 +84,7 @@ class course_renderer extends \core_course_renderer {
         $fullname = $chelper->get_course_formatted_name($element);
         $dateformat = get_string('strftimedaydate', 'core_langconfig');
 
-        $image = null;
-        foreach ($element->get_course_overviewfiles() as $file) {
-            if ($file->is_valid_image() && ($info = $file->get_imageinfo())) {
-                $image = [
-                    'url' => \moodle_url::make_pluginfile_url(
-                        $file->get_contextid(),
-                        $file->get_component(),
-                        $file->get_filearea(),
-                        null,
-                        $file->get_filepath(),
-                        $file->get_filename()
-                    )->out(false),
-                    'width' => $info['width'],
-                    'height' => $info['height'],
-                ];
-                break;
-            }
-        }
+        $image = \theme_ismos\local\card::cover($element);
 
         $customfields = '';
         if ($element->has_custom_fields()) {

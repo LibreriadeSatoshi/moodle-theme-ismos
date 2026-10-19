@@ -248,14 +248,70 @@ final class course_card_test extends \advanced_testcase {
         $this->assertStringNotContainsString('ismos-card__facts', $this->render($course));
     }
 
-    public function test_card_has_no_course_image(): void {
-        $course = $this->getDataGenerator()->create_course();
-        $fs = get_file_storage();
-        $fs->create_file_from_string([
+    /**
+     * Attach the gd-logo fixture (112 x 30) as the course cover.
+     *
+     * @param \stdClass $course
+     */
+    private function add_cover(\stdClass $course): void {
+        global $CFG;
+        get_file_storage()->create_file_from_pathname([
             'contextid' => \context_course::instance($course->id)->id, 'component' => 'course',
             'filearea' => 'overviewfiles', 'itemid' => 0, 'filepath' => '/', 'filename' => 'cover.png',
-        ], base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='));
-        $this->assertStringNotContainsString('<img', $this->render($course));
+        ], $CFG->dirroot . '/lib/tests/fixtures/gd-logo.png');
+    }
+
+    public function test_card_shows_the_course_cover_first_with_real_dimensions(): void {
+        $course = $this->getDataGenerator()->create_course();
+        $this->add_cover($course);
+        $image = card::export($this->element($course))['image'];
+        $this->assertStringContainsString('/course/overviewfiles/cover.png', $image['url']);
+        $this->assertSame(112, $image['width']);
+        $this->assertSame(30, $image['height']);
+
+        $html = $this->render($course);
+        $this->assertSame(1, substr_count($html, 'ismos-card__cover'));
+        $this->assertMatchesRegularExpression(
+            '~<a [^>]*>\s*<img class="ismos-card__cover" src="[^"]*/course/overviewfiles/cover\.png" alt="" width="112" height="30" loading="lazy" decoding="async">~',
+            $html
+        );
+        $this->assertStringNotContainsString('fetchpriority', $html);
+    }
+
+    public function test_prioritised_cover_is_eager_with_high_fetch_priority(): void {
+        $course = $this->getDataGenerator()->create_course();
+        $this->add_cover($course);
+        $data = card::export($this->element($course));
+        $data['image']['prioritise'] = true;
+        $html = $this->ismos_output()->render_from_template('theme_ismos/course_card', $data);
+        $this->assertStringContainsString('loading="eager"', $html);
+        $this->assertStringContainsString('fetchpriority="high"', $html);
+        $this->assertStringNotContainsString('loading="lazy"', $html);
+    }
+
+    public function test_course_without_cover_has_no_image_and_no_generated_fallback(): void {
+        $course = $this->getDataGenerator()->create_course();
+        $this->assertNull(card::export($this->element($course))['image']);
+        $html = $this->render($course);
+        $this->assertStringNotContainsString('ismos-card__cover', $html);
+        $this->assertStringNotContainsString('<img', $html);
+    }
+
+    public function test_only_the_first_cover_in_a_listing_is_prioritised(): void {
+        global $PAGE;
+        $withcover = [];
+        foreach (['One', 'Two'] as $name) {
+            $course = $this->getDataGenerator()->create_course(['fullname' => $name]);
+            $this->add_cover($course);
+            $withcover[] = $course;
+        }
+        $plain = $this->getDataGenerator()->create_course(['fullname' => 'Plain']);
+        $html = $PAGE->get_renderer('core', 'course')->frontpage_available_courses();
+        $this->assertSame(2, substr_count($html, 'ismos-card__cover'));
+        $this->assertSame(1, substr_count($html, 'fetchpriority="high"'));
+        $this->assertSame(1, substr_count($html, 'loading="eager"'));
+        $this->assertSame(1, substr_count($html, 'loading="lazy" decoding="async"'));
+        $this->assertStringContainsString('data-courseid="' . $plain->id . '"', $html);
     }
 
     public function test_listing_renders_cards_in_courses_container(): void {

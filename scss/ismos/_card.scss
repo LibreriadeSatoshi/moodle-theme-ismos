@@ -1,4 +1,4 @@
-// Course card: one link, no image but the teacher's photo (or initials).
+// Course card: one link. A flat cover image (when the course has one) tops it; teachers show as photo or initials.
 
 // Listing container: 3 / 2 / 1 columns. Core's .coursebox wrapper stays, stripped of its own box.
 // Chrome is reset on any card wrapper (specificity beats Boost's .coursebox rules).
@@ -35,6 +35,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    overflow: hidden; // The cover's top corners follow the card radius.
     padding: 24px;
     text-decoration: none;
 
@@ -52,6 +53,18 @@
         outline: 2px solid var(--ismos-focus);
         outline-offset: 2px;
     }
+}
+
+.ismos-card__cover {
+    aspect-ratio: 16 / 9;
+    block-size: auto;
+    border-block-end: 1px solid var(--ismos-hairline);
+    display: block;
+    inline-size: calc(100% + 48px); // Bleeds through the card padding to the edges.
+    margin-block-start: -24px;
+    margin-inline: -24px;
+    max-inline-size: none;
+    object-fit: cover;
 }
 
 .ismos-card__bar {
