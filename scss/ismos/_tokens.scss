@@ -1,4 +1,4 @@
-// ISMOS design tokens, light values. Dark values are added under .ismos-mode-dark by a later task.
+// ISMOS design tokens. Light values on :root; Hacker mode (dark) values below.
 :root {
     // Palette.
     --ismos-ink: #000;
@@ -44,6 +44,24 @@
     --ismos-border-input: var(--ismos-logwood-700);
     --ismos-border-strong: var(--ismos-ink);
     --ismos-disabled: var(--ismos-logwood-600);
+    --ismos-action-hover: var(--ismos-logwood-950);
+    --ismos-overlay-bg: var(--ismos-paper);
+    --ismos-overlay-edge: var(--ismos-logwood-200);
+    --ismos-modal-edge: transparent;
+    --ismos-selection-bg: var(--ismos-weld);
+    --ismos-selection-text: var(--ismos-ink);
+
+    // Status alerts: background, text and border.
+    --ismos-info-bg: var(--ismos-logwood-50);
+    --ismos-info-text: var(--ismos-logwood-800);
+    --ismos-info-border: transparent;
+    --ismos-success-bg: var(--ismos-paper);
+    --ismos-success-text: var(--ismos-indigo);
+    --ismos-success-border: var(--ismos-indigo);
+    --ismos-warning-bg: var(--ismos-weld);
+    --ismos-warning-text: var(--ismos-ink);
+    --ismos-warning-border: var(--ismos-ink);
+    --ismos-danger-bg: var(--ismos-paper);
 
     // Fonts.
     --ismos-font-serif: "Literata", georgia, serif;
@@ -54,4 +72,55 @@
     // Shadows (menus and modals only).
     --ismos-shadow-float: 0 2px 8px rgba(0, 0, 0, .1);
     --ismos-shadow-modal: 0 8px 24px rgba(0, 0, 0, .16);
+}
+
+// Hacker mode: Ink ground, Logwood raised surfaces, white text, Weld focus. Two surfaces only.
+@mixin ismos-hacker-tokens {
+    color-scheme: dark;
+    --ismos-surface: var(--ismos-ink);
+    --ismos-surface-raised: var(--ismos-logwood);
+    --ismos-text: var(--ismos-paper);
+    --ismos-text-heading: var(--ismos-paper);
+    --ismos-text-muted: var(--ismos-logwood-200);
+    --ismos-link: var(--ismos-mauveine-200);
+    --ismos-link-hover: var(--ismos-paper);
+    --ismos-action: var(--ismos-mauveine);
+    --ismos-on-action: var(--ismos-paper);
+    --ismos-action-hover: var(--ismos-indigo);
+    --ismos-hairline: var(--ismos-logwood-700);
+    --ismos-rule-strong: var(--ismos-paper);
+    --ismos-bar: var(--ismos-mauveine-300);
+    --ismos-track: var(--ismos-logwood-900);
+    --ismos-focus: var(--ismos-weld);
+    --ismos-alert: var(--ismos-madder);
+    --ismos-block: var(--ismos-mauveine);
+    --ismos-on-block: var(--ismos-paper);
+    --ismos-border-input: var(--ismos-logwood-400);
+    --ismos-border-strong: var(--ismos-paper);
+    --ismos-disabled: var(--ismos-logwood-400);
+    --ismos-overlay-bg: var(--ismos-logwood);
+    --ismos-overlay-edge: var(--ismos-logwood-400);
+    --ismos-modal-edge: var(--ismos-logwood-400);
+    --ismos-selection-bg: var(--ismos-weld);
+    --ismos-selection-text: var(--ismos-ink);
+    --ismos-info-bg: var(--ismos-logwood);
+    --ismos-info-text: var(--ismos-logwood-200);
+    --ismos-info-border: var(--ismos-logwood-700);
+    --ismos-success-bg: var(--ismos-ink);
+    --ismos-success-text: var(--ismos-mauveine-200);
+    --ismos-success-border: var(--ismos-mauveine-200);
+    --ismos-warning-bg: var(--ismos-weld);
+    --ismos-warning-text: var(--ismos-ink);
+    --ismos-warning-border: var(--ismos-weld);
+    --ismos-danger-bg: var(--ismos-ink);
+}
+
+.ismos-mode-dark {
+    @include ismos-hacker-tokens;
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto {
+        @include ismos-hacker-tokens;
+    }
 }

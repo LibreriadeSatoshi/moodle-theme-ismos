@@ -42,7 +42,10 @@ final class scss_test extends \advanced_testcase {
         $this->assertStringContainsString('ibmplexsans-latin.woff2', $flat);
         $this->assertMatchesRegularExpression('/\.invalid-feedback::?before[^{}]*\{[^}]*mask:/', $flat);
         $this->assertStringContainsString('--ismos-indigo:#2a2550', $flat);
-        $this->assertMatchesRegularExpression('/\.alert-success\{[^}]*color:var\(--ismos-indigo\)/', $flat);
+        $this->assertStringContainsString('--ismos-success-text:var(--ismos-indigo)', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-surface:var\(--ismos-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/prefers-color-scheme:dark\)\{\.ismos-mode-auto\{[^}]*--ismos-focus:var\(--ismos-weld\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.alert-success\{[^}]*color:var\(--ismos-success-text\)/', $flat);
         $this->assertMatchesRegularExpression('/\.btn\.btn:focus-visible\{[^}]*outline:2pxsolidvar\(--ismos-focus\)/', $flat);
         $this->assertStringNotContainsString('fonts.googleapis.com', $css);
 

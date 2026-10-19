@@ -46,8 +46,8 @@ a {
     &:hover,
     &:active,
     &:focus {
-        background-color: var(--ismos-logwood-950);
-        border-color: var(--ismos-logwood-950);
+        background-color: var(--ismos-action-hover);
+        border-color: var(--ismos-action-hover);
         color: var(--ismos-on-action);
     }
 }
@@ -117,7 +117,7 @@ a {
 
 // Cards: a 1 px hairline, never a shadow.
 .card {
-    background: var(--ismos-surface);
+    background: var(--ismos-surface-raised);
     border: 1px solid var(--ismos-hairline);
     border-radius: 4px;
     box-shadow: none;
@@ -129,12 +129,15 @@ a {
 
 // Menus and modals are the only things that float.
 .dropdown-menu {
-    border: 1px solid var(--ismos-hairline);
+    background: var(--ismos-overlay-bg);
+    border: 1px solid var(--ismos-overlay-edge);
     border-radius: 4px;
     box-shadow: var(--ismos-shadow-float);
 }
 
 .modal-content {
+    background: var(--ismos-overlay-bg);
+    border: 2px solid var(--ismos-modal-edge);
     border-radius: 8px;
     box-shadow: var(--ismos-shadow-modal);
 }
@@ -171,9 +174,9 @@ a {
 }
 
 .alert-info {
-    background: var(--ismos-logwood-50);
-    border: 0;
-    color: var(--ismos-logwood-800);
+    background: var(--ismos-info-bg);
+    border: 1px solid var(--ismos-info-border);
+    color: var(--ismos-info-text);
 
     &::before {
         @include ismos-icon("square-i");
@@ -181,9 +184,9 @@ a {
 }
 
 .alert-success {
-    background: var(--ismos-paper);
-    border: 1.5px solid var(--ismos-indigo);
-    color: var(--ismos-indigo);
+    background: var(--ismos-success-bg);
+    border: 1.5px solid var(--ismos-success-border);
+    color: var(--ismos-success-text);
 
     &::before {
         @include ismos-icon("check");
@@ -191,9 +194,9 @@ a {
 }
 
 .alert-warning {
-    background: var(--ismos-weld);
-    border: 1.5px solid var(--ismos-ink);
-    color: var(--ismos-ink);
+    background: var(--ismos-warning-bg);
+    border: 1.5px solid var(--ismos-warning-border);
+    color: var(--ismos-warning-text);
 
     &::before {
         @include ismos-icon("triangle");
@@ -201,7 +204,7 @@ a {
 }
 
 .alert-danger {
-    background: var(--ismos-paper);
+    background: var(--ismos-danger-bg);
     border: 2px solid var(--ismos-alert);
     color: var(--ismos-alert);
 
@@ -219,4 +222,9 @@ a {
 
 .progress-bar {
     background-color: var(--ismos-bar);
+}
+
+::selection {
+    background: var(--ismos-selection-bg);
+    color: var(--ismos-selection-text);
 }

@@ -77,3 +77,35 @@ function theme_ismos_get_pre_scss(theme_config $theme): string {
 function theme_ismos_get_extra_scss(theme_config $theme): string {
     return '';
 }
+
+/**
+ * Registers the dark mode preference (shared with theme_scholastica; the definitions are identical).
+ *
+ * @return array
+ */
+function theme_ismos_user_preferences(): array {
+    return [
+        'darkmode-on' => [
+            'type' => PARAM_BOOL,
+            'null' => NULL_NOT_ALLOWED,
+            'default' => false,
+            'permissioncallback' => [core_user::class, 'is_current_user'],
+        ],
+    ];
+}
+
+/**
+ * Adds exactly one mode class to the body: light, dark, or auto (follow the device).
+ *
+ * @param moodle_page $page The page being initialised.
+ */
+function theme_ismos_page_init(moodle_page $page): void {
+    $mode = 'auto';
+    if (isloggedin() && !isguestuser()) {
+        $pref = get_user_preferences('darkmode-on', null);
+        if ($pref !== null) {
+            $mode = $pref ? 'dark' : 'light';
+        }
+    }
+    $page->add_body_class('ismos-mode-' . $mode);
+}
