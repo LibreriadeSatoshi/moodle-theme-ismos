@@ -54,4 +54,32 @@ class course_renderer extends \core_course_renderer {
             ['class' => $classes, 'data-courseid' => $course->id, 'data-type' => self::COURSECAT_TYPE_COURSE]
         );
     }
+
+    /**
+     * Front page part: the available courses get the ISMOS label and heading (an h2, the hero is the h1).
+     *
+     * @param string $skipdivid
+     * @param string $contentsdivid
+     * @param string $header
+     * @param string $contents
+     * @return string
+     */
+    protected function frontpage_part($skipdivid, $contentsdivid, $header, $contents) {
+        if ($contentsdivid !== 'frontpage-available-course-list' || strval($contents) === '') {
+            return parent::frontpage_part($skipdivid, $contentsdivid, $header, $contents);
+        }
+        $heading = get_string('coursesheading', 'theme_ismos');
+        $output = \html_writer::link(
+            '#' . $skipdivid,
+            get_string('skipa', 'access', \core_text::strtolower($heading)),
+            ['class' => 'skip-block skip aabtn']
+        );
+        $output .= \html_writer::start_tag('div', ['id' => $contentsdivid]);
+        $output .= \html_writer::span(get_string('courses', 'theme_ismos'), 'ismos-label d-block');
+        $output .= $this->heading($heading);
+        $output .= $contents;
+        $output .= \html_writer::end_tag('div');
+        $output .= \html_writer::tag('span', '', ['class' => 'skip-block-to', 'id' => $skipdivid]);
+        return $output;
+    }
 }

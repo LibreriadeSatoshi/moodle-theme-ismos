@@ -66,12 +66,11 @@ $THEME->layouts = [
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),
-    // The site home page.
+    // The site home page: ISMOS hero, category row, course cards and testimonials. No block regions.
     'frontpage' => array(
-        'file' => 'drawers.php',
-        'regions' => array('side-pre'),
-        'defaultregion' => 'side-pre',
-        'options' => array('nonavbar' => true),
+        'file' => 'frontpage.php',
+        'regions' => [],
+        'options' => ['langmenu' => true],
     ),
     // Server administration scripts.
     'admin' => array(

@@ -25,9 +25,21 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['address'] = 'ISMOS.XYZ';
+$string['browseby'] = 'Explorar por categoría';
 $string['cardstarts'] = 'Empieza el {$a}';
 $string['choosereadme'] = 'El tema de ISMOS: un tema hijo de Boost, sobrio y de alto contraste, para estudiar.';
 $string['configtitle'] = 'Ajustes de ISMOS';
+$string['courses'] = 'Cursos';
+$string['coursesheading'] = 'Elige por dónde empezar';
 $string['darkmode'] = 'Modo oscuro';
+$string['frontpagesettings'] = 'Página de inicio';
+$string['herocta'] = 'Ver los cursos';
+$string['herolabel'] = 'Escuela de Bitcoin y Lightning';
+$string['herolead'] = 'Cohortes en vivo y cursos a tu ritmo. No necesitas saber nada todavía.';
+$string['herosignup'] = 'Crear una cuenta';
+$string['herotitle'] = 'Aprende a manejar tu propio dinero, una lección a la vez.';
 $string['pluginname'] = 'ISMOS';
+$string['testimonials'] = 'Testimonios';
+$string['testimonials_desc'] = 'Un testimonio por línea, con el formato: cita | nombre. El nombre es lo que sigue al último " | " de la línea. Déjalo vacío para ocultar la sección.';
+$string['testimonialsheading'] = 'Lo que dicen nuestros estudiantes';
 $string['wordmark'] = 'ISMOS';

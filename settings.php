@@ -24,7 +24,21 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/lib.php');
+
 if ($ADMIN->fulltree) {
     $settings = new theme_boost_admin_settingspage_tabs('themesettingismos', get_string('configtitle', 'theme_ismos'));
-    // Settings tabs are added in later tasks.
+
+    $page = new admin_settingpage('theme_ismos_frontpage', get_string('frontpagesettings', 'theme_ismos'));
+    $setting = new admin_setting_configtextarea(
+        'theme_ismos/testimonials',
+        get_string('testimonials', 'theme_ismos'),
+        get_string('testimonials_desc', 'theme_ismos'),
+        theme_ismos_default_testimonials(),
+        PARAM_TEXT,
+        80,
+        12
+    );
+    $page->add($setting);
+    $settings->add($page);
 }

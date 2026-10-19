@@ -109,3 +109,19 @@ function theme_ismos_page_init(moodle_page $page): void {
     }
     $page->add_body_class('ismos-mode-' . $mode);
 }
+
+/**
+ * Default testimonials: one "quote | name" per line, copied verbatim from the Scholastica front page.
+ *
+ * @return string
+ */
+function theme_ismos_default_testimonials(): string {
+    return <<<'TESTIMONIALS'
+When you become part of Librería you realize that everything makes sense. Being taught by them has been the best thing that's happened to me. I hope one day I can give back with my collaboration for everything they've given me. | Yuri Delgado, from Cuba
+A beautiful experience to be part of this seminar, from the technical knowledge to the human quality that you learn from all the people who are part of the bookstore. | Joni, from Argentina
+The effort is worth it. Very nice people, well-prepared guests, curious classmates eager to help. | Átomo, from España
+Incredible experience! Librería de Satoshi is a unique project that not only offers opportunities to learn, but also to connect with others, to get involved in projects about Bitcoin & LN | Dubraska, from Venezuela
+Librería is an excellent place to learn, develop yourself and specialize your knowledge of Bitcoin and Lightning Network accompanied by enthusiastic people willing to share their knowledge and resolve your doubts. | xwazzo, from México
+Participating in Librería's seminars opened my eyes about Bitcoin and Lightning. Thank you for making it accessible in Spanish. | anónimo, from the global south
+TESTIMONIALS;
+}

@@ -1,0 +1,148 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ismos/frontpage
+
+    ISMOS front page: top bar, Mauveine hero, category browse row, course list, testimonials, footer.
+    No course index or block drawers.
+
+    Context variables required for this template:
+    * output - The core renderer for the page
+    * bodyattributes - attributes for the body tag
+    * hero - label, title, lead, cta, ctaurl, signup, signupurl (null when not offered)
+    * categories, hascategories - top-level categories (name, url)
+    * testimonials, hastestimonials - quote and name
+
+    Example context (json):
+    {
+        "output": {
+            "doctype": "<!DOCTYPE html>",
+            "page_title": "ISMOS",
+            "favicon": "favicon.ico",
+            "main_content": "<div class='courses'></div>"
+        },
+        "bodyattributes": "",
+        "hasheaderactions": false,
+        "hero": {
+            "label": "Bitcoin and Lightning school",
+            "title": "Learn to run your own money, one lesson at a time.",
+            "lead": "Live cohorts and self-paced courses.",
+            "cta": "See the courses",
+            "ctaurl": "/course/index.php",
+            "signup": "Create an account",
+            "signupurl": "/login/signup.php"
+        },
+        "hascategories": true,
+        "categories": [{"name": "Bitcoin", "url": "/course/index.php?categoryid=1"}],
+        "hastestimonials": true,
+        "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}]
+    }
+}}
+{{> theme_boost/head }}
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+<div id="page-wrapper" class="d-print-block">
+
+    {{{ output.standard_top_of_body_html }}}
+
+    {{> theme_boost/navbar }}
+    <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers drag-container">
+        <div id="topofscroll" class="main-inner">
+            {{#hasheaderactions}}
+                <div class="ismos-frontpage-actions d-print-none">{{{ headeractions }}}</div>
+            {{/hasheaderactions}}
+            {{#secondarymoremenu}}
+                <div class="secondary-navigation d-print-none">
+                    {{> core/moremenu}}
+                </div>
+            {{/secondarymoremenu}}
+            <div id="page-content" class="pb-3 d-print-block">
+                <div id="region-main-box">
+                    <div id="region-main">
+                        {{#overflow}}
+                            <div class="container-fluid tertiary-navigation">
+                                <div class="navitem">
+                                    {{> core/url_select}}
+                                </div>
+                            </div>
+                        {{/overflow}}
+                        {{#hero}}
+                        <section class="ismos-hero" aria-labelledby="ismos-hero-title">
+                            <div class="ismos-frontpage-column">
+                                <span class="ismos-hero__bar"></span>
+                                <p class="ismos-hero__label">{{label}}</p>
+                                <h1 id="ismos-hero-title" class="ismos-hero__title">{{title}}</h1>
+                                <p class="ismos-hero__lead">{{lead}}</p>
+                                <div class="ismos-hero__actions">
+                                    <a class="ismos-hero__btn ismos-hero__btn--primary" href="{{{ctaurl}}}">{{cta}}</a>
+                                    {{#signupurl}}
+                                        <a class="ismos-hero__btn ismos-hero__btn--secondary" href="{{{signupurl}}}">{{signup}}</a>
+                                    {{/signupurl}}
+                                </div>
+                            </div>
+                        </section>
+                        {{/hero}}
+                        {{#hascategories}}
+                        <nav class="ismos-browse" aria-label="{{#str}}browseby, theme_ismos{{/str}}">
+                            <ul class="ismos-frontpage-column ismos-browse__list">
+                                {{#categories}}
+                                    <li><a href="{{{url}}}">{{name}}</a></li>
+                                {{/categories}}
+                            </ul>
+                        </nav>
+                        {{/hascategories}}
+                        <div class="ismos-frontpage-column ismos-frontpage-courses">
+                            {{{ output.course_content_header }}}
+                            {{{ output.main_content }}}
+                            {{{ output.course_content_footer }}}
+                        </div>
+                        {{#hastestimonials}}
+                        <section class="ismos-testimonials" aria-labelledby="ismos-testimonials-title">
+                            <div class="ismos-frontpage-column">
+                                <span class="ismos-label ismos-testimonials__label">{{#str}}testimonials, theme_ismos{{/str}}</span>
+                                <h2 id="ismos-testimonials-title">{{#str}}testimonialsheading, theme_ismos{{/str}}</h2>
+                                <ul class="ismos-testimonials__list">
+                                    {{#testimonials}}
+                                        <li>
+                                            <figure class="ismos-testimonial">
+                                                <blockquote><p>{{quote}}</p></blockquote>
+                                                <figcaption>{{name}}</figcaption>
+                                            </figure>
+                                        </li>
+                                    {{/testimonials}}
+                                </ul>
+                            </div>
+                        </section>
+                        {{/hastestimonials}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{> theme_boost/footer }}
+    </div>
+    {{{ output.standard_after_main_region_html }}}
+</div>
+
+</body>
+</html>
+{{#js}}
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader'], function() {
+    M.util.js_complete('theme_boost/loader');
+});
+{{/js}}
