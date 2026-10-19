@@ -41,8 +41,8 @@
     .ismos-mark {
         display: block;
         flex: none;
-        height: 20px;
-        width: 20px;
+        block-size: 20px;
+        inline-size: 20px;
     }
 
     .ismos-wordmark-text {
@@ -128,6 +128,45 @@
     .count-container {
         background-color: var(--ismos-madder-800);
         color: var(--ismos-paper);
+    }
+}
+
+// Menus and popovers opened from the bar sit on the overlay ground (Paper or Logwood), not Ink: restore the
+// normal text, link and icon colours and the normal focus ring. Id-level specificity beats the bar rules above.
+.navbar.fixed-top.ismos-navbar :is(#usernavigation, .primary-navigation) :is(.dropdown-menu, .popover, .popover-region-container) {
+    color: var(--ismos-text);
+
+    a {
+        color: var(--ismos-link);
+    }
+
+    .nav-link,
+    .btn,
+    .dropdown-item,
+    .dropdown-toggle,
+    a.dropdown-item,
+    .icon,
+    a .icon {
+        color: var(--ismos-text);
+    }
+
+    .nav-link:hover,
+    .nav-link:focus,
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: var(--ismos-surface-raised);
+        color: var(--ismos-text);
+    }
+
+    .count-container {
+        background-color: var(--ismos-madder-800);
+        color: var(--ismos-paper);
+    }
+
+    :focus-visible,
+    .btn.btn:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
     }
 }
 

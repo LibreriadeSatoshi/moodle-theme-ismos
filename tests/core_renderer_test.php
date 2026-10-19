@@ -17,6 +17,8 @@
 
 namespace theme_ismos;
 
+use PHPUnit\Framework\Attributes\CoversMethod;
+
 /**
  * Tests for the ISMOS renderer: favicon, mark URLs, icon map and the navbar and footer templates.
  *
@@ -24,6 +26,11 @@ namespace theme_ismos;
  * @copyright 2026 ISMOS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversMethod(\theme_ismos\output\core_renderer::class, 'favicon')]
+#[CoversMethod(\theme_ismos\output\core_renderer::class, 'get_ismos_mark_url')]
+#[CoversMethod(\theme_ismos\output\core_renderer::class, 'standard_head_html')]
+#[CoversMethod(\theme_ismos\output\icon_system_fontawesome::class, 'get_icon_name_map')]
+#[CoversMethod(\theme_ismos\output\core_renderer::class, 'ismos_darkmode_toggle')]
 final class core_renderer_test extends \advanced_testcase {
     /**
      * Switch to the theme and return its core renderer.
@@ -42,8 +49,6 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * The favicon is the theme's own SVG.
-     *
-     * @covers \theme_ismos\output\core_renderer::favicon
      */
     public function test_favicon_comes_from_theme(): void {
         $out = $this->ismos_renderer();
@@ -54,8 +59,6 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * Paper and ink variants are different files.
-     *
-     * @covers \theme_ismos\output\core_renderer::get_ismos_mark_url
      */
     public function test_mark_url_variants(): void {
         $out = $this->ismos_renderer();
@@ -69,8 +72,6 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * The head carries the apple touch icon.
-     *
-     * @covers \theme_ismos\output\core_renderer::standard_head_html
      */
     public function test_head_has_touch_icon(): void {
         $out = $this->ismos_renderer();
@@ -81,8 +82,6 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * The bundled image files exist.
-     *
-     * @covers \theme_ismos\output\core_renderer::favicon
      */
     public function test_pix_files_exist(): void {
         global $CFG;
@@ -94,13 +93,11 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * No icon of the theme maps to a banned Font Awesome glyph.
-     *
-     * @covers \theme_ismos\output\icon_system_fontawesome::get_core_icon_map
      */
     public function test_banned_icons_are_remapped(): void {
         $out = $this->ismos_renderer();
         $system = \core\output\icon_system::instance(\theme_ismos\output\icon_system_fontawesome::class);
-        $map = $system->get_core_icon_map();
+        $map = $system->get_icon_name_map();
         $this->assertNotEmpty($map);
         $banned = ['graduation-cap', 'trophy', 'medal', 'crown', 'star', 'rocket', 'award'];
         foreach ($map as $key => $value) {
@@ -112,15 +109,16 @@ final class core_renderer_test extends \advanced_testcase {
                 );
             }
         }
-        $this->assertEquals('fa-book', $map['core:i/course']);
-        $this->assertEquals('fa-regular fa-bookmark', $map['core:i/star-o']);
+        $this->assertStringContainsString('fa-book', $map['core:i/course']);
+        $this->assertStringNotContainsString('fa-star', $map['mod_forum:t/star']);
+        $this->assertStringContainsString('fa-bookmark', $map['mod_forum:t/star']);
+        $this->assertStringContainsString('fa-circle-dot', $map['core:i/badge']);
+        $this->assertStringContainsString('fa-regular fa-bookmark', $map['core:i/star-o']);
         $this->assertEquals('\theme_ismos\output\icon_system_fontawesome', $out->get_page()->theme->get_icon_system());
     }
 
     /**
      * Guests and logged in people get the right toggle state; the logged out navbar has a language menu slot.
-     *
-     * @covers \theme_ismos\output\core_renderer::ismos_darkmode_toggle
      */
     public function test_darkmode_toggle_context(): void {
         $out = $this->ismos_renderer();
@@ -138,8 +136,6 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * The footer keeps the required Moodle output and has no copyright or social links.
-     *
-     * @covers \theme_ismos\output\core_renderer
      */
     public function test_footer_template(): void {
         $out = $this->ismos_renderer();
@@ -152,8 +148,6 @@ final class core_renderer_test extends \advanced_testcase {
 
     /**
      * The navbar has the wordmark with an accessible name, the hidden mark and the toggle.
-     *
-     * @covers \theme_ismos\output\core_renderer
      */
     public function test_navbar_template(): void {
         global $CFG;

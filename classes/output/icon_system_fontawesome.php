@@ -23,7 +23,7 @@ defined('MOODLE_INTERNAL') || die();
  * Font Awesome icon system with the icons the ISMOS guide bans swapped for neutral ones.
  *
  * The guide bans graduation caps, trophies, medals, crowns, stars, rockets and awards (gamified, off-voice).
- * The meaning is kept: a course is a book, a badge or award is a confirmed check, a rating is a bookmark.
+ * The meaning is kept: a course is a book, a badge or award is a dot mark, a rating is a bookmark.
  *
  * @package   theme_ismos
  * @copyright 2026 ISMOS
@@ -33,25 +33,31 @@ class icon_system_fontawesome extends \core\output\icon_system_fontawesome {
     /** @var string[] Banned Font Awesome icon names (without the fa- prefix) and their neutral replacement. */
     private const REPLACEMENTS = [
         'graduation-cap' => 'book',
-        'trophy' => 'circle-check',
-        'medal' => 'circle-check',
-        'award' => 'circle-check',
+        'trophy' => 'circle-dot',
+        'medal' => 'circle-dot',
+        'award' => 'circle-dot',
         'crown' => 'bookmark',
         'star' => 'bookmark',
         'rocket' => 'arrow-up',
     ];
 
+    /** @var array|null Remapped copy of the full name map (core plus plugin maps), built once per request. */
+    private ?array $remapped = null;
+
     #[\Override]
-    public function get_core_icon_map() {
-        $map = parent::get_core_icon_map();
-        $pattern = '/(?<![\w-])fa-(' . implode('|', array_keys(self::REPLACEMENTS)) . ')(?![\w-])/';
-        foreach ($map as $key => $value) {
-            $map[$key] = preg_replace_callback(
-                $pattern,
-                fn(array $m): string => 'fa-' . self::REPLACEMENTS[$m[1]],
-                $value
+    public function get_icon_name_map() {
+        if ($this->remapped === null) {
+            $pattern = '/(?<![\w-])fa-(' . implode('|', array_keys(self::REPLACEMENTS)) . ')(?![\w-])/';
+            // The parent merges plugin maps (mod_forum, tool_brickfield) after the core map, so remap the merged result.
+            $this->remapped = array_map(
+                fn(string $value): string => preg_replace_callback(
+                    $pattern,
+                    fn(array $m): string => 'fa-' . self::REPLACEMENTS[$m[1]],
+                    $value
+                ),
+                parent::get_icon_name_map()
             );
         }
-        return $map;
+        return $this->remapped;
     }
 }

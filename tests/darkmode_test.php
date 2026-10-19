@@ -16,6 +16,8 @@
 
 namespace theme_ismos;
 
+use PHPUnit\Framework\Attributes\CoversFunction;
+
 /**
  * Tests for Hacker mode (dark mode) body classes and preference.
  *
@@ -23,6 +25,8 @@ namespace theme_ismos;
  * @copyright 2026 ISMOS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversFunction('theme_ismos_page_init')]
+#[CoversFunction('theme_ismos_user_preferences')]
 final class darkmode_test extends \advanced_testcase {
     /**
      * Run page_init and return the body classes.
@@ -55,8 +59,6 @@ final class darkmode_test extends \advanced_testcase {
 
     /**
      * Logged out visitors follow the device.
-     *
-     * @covers ::theme_ismos_page_init
      */
     public function test_logged_out_is_auto(): void {
         $this->resetAfterTest();
@@ -66,8 +68,6 @@ final class darkmode_test extends \advanced_testcase {
 
     /**
      * Guests follow the device.
-     *
-     * @covers ::theme_ismos_page_init
      */
     public function test_guest_is_auto(): void {
         $this->resetAfterTest();
@@ -77,8 +77,6 @@ final class darkmode_test extends \advanced_testcase {
 
     /**
      * No stored preference follows the device.
-     *
-     * @covers ::theme_ismos_page_init
      */
     public function test_logged_in_without_preference_is_auto(): void {
         $this->resetAfterTest();
@@ -89,8 +87,6 @@ final class darkmode_test extends \advanced_testcase {
 
     /**
      * Preference 1 is Hacker mode.
-     *
-     * @covers ::theme_ismos_page_init
      */
     public function test_preference_one_is_dark(): void {
         $this->resetAfterTest();
@@ -101,8 +97,6 @@ final class darkmode_test extends \advanced_testcase {
 
     /**
      * Preference 0 is light, and differs from absent.
-     *
-     * @covers ::theme_ismos_page_init
      */
     public function test_preference_zero_is_light(): void {
         $this->resetAfterTest();
@@ -113,8 +107,6 @@ final class darkmode_test extends \advanced_testcase {
 
     /**
      * The preference is registered as a boolean.
-     *
-     * @covers ::theme_ismos_user_preferences
      */
     public function test_preference_is_registered(): void {
         $this->resetAfterTest();

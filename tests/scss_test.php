@@ -16,6 +16,8 @@
 
 namespace theme_ismos;
 
+use PHPUnit\Framework\Attributes\CoversFunction;
+
 /**
  * Tests for the compiled ISMOS stylesheet.
  *
@@ -23,11 +25,11 @@ namespace theme_ismos;
  * @copyright 2026 ISMOS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversFunction('theme_ismos_get_pre_scss')]
+#[CoversFunction('theme_ismos_get_main_scss_content')]
 final class scss_test extends \advanced_testcase {
     /**
      * The compiled CSS carries the tokens and self-hosted fonts, and none of the forbidden things.
-     *
-     * @covers ::theme_ismos_get_pre_scss
      */
     public function test_compiled_css_contains_tokens_and_fonts(): void {
         $this->resetAfterTest();
@@ -63,5 +65,26 @@ final class scss_test extends \advanced_testcase {
         foreach ($sources as $source) {
             $this->assertStringNotContainsString('gradient(', file_get_contents($source), $source);
         }
+    }
+
+    /**
+     * The Ink bar colours do not leak into menus and popovers opened from the bar.
+     */
+    public function test_navbar_colours_do_not_leak_into_menus(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $flat = strtolower(preg_replace('/\s+/', '', \theme_config::load('ismos')->get_css_content()));
+
+        // Menus get the overlay text colour, link colour and the normal focus ring back.
+        $this->assertMatchesRegularExpression(
+            '/\.ismos-navbar:is\(#usernavigation,\.primary-navigation\):is\(\.dropdown-menu,\.popover,\.popover-region-container\)\{[^}]*color:var\(--ismos-text\)/',
+            $flat
+        );
+        $this->assertMatchesRegularExpression(
+            '/\.ismos-navbar:is\(#usernavigation,\.primary-navigation\):is\(\.dropdown-menu,[^{]*\):focus-visible[^{]*\{[^}]*outline:2pxsolidvar\(--ismos-focus\)/',
+            $flat
+        );
+        // The bar-level Weld ring is not applied to menu contents without that restore.
+        $this->assertStringContainsString('.ismos-navbar:focus-visible', str_replace('.navbar.fixed-top', '', $flat));
     }
 }

@@ -16,6 +16,8 @@
 
 namespace theme_ismos;
 
+use PHPUnit\Framework\Attributes\CoversMethod;
+
 /**
  * Basic tests for the ISMOS theme skeleton.
  *
@@ -23,11 +25,11 @@ namespace theme_ismos;
  * @copyright 2026 ISMOS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversMethod(\theme_config::class, 'load')]
+#[CoversMethod(\core_string_manager::class, 'get_string')]
 final class theme_test extends \advanced_testcase {
     /**
      * The theme loads and inherits from Boost.
-     *
-     * @covers \theme_config::load
      */
     public function test_theme_loads_with_boost_parent(): void {
         $this->resetAfterTest();
@@ -38,8 +40,6 @@ final class theme_test extends \advanced_testcase {
 
     /**
      * Required strings exist in English and Spanish, and Spanish is translated.
-     *
-     * @covers \core_string_manager::get_string
      */
     public function test_strings_exist_in_english_and_spanish(): void {
         $this->resetAfterTest();
