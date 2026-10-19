@@ -145,7 +145,9 @@
     a.dropdown-item,
     a.nav-link,
     a.btn,
-    a.list-group-item {
+    a.list-group-item,
+    a.content-item-container,
+    .context-link {
         text-decoration: none;
     }
 
@@ -207,6 +209,19 @@
             background-color: var(--ismos-surface-raised);
         }
 
+        // Selected row: raised ground, inline-start bar and weight (as the list-group active state), not Boost's blue.
+        &.selected {
+            background-color: var(--ismos-surface-raised);
+            border-color: var(--ismos-overlay-edge);
+            border-inline-start: 2px solid var(--ismos-bar);
+            color: var(--ismos-text);
+            font-weight: 600;
+
+            .timestamp {
+                color: var(--ismos-text-muted);
+            }
+        }
+
         &:hover,
         &:focus {
             background-color: var(--ismos-surface-raised);
@@ -220,6 +235,17 @@
 
     .timestamp {
         color: var(--ismos-text-muted);
+    }
+}
+
+// The notch above the popover: edge and ground from the overlay tokens so it flips with the mode.
+.navbar.fixed-top.ismos-navbar #usernavigation .popover-region-toggle {
+    &::before {
+        border-block-end-color: var(--ismos-overlay-edge);
+    }
+
+    &::after {
+        border-block-end-color: var(--ismos-overlay-bg);
     }
 }
 

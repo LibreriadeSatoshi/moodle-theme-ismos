@@ -96,6 +96,13 @@ final class scss_test extends \advanced_testcase {
             '/\.popover-region-container\.popover-region-footer-container[^{]*\{[^}]*background-color:var\(--ismos-overlay-bg\)/',
             $flat
         );
+        // Selected row and notch use tokens, not Boost's blue and white.
+        $this->assertMatchesRegularExpression(
+            '/\.content-item-container\.selected\{[^}]*background-color:var\(--ismos-surface-raised\)[^}]*border-inline-start:2pxsolidvar\(--ismos-bar\)/',
+            $flat
+        );
+        $this->assertMatchesRegularExpression('/\.popover-region-toggle::after\{[^}]*border-block-end-color:var\(--ismos-overlay-bg\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.a\.content-item-container|a\.content-item-container[^{]*\{[^}]*text-decoration:none/', $flat);
         // The bar-level Weld ring is not applied to menu contents without that restore.
         $this->assertStringContainsString('.ismos-navbar:focus-visible', str_replace('.navbar.fixed-top', '', $flat));
     }
