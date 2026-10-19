@@ -62,8 +62,10 @@ final class scss_test extends \advanced_testcase {
         $this->assertStringContainsString('html:has(body.ismos-mode-dark){color-scheme:dark', $flat);
         $this->assertMatchesRegularExpression('/\.alert-success\{[^}]*color:var\(--ismos-success-text\)/', $flat);
         $this->assertMatchesRegularExpression('/\.btn\.btn:focus-visible\{[^}]*outline:2pxsolidvar\(--ismos-focus\)/', $flat);
-        $this->assertMatchesRegularExpression('/\ba:not\(\.btn\)\{[^}]*text-decoration:underline/', $flat);
-        $this->assertMatchesRegularExpression('/\ba:not\(\.btn\)\{[^}]*color:var\(--ismos-link\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.btn\.btn(,[^{]*)?\{[^}]*text-decoration:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.btn\.btn:hover(,[^{]*)?\{[^}]*text-decoration:none|\.btn\.btn:hover[^{]*\{[^}]*text-decoration:none/', $flat);
+        $this->assertMatchesRegularExpression('/:where\(a:not\(\.btn\)\)\{[^}]*text-decoration:underline/', $flat);
+        $this->assertMatchesRegularExpression('/:where\(a:not\(\.btn\)\)\{[^}]*color:var\(--ismos-link\)/', $flat);
         $this->assertStringNotContainsString('fonts.googleapis.com', $css);
 
         // The compiled sheet also carries other plugins' own styles.css (some use gradients), so the

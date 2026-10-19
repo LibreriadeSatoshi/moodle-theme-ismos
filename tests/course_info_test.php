@@ -107,6 +107,15 @@ final class course_info_test extends \advanced_testcase {
         $this->assertStringNotContainsString('ismos-courseinfo__fields', $this->info($without, 'course-info'));
     }
 
+    public function test_hidden_course_has_one_combined_label(): void {
+        $cat = $this->getDataGenerator()->create_category(['name' => 'Privacy']);
+        $course = $this->getDataGenerator()->create_course(['category' => $cat->id, 'visible' => 0]);
+        $this->setAdminUser();
+        $html = $this->info($course, 'course-info');
+        $this->assertStringContainsString('Privacy - ' . get_string('hiddenfromstudents'), $html);
+        $this->assertSame(1, substr_count($html, 'ismos-courseinfo__label'));
+    }
+
     public function test_no_cover_means_no_image_and_no_dates_means_no_date_list(): void {
         $course = $this->getDataGenerator()->create_course(['startdate' => 0, 'enddate' => 0]);
         $html = $this->info($course, 'course-info');

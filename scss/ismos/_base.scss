@@ -5,7 +5,16 @@ body {
 }
 
 // Anchor buttons (a.btn) keep their button colours and no underline.
-a:not(.btn) {
+// Reboot underlines every a; buttons never underline, in any state.
+.btn.btn,
+.btn.btn:hover,
+.btn.btn:focus,
+.btn.btn:active {
+    text-decoration: none;
+}
+
+// Zero specificity, so class-based anchor rules (hero buttons, cards) still win.
+:where(a:not(.btn)) {
     color: var(--ismos-link);
     text-decoration: underline;
     text-underline-offset: 2px;

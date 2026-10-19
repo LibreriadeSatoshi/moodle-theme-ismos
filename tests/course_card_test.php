@@ -185,6 +185,15 @@ final class course_card_test extends \advanced_testcase {
         $this->assertCount(3, card::teachers($this->element($course), 5));
     }
 
+    public function test_null_limit_returns_every_contact(): void {
+        $course = $this->getDataGenerator()->create_course();
+        foreach (['Ada', 'Grace', 'Alan'] as $name) {
+            $this->teacher($course, ['firstname' => $name, 'lastname' => 'Test']);
+        }
+        $this->assertCount(3, card::teachers($this->element($course), null));
+        $this->assertCount(2, card::teachers($this->element($course)));
+    }
+
     public function test_teacher_without_picture_has_null_url_and_two_letter_initials(): void {
         $course = $this->getDataGenerator()->create_course();
         $this->teacher($course, ['firstname' => 'Grace', 'lastname' => 'Hopper']);
