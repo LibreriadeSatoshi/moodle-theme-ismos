@@ -6,11 +6,24 @@ body {
 
 // Anchor buttons (a.btn) keep their button colours and no underline.
 // Reboot underlines every a; buttons never underline, in any state.
-.btn.btn,
-.btn.btn:hover,
-.btn.btn:focus,
-.btn.btn:active {
+.btn.btn:not(.btn-link),
+.btn.btn:not(.btn-link):hover,
+.btn.btn:not(.btn-link):focus,
+.btn.btn:not(.btn-link):active {
     text-decoration: none;
+}
+
+// .btn-link is a link in a button's clothes: underlined, in the link colours.
+.btn.btn-link {
+    color: var(--ismos-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover,
+    &:focus {
+        color: var(--ismos-link-hover);
+        text-decoration: underline;
+    }
 }
 
 // Zero specificity, so class-based anchor rules (hero buttons, cards) still win.
@@ -18,11 +31,11 @@ body {
     color: var(--ismos-link);
     text-decoration: underline;
     text-underline-offset: 2px;
+}
 
-    &:hover {
-        color: var(--ismos-link-hover);
-        text-decoration: underline;
-    }
+:where(a:not(.btn):hover) {
+    color: var(--ismos-link-hover);
+    text-decoration: underline;
 }
 
 :focus-visible {
