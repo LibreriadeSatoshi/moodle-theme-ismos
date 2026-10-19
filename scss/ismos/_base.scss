@@ -31,6 +31,13 @@ a {
     }
 }
 
+// Doubled class so the ring beats Bootstrap's `.btn-*:focus-visible { outline: 0 }` variant rules.
+.btn.btn:focus-visible {
+    box-shadow: none;
+    outline: 2px solid var(--ismos-focus);
+    outline-offset: 2px;
+}
+
 .btn-primary {
     background-color: var(--ismos-action);
     border-color: var(--ismos-action);
