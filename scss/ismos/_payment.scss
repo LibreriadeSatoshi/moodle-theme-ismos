@@ -1,0 +1,126 @@
+// Payment and enrolment screens: the fee line on the enrolment page and the gateway chooser modal.
+// Flat: 1 px hairline, 4 px corners, no shadow. Selection reads from border and weight, not colour.
+
+// Gateway logo box. Square by default, wide for wordmark logos; the image scales to fit.
+.paygw-icon-badge {
+    align-items: center;
+    block-size: 32px;
+    display: inline-flex;
+    flex: none;
+    inline-size: 32px;
+    justify-content: center;
+    overflow: hidden;
+
+    img {
+        block-size: auto;
+        inline-size: auto;
+        margin: 0;
+        max-block-size: 100%;
+        max-inline-size: 100%;
+        object-fit: contain;
+    }
+}
+
+.paygw-icon-badge--wordmark {
+    inline-size: 110px;
+}
+
+.paygw-icon-badge--option {
+    block-size: 40px;
+    inline-size: 40px;
+}
+
+// Enrolment page: cost on one side, gateway brand on the other.
+.ismos-enrolfee {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: space-between;
+}
+
+.ismos-enrolfee__cost {
+    color: var(--ismos-text);
+}
+
+.ismos-enrolfee__gateway {
+    align-items: center;
+    display: inline-flex;
+    gap: 8px;
+}
+
+.ismos-enrolfee__gatewayname {
+    color: var(--ismos-text);
+    font-family: var(--ismos-font-sans);
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 30px;
+}
+
+// Gateway chooser: one bordered option per gateway, radio sits inside the box.
+.ismos-gateway {
+    margin-block-end: 12px;
+    position: relative;
+}
+
+.ismos-gateway__radio {
+    inset-block-start: 16px;
+    inset-inline-start: 16px;
+    margin: 0;
+    position: absolute;
+
+    // The ring is drawn on the label, see below.
+    &:focus-visible {
+        outline: 0;
+    }
+}
+
+.ismos-gateway__label {
+    background-color: var(--ismos-card-bg);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    color: var(--ismos-text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    inline-size: 100%;
+    margin: 0;
+    min-block-size: 44px;
+    padding: 16px;
+    padding-inline-start: 48px;
+}
+
+.ismos-gateway__head {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+}
+
+.ismos-gateway__name {
+    color: var(--ismos-text-heading);
+    font-family: var(--ismos-font-sans);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.ismos-gateway__description {
+    color: var(--ismos-text);
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.ismos-gateway__radio:checked + .ismos-gateway__label {
+    border-color: var(--ismos-border-strong);
+    box-shadow: none;
+
+    .ismos-gateway__name {
+        font-weight: 600;
+    }
+}
+
+.ismos-gateway__radio:focus-visible + .ismos-gateway__label {
+    outline: 2px solid var(--ismos-focus);
+    outline-offset: 2px;
+}
