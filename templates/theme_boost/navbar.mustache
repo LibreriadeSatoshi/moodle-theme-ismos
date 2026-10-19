@@ -86,10 +86,10 @@
                 {{{ output.search_box }}}
                 <div class="divider border-start h-75 align-self-center mx-1"></div>
             {{/output.search_box}}
-            {{#langmenu}}
-                {{> theme_boost/language_menu }}
+            {{#output.ismos_lang_menu}}
+                {{{ . }}}
                 <div class="divider border-start h-75 align-self-center mx-1"></div>
-            {{/langmenu}}
+            {{/output.ismos_lang_menu}}
             <div class="ismos-darkmode d-flex align-items-center">
                 {{{ output.ismos_darkmode_toggle }}}
             </div>

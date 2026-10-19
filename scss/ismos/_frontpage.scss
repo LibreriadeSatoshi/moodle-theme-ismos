@@ -3,14 +3,7 @@
 body.ismos-frontpage {
     // The content column: 1200 px max, 32 px margin (16 px on mobile). Not Boost's limited width.
     .ismos-frontpage-column {
-        box-sizing: border-box;
-        margin-inline: auto;
-        max-inline-size: 1200px;
-        padding-inline: 16px;
-
-        @media (min-width: 640px) {
-            padding-inline: 32px;
-        }
+        @include ismos-column;
     }
 
     // Boost limits the site home to 830 px and reserves 48 px for the drawer toggles; neither applies here.
@@ -60,7 +53,6 @@ body.ismos-frontpage {
 
     // The course search box: one row, token colours, 4 px corners.
     .ismos-frontpage-search {
-        + .box,
         .search-input-form,
         form {
             inline-size: 100%;
@@ -141,7 +133,9 @@ body.ismos-frontpage {
 }
 
 .ismos-frontpage-actions {
-    padding: 16px 32px 0;
+    @include ismos-column;
+
+    padding-block-start: 16px;
     text-align: end;
 }
 

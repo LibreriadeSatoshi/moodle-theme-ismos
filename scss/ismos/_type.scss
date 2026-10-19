@@ -19,6 +19,19 @@
     background: var(--ismos-bar);
 }
 
+// The content column: 1200 px max including the page margin (32 px, 16 px on mobile), centred.
+// Used by every front page section and the footer so they share one left edge.
+@mixin ismos-column {
+    box-sizing: border-box;
+    margin-inline: auto;
+    max-inline-size: 1200px;
+    padding-inline: 16px;
+
+    @media (min-width: 640px) {
+        padding-inline: 32px;
+    }
+}
+
 // 1.5 px line icons drawn as a mask, so they take currentColor.
 $ismos-icons: (
     "triangle": "%3Cpath d='M12 3 2.5 20h19z'/%3E%3Cpath d='M12 10v4.5M12 17.2v.1'/%3E",

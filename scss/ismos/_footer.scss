@@ -17,18 +17,11 @@
         outline-offset: 2px;
     }
 
-    // Rows sit on the same 1200 px content column as the page, 32 px margin (16 px on mobile).
+    // Rows sit on the same content column as the page.
     .ismos-footer-inner {
+        @include ismos-column;
+
         align-items: center;
-        box-sizing: border-box;
-        margin-inline: auto;
-        max-inline-size: 1200px;
-        padding-inline: 16px;
-
-        @media (min-width: 640px) {
-            padding-inline: 32px;
-        }
-
         display: flex;
         flex-wrap: wrap;
         gap: 16px 24px;

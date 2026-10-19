@@ -68,6 +68,22 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * Renders the language menu for the top bar, for logged-in visitors as well as logged-out ones.
+     *
+     * Boost only puts the menu in the bar for logged-out visitors and moves it into the user menu
+     * otherwise. ISMOS keeps the switch always visible.
+     *
+     * @return string empty when the site offers a single language
+     */
+    public function ismos_lang_menu(): string {
+        $menu = (new \core\output\language_menu($this->page))->export_for_template($this);
+        if (empty($menu) || empty($menu['items'])) {
+            return '';
+        }
+        return $this->render_from_template('theme_boost/language_menu', $menu);
+    }
+
+    /**
      * Renders the dark mode toggle for the top bar.
      *
      * @return string

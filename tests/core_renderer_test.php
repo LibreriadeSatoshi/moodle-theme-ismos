@@ -162,6 +162,33 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertStringContainsString('alt="" aria-hidden="true"', $html);
         $this->assertStringContainsString('ismos-mark-paper.svg', $html);
         $this->assertStringContainsString('data-action="theme_ismos/toggle-darkmode"', $html);
-        $this->assertStringContainsString('langmenu', $html);
+    }
+
+    /**
+     * The language menu is built for logged-in visitors too, and is empty with a single language.
+     */
+    public function test_lang_menu_for_logged_in_users(): void {
+        global $CFG;
+        $out = $this->ismos_renderer();
+        $this->setUser($this->getDataGenerator()->create_user());
+        $this->assertSame('', $out->ismos_lang_menu());
+
+        // Install a second language pack in the data directory.
+        $CFG->langmenu = 1;
+        purge_all_caches();
+        $dir = $CFG->dataroot . '/lang/es';
+        check_dir_exists($dir);
+        file_put_contents($dir . '/langconfig.php', "<?php\n\$string['thislanguage'] = 'Español';\n\$string['thislanguageint'] = 'Spanish';\n");
+        get_string_manager(true);
+        $html = $out->ismos_lang_menu();
+        $this->assertStringContainsString('class="langmenu"', $html);
+        $this->assertStringContainsString('Español', $html);
+
+        $navbar = $out->render_from_template('theme_boost/navbar', [
+            'output' => $out,
+            'config' => (object) ['homeurl' => $CFG->wwwroot],
+            'sitename' => 'ISMOS',
+        ]);
+        $this->assertStringContainsString('class="langmenu"', $navbar);
     }
 }
