@@ -165,13 +165,25 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
-     * Install a fake second language pack in the data directory and reset the string manager.
+     * The directory of the fake language pack; skips the test if a real one is already there.
      *
-     * @return string the directory created, to be removed by the caller
+     * @return string
      */
-    private function install_fake_language(): string {
+    private function fake_language_dir(): string {
         global $CFG;
         $dir = $CFG->dataroot . '/lang/es';
+        if (file_exists($dir)) {
+            $this->markTestSkipped('A language pack already exists in the data directory; not overwriting it.');
+        }
+        return $dir;
+    }
+
+    /**
+     * Install a fake second language pack in the data directory and reset the string manager.
+     *
+     * @param string $dir from fake_language_dir()
+     */
+    private function install_fake_language(string $dir): void {
         check_dir_exists($dir);
         file_put_contents(
             $dir . '/langconfig.php',
@@ -179,7 +191,6 @@ final class core_renderer_test extends \advanced_testcase {
         );
         purge_all_caches();
         get_string_manager(true);
-        return $dir;
     }
 
     /**
@@ -198,11 +209,12 @@ final class core_renderer_test extends \advanced_testcase {
         get_string_manager(true);
         $this->assertSame('', $out->ismos_lang_menu());
 
-        $dir = $this->install_fake_language();
+        $dir = $this->fake_language_dir();
         try {
+            $this->install_fake_language($dir);
             $CFG->langlist = '';
             purge_all_caches();
-        get_string_manager(true);
+            get_string_manager(true);
             $html = $out->ismos_lang_menu();
             $this->assertStringContainsString('class="langmenu"', $html);
             $this->assertStringContainsString('Español', $html);
@@ -216,7 +228,7 @@ final class core_renderer_test extends \advanced_testcase {
         } finally {
             remove_dir($dir);
             purge_all_caches();
-        get_string_manager(true);
+            get_string_manager(true);
         }
     }
 
@@ -227,17 +239,18 @@ final class core_renderer_test extends \advanced_testcase {
         global $CFG;
         $this->resetAfterTest(true);
         $out = $this->ismos_renderer();
-        $dir = $this->install_fake_language();
+        $dir = $this->fake_language_dir();
         try {
+            $this->install_fake_language($dir);
             $CFG->langlist = '';
             $CFG->langmenu = 0;
             purge_all_caches();
-        get_string_manager(true);
+            get_string_manager(true);
             $this->assertSame('', $out->ismos_lang_menu());
         } finally {
             remove_dir($dir);
             purge_all_caches();
-        get_string_manager(true);
+            get_string_manager(true);
         }
     }
 }
