@@ -95,9 +95,9 @@ class course_renderer extends \core_course_renderer {
         $customfields = '';
         if ($element->has_custom_fields()) {
             $handler = \core_course\customfield\course_handler::create();
-            $customfields = $handler->display_custom_fields_data($element->get_custom_fields());
+            $customfields = trim($handler->display_custom_fields_data($element->get_custom_fields()));
         }
-        $teachers = \theme_ismos\local\card::teachers($element, 50);
+        $teachers = \theme_ismos\local\card::teachers($element, null);
 
         return $this->render_from_template('theme_ismos/course_info', [
             'title' => $fullname,

@@ -58,10 +58,10 @@ final class card {
      * Honours the coursecontact setting through the course list element.
      *
      * @param \core_course_list_element $course
-     * @param int $limit maximum number of teachers
+     * @param int|null $limit maximum number of teachers, null for all contacts
      * @return array of [name => string, pictureurl => ?string, initials => string]
      */
-    public static function teachers(\core_course_list_element $course, int $limit = 2): array {
+    public static function teachers(\core_course_list_element $course, ?int $limit = 2): array {
         global $DB, $PAGE;
 
         $contacts = $course->get_course_contacts();
@@ -69,10 +69,12 @@ final class card {
         foreach ($contacts as $contact) {
             $ids[$contact['user']->id] = $contact['user']->id;
         }
-        if (!$ids || $limit < 1) {
+        if (!$ids || ($limit !== null && $limit < 1)) {
             return [];
         }
-        $ids = array_slice($ids, 0, $limit, true);
+        if ($limit !== null) {
+            $ids = array_slice($ids, 0, $limit, true);
+        }
         $fields = \core_user\fields::for_userpic()->get_sql('u', false, '', '', false)->selects;
         [$insql, $params] = $DB->get_in_or_equal(array_keys($ids), SQL_PARAMS_NAMED);
         $users = $DB->get_records_sql("SELECT $fields FROM {user} u WHERE u.id $insql", $params);

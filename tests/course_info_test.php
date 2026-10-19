@@ -12,6 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace theme_ismos;
 
@@ -62,7 +63,8 @@ final class course_info_test extends \advanced_testcase {
         $this->assertStringContainsString('Ada Lovelace', $html);
         $this->assertStringContainsString('course/view.php?id=' . $course->id, $html);
         $this->assertStringContainsString(get_string('gotocourse', 'theme_ismos'), $html);
-        $this->assertStringContainsString('<h1', $html);
+        $this->assertStringContainsString('<h2', $html);
+        $this->assertStringNotContainsString('<h1', $html);
         $this->assertStringContainsString(userdate(1793000000, get_string('strftimedaydate', 'core_langconfig')), $html);
     }
 
@@ -92,10 +94,23 @@ final class course_info_test extends \advanced_testcase {
         $this->assertStringContainsString('loading="eager"', $html);
     }
 
+    public function test_custom_field_with_value_renders_and_empty_does_not(): void {
+        $generator = $this->getDataGenerator()->get_plugin_generator('core_customfield');
+        $category = $generator->create_category(['component' => 'core_course', 'area' => 'course']);
+        $field = $generator->create_field(['categoryid' => $category->get('id'), 'type' => 'text', 'shortname' => 'level', 'name' => 'Level']);
+        $with = $this->getDataGenerator()->create_course(['customfield_level' => 'Beginner']);
+        $without = $this->getDataGenerator()->create_course();
+
+        $html = $this->info($with, 'course-info');
+        $this->assertStringContainsString('ismos-courseinfo__fields', $html);
+        $this->assertStringContainsString('Beginner', $html);
+        $this->assertStringNotContainsString('ismos-courseinfo__fields', $this->info($without, 'course-info'));
+    }
+
     public function test_no_cover_means_no_image_and_no_dates_means_no_date_list(): void {
         $course = $this->getDataGenerator()->create_course(['startdate' => 0, 'enddate' => 0]);
         $html = $this->info($course, 'course-info');
-        $this->assertStringNotContainsString('cover', $html);
+        $this->assertStringNotContainsString('ismos-courseinfo__cover', $html);
         $this->assertStringNotContainsString('ismos-courseinfo__dates', $html);
     }
 }

@@ -42,9 +42,9 @@
 }}
 <article class="ismos-courseinfo" aria-labelledby="ismos-courseinfo-title">
     <span class="ismos-courseinfo__bar" aria-hidden="true"></span>
-    {{#label}}<span class="ismos-courseinfo__label">{{label}}</span>{{/label}}
-    {{#hidden}}<span class="ismos-courseinfo__label">{{hiddenlabel}}</span>{{/hidden}}
-    <h1 class="ismos-courseinfo__title" id="ismos-courseinfo-title">{{{title}}}</h1>
+    {{#label}}{{^hidden}}<span class="ismos-courseinfo__label">{{label}}</span>{{/hidden}}{{/label}}
+    {{#hidden}}<span class="ismos-courseinfo__label">{{#label}}{{label}} - {{/label}}{{hiddenlabel}}</span>{{/hidden}}
+    <h2 class="ismos-courseinfo__title" id="ismos-courseinfo-title">{{{title}}}</h2>
 
     {{#image}}
     <img class="ismos-courseinfo__cover" src="{{{url}}}" alt="{{imagealt}}" width="{{width}}" height="{{height}}" loading="eager">
