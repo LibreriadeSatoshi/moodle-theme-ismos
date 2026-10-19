@@ -8,7 +8,6 @@
     .bg-white,
     .bg-body,
     .bg-light,
-    .navbar,
     .secondary-navigation,
     .moremenu,
     .moremenu .nav-tabs,
@@ -19,7 +18,6 @@
     .modal-header,
     .modal-footer,
     .popover,
-    .list-group-item,
     .dropdown-menu {
         background-color: var(--ismos-surface) !important; // stylelint-disable-line declaration-no-important
         color: var(--ismos-text);
@@ -41,6 +39,33 @@
     .popover,
     .modal-content {
         background-color: var(--ismos-overlay-bg) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .navbar {
+        background-color: var(--ismos-surface);
+        border-bottom: 1px solid var(--ismos-hairline);
+    }
+
+    // Rest state only, so active, hover and focus keep their own look.
+    .list-group-item:not(.active, :hover, :focus-visible) {
+        background-color: var(--ismos-surface);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    .list-group-item-action:hover,
+    .list-group-item-action:focus-visible {
+        background-color: var(--ismos-surface-raised);
+        color: var(--ismos-text);
+    }
+
+    // Active: Logwood ground, white type, heavier weight and a 2 px Mauveine 300 bar at the inline start.
+    .list-group-item.active {
+        background-color: var(--ismos-surface-raised);
+        border-color: var(--ismos-hairline);
+        border-inline-start: 2px solid var(--ismos-bar);
+        color: var(--ismos-text);
+        font-weight: 600;
     }
 
     .border,

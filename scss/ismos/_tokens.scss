@@ -48,6 +48,10 @@
     --ismos-input-bg: var(--ismos-paper);
     --ismos-surface-rgb: 255, 255, 255;
     --ismos-text-rgb: 0, 0, 0;
+    --ismos-muted-rgb: 84, 66, 129;
+    --ismos-raised-rgb: 248, 246, 254;
+    --ismos-link-rgb: 77, 1, 224;
+    --ismos-hairline-rgb: 223, 216, 251;
     --ismos-action-hover: var(--ismos-logwood-950);
     --ismos-overlay-bg: var(--ismos-paper);
     --ismos-overlay-edge: var(--ismos-logwood-200);
@@ -73,14 +77,22 @@
     --bs-body-color: var(--ismos-text);
     --bs-body-color-rgb: var(--ismos-text-rgb);
     --bs-emphasis-color: var(--ismos-text-heading);
+    --bs-emphasis-color-rgb: var(--ismos-text-rgb);
     --bs-heading-color: var(--ismos-text-heading);
     --bs-secondary-color: var(--ismos-text-muted);
+    --bs-secondary-color-rgb: var(--ismos-muted-rgb);
     --bs-secondary-bg: var(--ismos-surface-raised);
+    --bs-secondary-bg-rgb: var(--ismos-raised-rgb);
     --bs-tertiary-color: var(--ismos-text-muted);
+    --bs-tertiary-color-rgb: var(--ismos-muted-rgb);
     --bs-tertiary-bg: var(--ismos-surface-raised);
+    --bs-tertiary-bg-rgb: var(--ismos-raised-rgb);
     --bs-border-color: var(--ismos-hairline);
+    --bs-border-color-translucent: rgba(var(--ismos-hairline-rgb), .5);
     --bs-link-color: var(--ismos-link);
+    --bs-link-color-rgb: var(--ismos-link-rgb);
     --bs-link-hover-color: var(--ismos-link-hover);
+    --bs-link-hover-color-rgb: var(--ismos-text-rgb);
 
     // Fonts.
     --ismos-font-serif: "Literata", georgia, serif;
@@ -121,6 +133,10 @@
     --ismos-input-bg: var(--ismos-logwood);
     --ismos-surface-rgb: 0, 0, 0;
     --ismos-text-rgb: 255, 255, 255;
+    --ismos-muted-rgb: 223, 216, 251;
+    --ismos-raised-rgb: 37, 29, 58;
+    --ismos-link-rgb: 191, 195, 255;
+    --ismos-hairline-rgb: 107, 85, 162;
     --ismos-overlay-bg: var(--ismos-logwood);
     --ismos-overlay-edge: var(--ismos-logwood-400);
     --ismos-modal-edge: var(--ismos-logwood-400);
@@ -142,14 +158,22 @@
     --bs-body-color: var(--ismos-text);
     --bs-body-color-rgb: var(--ismos-text-rgb);
     --bs-emphasis-color: var(--ismos-text-heading);
+    --bs-emphasis-color-rgb: var(--ismos-text-rgb);
     --bs-heading-color: var(--ismos-text-heading);
     --bs-secondary-color: var(--ismos-text-muted);
+    --bs-secondary-color-rgb: var(--ismos-muted-rgb);
     --bs-secondary-bg: var(--ismos-surface-raised);
+    --bs-secondary-bg-rgb: var(--ismos-raised-rgb);
     --bs-tertiary-color: var(--ismos-text-muted);
+    --bs-tertiary-color-rgb: var(--ismos-muted-rgb);
     --bs-tertiary-bg: var(--ismos-surface-raised);
+    --bs-tertiary-bg-rgb: var(--ismos-raised-rgb);
     --bs-border-color: var(--ismos-hairline);
+    --bs-border-color-translucent: rgba(var(--ismos-hairline-rgb), .5);
     --bs-link-color: var(--ismos-link);
+    --bs-link-color-rgb: var(--ismos-link-rgb);
     --bs-link-hover-color: var(--ismos-link-hover);
+    --bs-link-hover-color-rgb: var(--ismos-text-rgb);
 }
 
 .ismos-mode-dark {
@@ -159,5 +183,16 @@
 @media (prefers-color-scheme: dark) {
     .ismos-mode-auto {
         @include ismos-hacker-tokens;
+    }
+}
+
+// Dark canvas and scrollbars before any script runs.
+html:has(body.ismos-mode-dark) {
+    color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    html:has(body.ismos-mode-auto) {
+        color-scheme: dark;
     }
 }
