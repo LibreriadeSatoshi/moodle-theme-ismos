@@ -1,7 +1,8 @@
 // Course card: one link, no image but the teacher's photo (or initials).
 
 // Listing container: 3 / 2 / 1 columns. Core's .coursebox wrapper stays, stripped of its own box.
-.courses {
+// Chrome is reset on any card wrapper (specificity beats Boost's .coursebox rules).
+.courses:has(> .ismos-coursebox) {
     display: grid;
     gap: 24px;
     grid-template-columns: 1fr;
@@ -15,11 +16,11 @@
     }
 
     // Paging bars and "more" links span the whole row.
-    > :not(.coursebox) {
+    > :not(.ismos-coursebox) {
         grid-column: 1 / -1;
     }
 
-    > .coursebox {
+    > .ismos-coursebox {
         background: none;
         border: 0;
         margin: 0;
@@ -132,4 +133,23 @@
     font-weight: 500;
     gap: 4px 16px;
     padding-block-start: 12px;
+}
+
+.ismos-coursebox.coursebox {
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.ismos-card--hidden {
+    .ismos-card__title,
+    .ismos-card__text,
+    .ismos-card__teacher {
+        color: var(--ismos-text-muted);
+    }
+}
+
+.ismos-card__hidden {
+    @include ismos-label;
 }

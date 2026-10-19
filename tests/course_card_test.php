@@ -105,6 +105,35 @@ final class course_card_test extends \advanced_testcase {
         $this->assertStringContainsString('ismos-card__title', $html);
     }
 
+    public function test_category_label_is_escaped_once(): void {
+        $cat = $this->getDataGenerator()->create_category(['name' => 'Q&A']);
+        $course = $this->getDataGenerator()->create_course(['category' => $cat->id]);
+        $this->assertSame('Q&A', card::export($this->element($course))['label']);
+        $html = $this->render($course);
+        $this->assertStringContainsString('>Q&amp;A<', $html);
+        $this->assertStringNotContainsString('Q&amp;amp;A', $html);
+    }
+
+    public function test_hidden_course_is_marked_for_those_who_can_see_it(): void {
+        $visible = $this->getDataGenerator()->create_course();
+        $hidden = $this->getDataGenerator()->create_course(['visible' => 0]);
+        $this->assertFalse(card::export($this->element($visible))['hidden']);
+        $this->assertStringNotContainsString('ismos-card--hidden', $this->render($visible));
+        $this->assertTrue(card::export($this->element($hidden))['hidden']);
+        $html = $this->render($hidden);
+        $this->assertStringContainsString('ismos-card--hidden', $html);
+        $this->assertStringContainsString(get_string('hiddenfromstudents'), $html);
+    }
+
+    public function test_link_name_comes_from_title_and_description_from_summary(): void {
+        $course = $this->getDataGenerator()->create_course(['summary' => 'About it']);
+        $html = $this->render($course);
+        $this->assertStringContainsString('aria-labelledby="ismos-card-title-' . $course->id . '"', $html);
+        $this->assertStringContainsString('id="ismos-card-title-' . $course->id . '"', $html);
+        $this->assertStringContainsString('aria-describedby="ismos-card-text-' . $course->id . '"', $html);
+        $this->assertStringContainsString('id="ismos-card-text-' . $course->id . '"', $html);
+    }
+
     public function test_long_title_is_not_truncated(): void {
         $title = str_repeat('Éducation à la souveraineté ', 5);
         $title = trim(mb_substr($title, 0, 120));
@@ -210,7 +239,6 @@ final class course_card_test extends \advanced_testcase {
     }
 
     public function test_listing_renders_cards_in_courses_container(): void {
-        $out = $this->ismos_output();
         $course = $this->getDataGenerator()->create_course(['fullname' => 'Listed course']);
         global $PAGE;
         $courserenderer = $PAGE->get_renderer('core', 'course');
@@ -221,6 +249,5 @@ final class course_card_test extends \advanced_testcase {
         $this->assertStringContainsString('data-courseid="' . $course->id . '"', $html);
         $this->assertStringContainsString('ismos-card', $html);
         $this->assertStringContainsString('Listed course', $html);
-        unset($out);
     }
 }

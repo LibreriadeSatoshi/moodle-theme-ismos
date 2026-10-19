@@ -37,9 +37,12 @@ final class card {
         $facts = self::facts($course);
 
         return [
+            'id' => (int) $course->id,
+            'hidden' => !$course->visible,
+            'hiddenlabel' => get_string('hiddenfromstudents'),
             'url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
             'title' => format_string($course->fullname, true, ['context' => $context]),
-            'label' => $category ? $category->get_formatted_name() : '',
+            'label' => $category ? format_string($category->name, true, ['context' => $category->get_context(), 'escape' => false]) : '',
             'summary' => self::summary($course, $context),
             'hasteachers' => !empty($teachers),
             'teachers' => $teachers,

@@ -29,6 +29,12 @@ class course_renderer extends \core_course_renderer {
      *
      * Keeps the .coursebox wrapper and data attributes core scripts and behat look for.
      *
+     * Deliberate departure from core: every display mode (collapsed, auto, expanded) renders the same
+     * full card. The collapsed "more info" toggle and the enrolment icons are dropped, because a card
+     * is a single link with no nested interactive elements, and the card already carries the summary,
+     * teachers and fee. The category expander only listens on .coursebox .moreinfo, which is absent, so
+     * it keeps working for categories and simply never toggles a course.
+     *
      * @param \coursecat_helper $chelper
      * @param \core_course_list_element|\stdClass $course
      * @param string $additionalclasses
@@ -41,7 +47,7 @@ class course_renderer extends \core_course_renderer {
         if ($course instanceof \stdClass) {
             $course = new \core_course_list_element($course);
         }
-        $classes = trim('coursebox ' . $additionalclasses);
+        $classes = trim('coursebox ismos-coursebox ' . $additionalclasses);
         return \html_writer::tag(
             'div',
             $this->output->render_from_template('theme_ismos/course_card', \theme_ismos\local\card::export($course)),
