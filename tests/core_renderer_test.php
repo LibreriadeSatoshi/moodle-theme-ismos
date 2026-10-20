@@ -67,6 +67,27 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
+     * The welcome line is escaped when rendered through core/full_header, on both first visit and return.
+     */
+    public function test_welcome_message_is_escaped_in_full_header(): void {
+        $renderer = $this->ismos_renderer();
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+        // Core takes the name from $USER, as the renderer does.
+        $GLOBALS['USER']->firstname = '<b>x</b>';
+
+        foreach (['welcometosite' => 'Welcome, ', 'welcomeback' => 'Welcome back, '] as $key => $prefix) {
+            $context = (object) [
+                'welcomemessage' => new \lang_string($key, 'core', (object) ['firstname' => '<b>x</b>']),
+                'hasnavbar' => false,
+            ];
+            $html = $renderer->render_from_template('core/full_header', $context);
+            $this->assertStringContainsString($prefix . '&lt;b&gt;x&lt;/b&gt;.', $html);
+            $this->assertStringNotContainsString('<b>x</b>', $html);
+        }
+    }
+
+    /**
      * The favicon is the theme's own SVG.
      */
     public function test_favicon_comes_from_theme(): void {
