@@ -244,14 +244,18 @@
         inline-size: 100%;
     }
 
-    // Identity providers and guest login are full width secondary buttons.
-    .login-identityprovider-btn,
+    // Identity providers (the Nostr button too, it has the same markup) and guest login are full width secondary
+    // buttons. Boost sets a 1 px edge on `.login-container .login-identityproviders .login-identityprovider-btn`, so
+    // the selector is as specific.
+    .login-container .login-identityprovider-btn,
+    .login-container .login-identityproviders .login-identityprovider-btn,
     #loginguestbtn {
         align-items: center;
         background: transparent;
         border: 1.5px solid var(--ismos-text);
         color: var(--ismos-text);
         display: flex;
+        font-size: 15px;
         gap: 8px;
         justify-content: center;
         min-block-size: 44px;
@@ -334,6 +338,13 @@
     }
 }
 
+// Login: "New here? Create an account" is one quiet line under the heading, 8 px below it and 24 px above the
+// first field (the heading keeps its 24 px margin, pulled back by 16 px).
+.ismos-login__form .loginform > .ismos-login-alt {
+    margin: -16px 0 24px;
+    text-align: start;
+}
+
 // auth_nostr adds its own button (and an "or") right after the form. Order the login form's children so the
 // button sits under our single OR divider, styled like the other providers. Theme CSS only.
 .ismos-login__form .loginform {
@@ -345,6 +356,7 @@
     }
 
     > h1,
+    > .ismos-login-alt,
     > .alert,
     > .login-form,
     > form#login {
@@ -400,28 +412,6 @@
 
     .login-divider-or + .auth-nostr-wrapper {
         margin-block-start: 0;
-    }
-}
-
-.ismos-login__form #auth-nostr-btn.btn {
-    align-items: center;
-    background: transparent;
-    border: 1.5px solid var(--ismos-text);
-    border-radius: 4px;
-    color: var(--ismos-text);
-    display: flex;
-    font-size: 15px;
-    gap: 8px;
-    inline-size: 100%;
-    justify-content: center;
-    min-block-size: 44px;
-
-    &:hover,
-    &:focus,
-    &:active {
-        background: var(--ismos-surface-raised);
-        border-color: var(--ismos-text);
-        color: var(--ismos-text);
     }
 }
 

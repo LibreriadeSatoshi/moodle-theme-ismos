@@ -106,6 +106,12 @@
 <div class="loginform">
     {{! The core site logo is deliberately not shown: the ISMOS login layout carries the mark and wordmark. }}
     <h1 class="login-heading mb-4">{{#str}} loginto, core, {{sitename}} {{/str}}</h1>
+    {{#cansignup}}
+        <p class="ismos-login-alt">
+            {{#str}} newhere, theme_ismos {{/str}}
+            <a href="{{signupurl}}">{{#str}} createaccountlink, theme_ismos {{/str}}</a>
+        </p>
+    {{/cansignup}}
     {{#maintenance}}
         <div class="alert alert-danger login-maintenance">
             {{{maintenance}}}
@@ -172,12 +178,6 @@
             {{/identityproviders}}
         </div>
     {{/hasidentityproviders}}
-    {{#cansignup}}
-        <p class="ismos-login-alt">
-            {{#str}} newhere, theme_ismos {{/str}}
-            <a href="{{signupurl}}">{{#str}} createaccountlink, theme_ismos {{/str}}</a>
-        </p>
-    {{/cansignup}}
     {{#canloginasguest}}
         <div class="login-divider"></div>
         <h2 class="login-heading">{{#str}}someallowguest{{/str}}</h2>

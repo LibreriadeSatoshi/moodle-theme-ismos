@@ -17,7 +17,8 @@
 {{!
     @template theme_boost/footer
 
-    ISMOS override: Ink footer with the mark, address and language menu. The help links, login info and
+    ISMOS override: Ink footer (the optional footermark context value is the mark URL for layouts whose output is not the theme
+    renderer, such as maintenance) with the mark, address and language menu. The help links, login info and
     standard footer output are shown inline instead of in Boost's popover.
 
     Page footer.
@@ -41,7 +42,7 @@
 <footer id="page-footer" class="ismos-footer">
     <div class="ismos-footer-inner">
         <div class="ismos-footer-brand">
-            <img src="{{{ output.get_ismos_mark_url }}}" class="ismos-mark" width="20" height="20" alt="" aria-hidden="true">
+            <img src="{{#footermark}}{{{ . }}}{{/footermark}}{{^footermark}}{{{ output.get_ismos_mark_url }}}{{/footermark}}" class="ismos-mark" width="20" height="20" alt="" aria-hidden="true">
             <span class="ismos-footer-address">{{#str}}address, theme_ismos{{/str}}</span>
         </div>
         <div class="ismos-footer-lang">

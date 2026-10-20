@@ -55,8 +55,10 @@ final class scss_test extends \advanced_testcase {
 
         // Login: the block cell stretches, its content is the sticky full-height part; Nostr like the other providers.
         $this->assertMatchesRegularExpression('/\.ismos-login__block-inner\{[^}]*block-size:100dvh[^}]*position:sticky/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-login__form#auth-nostr-btn\.btn\{[^}]*background:(?:transparent|#fff0);' .
-            'border:1\.5pxsolidvar\(--ismos-text\);border-radius:4px/', $flat);
+        // Nostr has the markup of a provider button, so one rule styles all: 1.5 px text edge, no special case.
+        $this->assertDoesNotMatchRegularExpression('/#auth-nostr-btn\.btn\{/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-login__form\.login-container\.login-identityprovider-btn,[^{]*\.login-identityproviders\.login-identityprovider-btn,[^{]*\{' .
+            '[^}]*border:1\.5pxsolidvar\(--ismos-text\)[^}]*font-size:15px/', $flat);
         $this->assertMatchesRegularExpression('/\.loginform:has\(\.login-divider-or\)\.auth-nostr-sep\{display:none/', $flat);
         $this->assertMatchesRegularExpression('/#page-login-signup\.ismos-login__form\.mform\[data-groupname="buttonar"\]#id_cancel\{display:none/', $flat);
 

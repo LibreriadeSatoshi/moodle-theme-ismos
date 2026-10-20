@@ -45,6 +45,65 @@
         margin-block-end: 24px;
     }
 
+    // The maintenance message page: a calm 640 px column on the page ground. The mark, a mono label, a Literata
+    // heading, the admin's message as plain body text, and a quiet line for questions.
+    .ismos-maintenance__content {
+        box-sizing: border-box;
+        margin-inline: auto;
+        max-inline-size: 640px;
+        padding-block: 32px 0;
+    }
+
+    .ismos-maintenance__mark {
+        block-size: 40px;
+        display: block;
+        inline-size: 40px;
+        margin-block-end: 24px;
+    }
+
+    .ismos-maintenance__mark.ismos-mark-paper {
+        display: none;
+    }
+
+    .ismos-maintenance__label {
+        margin: 0 0 12px;
+    }
+
+    .ismos-maintenance__heading {
+        font-family: var(--ismos-font-serif);
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 38px;
+        margin: 0 0 24px;
+        text-wrap: balance;
+
+        @media (min-width: 768px) {
+            font-size: 44px;
+            line-height: 50px;
+        }
+    }
+
+    .ismos-maintenance__message {
+        font-size: 19px;
+        line-height: 30px;
+        overflow-wrap: anywhere;
+
+        > :first-child {
+            margin-block-start: 0;
+        }
+
+        > :last-child {
+            margin-block-end: 0;
+        }
+    }
+
+    .ismos-maintenance__questions {
+        color: var(--ismos-text-muted);
+        font-size: 15px;
+        line-height: 24px;
+        margin: 32px 0 0;
+    }
+
     // The message: info tokens, 4 px corners, on the page ground.
     .maintenance_message,
     .box.generalbox {
@@ -55,6 +114,28 @@
         margin: 0;
         max-inline-size: 680px;
         padding: 16px 20px;
+    }
+}
+
+.ismos-mode-dark .ismos-maintenance__mark {
+    &.ismos-mark-paper {
+        display: block;
+    }
+
+    &.ismos-mark-ink {
+        display: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto .ismos-maintenance__mark {
+        &.ismos-mark-paper {
+            display: block;
+        }
+
+        &.ismos-mark-ink {
+            display: none;
+        }
     }
 }
 

@@ -27,6 +27,8 @@
     * markpaper - URL of the Paper mark
     * homeurl - URL of the site
     * wordmark - The wordmark text
+    * footermark - URL of the Paper mark for the footer
+    * ismaintenance - true on the maintenance message page, with label, heading, message and questions
 
     Example context (json):
     {
@@ -39,7 +41,8 @@
         "markink": "/theme/ismos/pix/ismos-mark-ink.svg",
         "markpaper": "/theme/ismos/pix/ismos-mark-paper.svg",
         "homeurl": "/",
-        "wordmark": "ISMOS"
+        "wordmark": "ISMOS",
+        "footermark": "/theme/ismos/pix/ismos-mark-paper.svg"
     }
 }}
 {{{ output.doctype }}}
@@ -69,7 +72,26 @@
     <div id="page" class="ismos-maintenance__page">
         <div id="page-content">
             <div id="region-main">
-                {{{ output.main_content }}}
+                {{#ismaintenance}}
+                    <div class="ismos-maintenance__content">
+                        <img src="{{{ markink }}}" class="ismos-maintenance__mark ismos-mark-ink" width="40" height="40" alt="" aria-hidden="true">
+                        <img src="{{{ markpaper }}}" class="ismos-maintenance__mark ismos-mark-paper" width="40" height="40" alt="" aria-hidden="true">
+                        <p class="ismos-label ismos-maintenance__label">{{ label }}</p>
+                        <h1 class="ismos-maintenance__heading">{{ heading }}</h1>
+                        {{#message}}
+                            <div class="ismos-maintenance__message">{{{ . }}}</div>
+                        {{/message}}
+                        {{#questions}}
+                            <p class="ismos-maintenance__questions">{{{ . }}}</p>
+                        {{/questions}}
+                    </div>
+                    {{! Core still has to print its main content (it is the page's placeholder token); its long
+                        heading and message are replaced by the ones above, so they are not shown or announced. }}
+                    <div hidden>{{{ output.main_content }}}</div>
+                {{/ismaintenance}}
+                {{^ismaintenance}}
+                    {{{ output.main_content }}}
+                {{/ismaintenance}}
             </div>
         </div>
     </div>
