@@ -11,12 +11,18 @@
         padding: 24px !important; // stylelint-disable-line declaration-no-important
 
         > .d-flex:first-child {
-            border-block-end: 1px solid var(--ismos-hairline);
-            padding-block-end: 16px;
+            padding-block-end: 0;
         }
     }
 
-    .card-title {
+    // The separator only exists with a visible title (a separate rule: a selector scssphp cannot parse would
+    // drop the whole block).
+    > .card-body > .d-flex:has(> .card-title) {
+        border-block-end: 1px solid var(--ismos-hairline);
+        padding-block-end: 16px;
+    }
+
+    > .card-body > .d-flex > .card-title {
         color: var(--ismos-text-heading);
         font-family: var(--ismos-font-serif);
         font-size: 24px;
@@ -25,9 +31,26 @@
         margin: 0;
     }
 
-    .card-text.content {
+    > .card-body > .card-text.content {
         margin-block-start: 16px !important; // stylelint-disable-line declaration-no-important
     }
+}
+
+// Boost strips the padding of the course overview block's body on My courses (important, 4 classes): an id
+// outranks it. One hairline under the title: the block-cards top border Boost adds is removed.
+#page .block.card > .card-body {
+    padding: 24px !important; // stylelint-disable-line declaration-no-important
+}
+
+#page .block_myoverview .block-cards {
+    border-block-start: 0;
+    padding-block-start: 0;
+}
+
+// Card headers and footers stay on the mode's ground: Bootstrap's bg-white utility is important.
+.card-header.bg-white,
+.card-footer.bg-white {
+    background-color: var(--ismos-surface-raised) !important; // stylelint-disable-line declaration-no-important
 }
 
 // Course overview filters: the theme's select look (input border, input ground, 44 px).
@@ -78,6 +101,12 @@
         border-block-end: 1px solid var(--ismos-hairline);
     }
 
+    // The loading placeholder has the same 16:9 ratio, so the cards do not jump when they load.
+    .card-img-top.bg-pulse-grey {
+        aspect-ratio: 16 / 9;
+        block-size: auto !important; // stylelint-disable-line declaration-no-important
+    }
+
     .card-body.course-info-container {
         display: flex;
         flex-direction: column;
@@ -120,13 +149,16 @@
 
     .ismos-course-card__foot {
         gap: 12px;
-        padding: 0 24px 16px;
+
+        // Padding sits on the children, so an empty foot (no progress, no menu) takes no space.
+        > * {
+            padding: 0 24px 16px;
+        }
 
         .card-footer {
             background: transparent !important; // stylelint-disable-line declaration-no-important
             border: 0;
             color: var(--ismos-text-muted);
-            padding: 0;
         }
 
         .progress-text {
@@ -142,6 +174,7 @@
         .card-footer.menu {
             flex: none;
             margin-inline-start: auto;
+            padding-inline: 0 16px;
         }
     }
 
@@ -186,5 +219,23 @@
     .categoryname,
     .btn-link {
         color: var(--ismos-text-muted);
+    }
+}
+
+// List and summary views: the generated pattern is not a cover. Hidden, and its column goes with it.
+.block_myoverview {
+    .list-image[style*="data:image"],
+    .summary-image[style*="data:image"] {
+        display: none;
+    }
+
+    .col-md-2:has(> a > :is(.list-image, .summary-image)[style*="data:image"]) {
+        display: none;
+    }
+
+    .col-md-2:has(> a > :is(.list-image, .summary-image)[style*="data:image"]) + .col-md-10 {
+        flex: 0 0 100%;
+        max-inline-size: 100%;
+        inline-size: 100%;
     }
 }

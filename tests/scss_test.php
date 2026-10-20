@@ -91,8 +91,8 @@ final class scss_test extends \advanced_testcase {
         // Blocks.
         $this->assertMatchesRegularExpression('/\.block\.card\{[^}]*border-radius:4px/', $flat);
         $this->assertMatchesRegularExpression('/\.block\.card>\.card-body\{padding:24px!important/', $flat);
-        $this->assertMatchesRegularExpression('/\.block\.card>\.card-body>\.d-flex:first-child\{border-block-end:1pxsolidvar\(--ismos-hairline\)/', $flat);
-        $this->assertMatchesRegularExpression('/\.block\.card\.card-title\{[^}]*font-family:var\(--ismos-font-serif\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.block\.card>\.card-body>\.d-flex:has\(>\.card-title\)\{border-block-end:1pxsolidvar\(--ismos-hairline\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.block\.card>\.card-body>\.d-flex>\.card-title\{[^}]*font-family:var\(--ismos-font-serif\)/', $flat);
         $this->assertMatchesRegularExpression('/\[data-region="filter"\]\.btn,[^{]*\{[^}]*border:1pxsolidvar\(--ismos-border-input\)/', $flat);
         // Course cards: edge, radius, no generated pattern, a bar, no box on the actions button.
         $this->assertMatchesRegularExpression('/\.course-card\.card\{[^}]*border:1pxsolidvar\(--ismos-hairline\);border-radius:4px;box-shadow:none/', $flat);
@@ -120,7 +120,19 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.btn-outline-secondary\{border-color:var\(--ismos-border-input\)/', $flat);
         // Help and action icons follow the ink.
         $this->assertMatchesRegularExpression('/\.icon\.text-info,[^{]*\{color:var\(--ismos-text\)!important/', $flat);
-        $this->assertMatchesRegularExpression('/\.icon\.fa:not\(\.text-danger,\.text-warning\)\{color:var\(--ismos-text-muted\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.icon\.fa-regular,\.icon\.far\{font-family:"fontawesome6free";font-weight:400/', $flat);
+        $this->assertMatchesRegularExpression('/#page\.block\.card>\.card-body\{padding:24px!important/', $flat);
+        $this->assertMatchesRegularExpression('/#page\.block_myoverview\.block-cards\{border-block-start:0/', $flat);
+        // List and summary views hide the generated pattern and its column; light card footers follow the mode.
+        $this->assertMatchesRegularExpression('/\.block_myoverview\.list-image\[style\*="data:image"\],\.block_myoverview\.summary-image\[style\*="data:image"\]\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.col-md-2:has\(>a>:is\(\.list-image,\.summary-image\)\[style\*="data:image"\]\)\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.card-footer\.bg-white\{background-color:var\(--ismos-surface-raised\)!important/', $flat);
+        // An empty card foot takes no space; the placeholder has the cover ratio.
+        $this->assertMatchesRegularExpression('/\.ismos-course-card__foot>\*\{padding:0[^}]*16px\}/', $flat);
+        $this->assertMatchesRegularExpression('/\.card-img-top\.bg-pulse-grey\{aspect-ratio:(?:16\/9|1\.7777777778);block-size:auto!important/', $flat);
+        // Action icons: not inside buttons, state icons exempt.
+        $this->assertMatchesRegularExpression('/\.icon\.fa:not\(\.text-success,\.text-danger,\.text-warning,\.text-info,\.fa-check,\.fa-circle-check,\.fa-xmark,\.fa-circle-xmark\)\{color:var\(--ismos-text-muted\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.btn\.icon\.fa\{color:inherit!important/', $flat);
         // Signup legend.
         $this->assertMatchesRegularExpression('/#page-login-signup\.ismos-login__form\.mform\.fdescription\.required\{display:none/', $flat);
     }

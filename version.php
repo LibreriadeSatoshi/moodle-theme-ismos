@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026101907;
+$plugin->version   = 2026101908;
 $plugin->requires  = 2025100600;
 $plugin->component = 'theme_ismos';
 $plugin->release = '0.1.0';

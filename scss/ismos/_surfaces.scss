@@ -149,6 +149,13 @@ thead.table-light th,
     color: var(--ismos-text);
 }
 
+// Outline icons (FA regular) are weight 400: Moodle's icon base would otherwise draw them solid.
+.icon.fa-regular,
+.icon.far {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 400;
+}
+
 // The help icon: the text colour, one ink, and a 44 px target.
 .btn-link:has(.icon.text-info),
 a[data-bs-toggle="popover"].btn-link {
@@ -165,13 +172,20 @@ a[data-bs-toggle="popover"] .icon {
     color: var(--ismos-text) !important; // stylelint-disable-line declaration-no-important
 }
 
-// Font Awesome action icons in tables, forms and the main region follow the ink, not the plugin's colours.
-// Image icons (QR codes, logos) are untouched; danger and warning keep their status colour.
-#region-main :is(table, .mform, .generaltable) .icon.fa:not(.text-danger, .text-warning),
-#region-main :is(table, .mform, .generaltable) a .icon.fa:not(.text-danger, .text-warning) {
+// Plain Font Awesome action icons in tables, forms and the main region follow the ink, not the plugin's colours.
+// Not touched: image icons (QR codes, logos), anything inside a button, and state icons (success, danger,
+// warning, info colours; check and cross marks), which carry meaning.
+$ismos-state-icons: ".text-success, .text-danger, .text-warning, .text-info, .fa-check, .fa-circle-check, .fa-xmark, .fa-circle-xmark";
+
+#region-main :is(table, .mform, .generaltable) :is(td, th, .action-icon, a:not(.btn)) .icon.fa:not(#{$ismos-state-icons}) {
     color: var(--ismos-text-muted);
 }
 
-#region-main :is(table, .mform, .generaltable) a:hover .icon.fa:not(.text-danger, .text-warning) {
+#region-main :is(table, .mform, .generaltable) a:not(.btn):hover .icon.fa:not(#{$ismos-state-icons}) {
     color: var(--ismos-text);
+}
+
+// Icons inside buttons keep the button's own colour.
+#region-main :is(table, .mform, .generaltable) .btn .icon.fa {
+    color: inherit !important; // stylelint-disable-line declaration-no-important
 }
