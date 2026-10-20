@@ -120,7 +120,9 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.btn-outline-secondary\{border-color:var\(--ismos-border-input\)/', $flat);
         // Help and action icons follow the ink.
         $this->assertMatchesRegularExpression('/\.icon\.text-info,[^{]*\{color:var\(--ismos-text\)!important/', $flat);
-        $this->assertMatchesRegularExpression('/\.icon\.fa-regular,\.icon\.far\{font-family:"fontawesome6free";font-weight:400/', $flat);
+        $this->assertStringNotContainsString('.icon.fa-regular', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.ismos-bar-icon\{[^}]*block-size:20px[^}]*stroke:currentcolor[^}]*stroke-width:1\.5/', $flat);
+        $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar:focus:not\(:focus-visible\)\{box-shadow:none;outline:0/', $flat);
         $this->assertMatchesRegularExpression('/#page\.block\.card>\.card-body\{padding:24px!important/', $flat);
         $this->assertMatchesRegularExpression('/#page\.block_myoverview\.block-cards\{border-block-start:0/', $flat);
         // List and summary views hide the generated pattern and its column; light card footers follow the mode.

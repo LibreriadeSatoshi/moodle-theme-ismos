@@ -298,13 +298,23 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
-     * The bell and messages icons are outline (FA regular) so the bar has one icon style.
+     * The bell and messages toggles use inline line icons and keep their regions and names.
      */
-    public function test_bar_icons_are_outline(): void {
-        $map = \core\output\icon_system::instance(\theme_ismos\output\icon_system_fontawesome::class)->get_icon_name_map();
-        $this->assertSame('fa-regular fa-bell', $map['core:i/notifications']);
-        $this->assertSame('fa-regular fa-message', $map['core:t/message']);
-        $this->assertStringNotContainsString('fa-star', implode(' ', $map));
+    public function test_bar_icons_are_inline_svg(): void {
+        $this->setAdminUser();
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('core_message/message_popover', ['uniqid' => 'x1', 'unreadcount' => 2]);
+        $this->assertStringContainsString('<svg class="ismos-bar-icon" aria-hidden="true"', $html);
+        $this->assertStringContainsString('data-region="count-container"', $html);
+        $this->assertStringContainsString('aria-label=', $html);
+        $this->assertStringNotContainsString('fa-message', $html);
+        $this->assertStringNotContainsString('}}', $html);
+
+        $html = $out->render_from_template('message_popup/notification_popover', ['userid' => 2, 'unreadcount' => 1]);
+        $this->assertStringContainsString('<svg class="ismos-bar-icon" aria-hidden="true"', $html);
+        $this->assertStringContainsString('data-region="count-container"', $html);
+        $this->assertStringNotContainsString('fa-bell', $html);
+        $this->assertStringNotContainsString('}}', $html);
     }
 
     /**

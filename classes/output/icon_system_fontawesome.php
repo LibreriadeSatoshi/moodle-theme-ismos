@@ -38,12 +38,6 @@ class icon_system_fontawesome extends \core\output\icon_system_fontawesome {
         'rocket' => 'arrow-up',
     ];
 
-    /** @var string[] Icons drawn as FA regular (outline) so the top bar has one line style, with the toggle and the rewards mark. */
-    private const OUTLINE = [
-        'core:i/notifications' => 'fa-regular fa-bell',
-        'core:t/message' => 'fa-regular fa-message',
-    ];
-
     /** @var array|null Remapped copy of the full name map (core plus plugin maps), built once per request. */
     private ?array $remapped = null;
 
@@ -60,9 +54,6 @@ class icon_system_fontawesome extends \core\output\icon_system_fontawesome {
                 ),
                 parent::get_icon_name_map()
             );
-            foreach (self::OUTLINE as $key => $value) {
-                $this->remapped[$key] = $value;
-            }
         }
         return $this->remapped;
     }

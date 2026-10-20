@@ -47,6 +47,24 @@
     }
 }
 
+// Bell and messages: inline line icons, the same style as the dark mode toggle and the rewards mark.
+.ismos-navbar .ismos-bar-icon {
+    block-size: 20px;
+    display: block;
+    fill: none;
+    inline-size: 20px;
+    stroke: currentcolor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+}
+
+// A mouse click leaves no ring: it shows for the keyboard only (:focus-visible, above).
+.navbar.fixed-top.ismos-navbar :focus:not(:focus-visible) {
+    box-shadow: none;
+    outline: 0;
+}
+
 .ismos-mode-dark .navbar.fixed-top.ismos-navbar .navbar-toggler-icon {
     filter: invert(1);
 }

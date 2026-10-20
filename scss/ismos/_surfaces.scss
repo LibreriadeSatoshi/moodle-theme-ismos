@@ -149,13 +149,6 @@ thead.table-light th,
     color: var(--ismos-text);
 }
 
-// Outline icons (FA regular) are weight 400: Moodle's icon base would otherwise draw them solid.
-.icon.fa-regular,
-.icon.far {
-    font-family: "Font Awesome 6 Free";
-    font-weight: 400;
-}
-
 // The help icon: the text colour, one ink, and a 44 px target.
 .btn-link:has(.icon.text-info),
 a[data-bs-toggle="popover"].btn-link {
