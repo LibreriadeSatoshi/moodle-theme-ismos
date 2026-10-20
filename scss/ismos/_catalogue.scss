@@ -1,0 +1,350 @@
+// Course catalogue (course/index.php and its category pages): heading, level tabs, search, one section per level
+// with course cards. Tokens only; one rule serves both modes.
+
+// The page is as wide as the landing: no limited width, no drawer toggles space, core's heading and menu are gone.
+body.ismos-catalog {
+    #page.drawers {
+        padding-inline: 0;
+    }
+
+    #page.drawers .main-inner {
+        margin-block: 0;
+        max-inline-size: none;
+        padding-block: 0;
+        padding-inline: 0;
+    }
+
+    #region-main-box,
+    #region-main {
+        max-inline-size: none;
+    }
+
+    #page-content {
+        padding-inline: 0;
+    }
+
+    #page.drawers div[role="main"] {
+        padding-inline: 0;
+    }
+
+    #region-main-settings-menu {
+        display: none;
+    }
+}
+
+.ismos-catalogue {
+    @include ismos-column;
+
+    padding-block: 48px 80px;
+
+    @media (min-width: 901px) {
+        padding-block: 56px 80px;
+    }
+}
+
+.ismos-catalogue__head {
+    h1 {
+        font-family: var(--ismos-font-serif);
+        font-size: 34px;
+        font-weight: 500;
+        line-height: 40px;
+        margin: 8px 0 10px;
+
+        @media (min-width: 901px) {
+            font-size: 48px;
+            line-height: 54px;
+        }
+    }
+}
+
+.ismos-catalogue__top {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    justify-content: space-between;
+
+    .ismos-label {
+        color: var(--ismos-text-muted);
+    }
+}
+
+.ismos-catalogue__manage {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ismos-catalogue__lead {
+    color: var(--ismos-text-muted);
+    font-size: 18px;
+    line-height: 28px;
+    margin: 0;
+    max-inline-size: 70ch;
+}
+
+// Toolbar: level tabs and the search, on a hairline.
+.ismos-catalogue__tools {
+    align-items: flex-end;
+    border-block-end: 1px solid var(--ismos-hairline);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    justify-content: space-between;
+    margin-block: 36px 8px;
+}
+
+.ismos-catalogue__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    a {
+        align-items: center;
+        border-block-end: 2px solid transparent;
+        color: var(--ismos-text-muted);
+        display: flex;
+        font-size: 15px;
+        gap: 8px;
+        margin-block-end: -1px;
+        min-block-size: 44px;
+        padding: 8px 14px;
+        text-decoration: none;
+
+        &:hover {
+            border-block-end-color: var(--ismos-hairline);
+            color: var(--ismos-text);
+        }
+
+        &.active {
+            border-block-end-color: var(--ismos-text);
+            color: var(--ismos-text);
+            font-weight: 600;
+        }
+
+        span {
+            font-family: var(--ismos-font-mono);
+            font-size: 11px;
+            font-weight: 600;
+        }
+    }
+}
+
+.ismos-catalogue__search {
+    inline-size: 100%;
+    margin-block-end: 10px;
+    position: relative;
+
+    @media (min-width: 901px) {
+        inline-size: 280px;
+    }
+
+    input {
+        background: var(--ismos-input-bg);
+        block-size: 44px;
+        border: 1.5px solid var(--ismos-border-input);
+        border-radius: 4px;
+        box-sizing: border-box;
+        color: var(--ismos-text);
+        font-size: 15px;
+        inline-size: 100%;
+        padding-inline: 12px 40px;
+    }
+
+    svg {
+        block-size: 20px;
+        fill: none;
+        inline-size: 20px;
+        inset-block-start: 12px;
+        inset-inline-end: 12px;
+        pointer-events: none;
+        position: absolute;
+        stroke: var(--ismos-text-muted);
+        stroke-width: 1.5;
+    }
+}
+
+// A level: bars, kicker, Literata h2, a two line description and the link to the level.
+.ismos-level {
+    margin-block-start: 56px;
+}
+
+.ismos-level__head {
+    align-items: end;
+    display: grid;
+    gap: 12px 24px;
+    grid-template-columns: minmax(0, 1fr);
+    margin-block-end: 22px;
+
+    @media (min-width: 901px) {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    h2 {
+        font-family: var(--ismos-font-serif);
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 36px;
+        margin: 6px 0;
+    }
+
+    a {
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .ismos-path__level {
+        margin-block-end: 10px;
+    }
+}
+
+.ismos-level__kicker {
+    color: var(--ismos-text-muted);
+    display: block;
+}
+
+.ismos-level__text {
+    -webkit-box-orient: vertical;
+    color: var(--ismos-text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    line-height: 24px;
+    margin: 0;
+    max-inline-size: 70ch;
+    overflow: hidden;
+}
+
+// Course cards: the whole card is the link.
+.ismos-cards {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @media (min-width: 901px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    > li {
+        display: flex;
+    }
+}
+
+.ismos-ccard {
+    background: var(--ismos-card-bg);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--ismos-text);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    inline-size: 100%;
+    padding: 22px;
+    text-decoration: none;
+    transition: border-color .15s;
+
+    &:hover,
+    &:focus {
+        border-color: var(--ismos-text);
+        color: var(--ismos-text);
+        text-decoration: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
+// Past courses: a raised ground and no edge.
+.ismos-ccard--past {
+    background: var(--ismos-surface-raised);
+    border-color: transparent;
+}
+
+.ismos-ccard__top {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.ismos-ccard__when {
+    @include ismos-label;
+
+    align-items: center;
+    color: var(--ismos-text-muted);
+    display: flex;
+    gap: 8px;
+}
+
+.ismos-ccard__when--open {
+    color: var(--ismos-text);
+
+    &::before {
+        background: var(--ismos-madder);
+        block-size: 8px;
+        border-radius: 50%;
+        content: "";
+        inline-size: 8px;
+    }
+}
+
+.ismos-ccard__title {
+    font-family: var(--ismos-font-serif);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 28px;
+    margin-block-start: 4px;
+    overflow-wrap: anywhere;
+}
+
+.ismos-ccard__text {
+    -webkit-box-orient: vertical;
+    color: var(--ismos-text-muted);
+    display: -webkit-box;
+    font-size: 14px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    line-height: 22px;
+    overflow: hidden;
+}
+
+.ismos-ccard__foot {
+    align-items: center;
+    border-block-start: 1px solid var(--ismos-hairline);
+    color: var(--ismos-text-muted);
+    display: flex;
+    font-size: 13px;
+    gap: 10px;
+    margin-block-start: auto;
+    padding-block-start: 14px;
+}
+
+.ismos-ccard__avatar {
+    align-items: center;
+    background: var(--ismos-track);
+    block-size: 28px;
+    border-radius: 50%;
+    color: var(--ismos-text);
+    display: inline-flex;
+    flex: none;
+    font-size: 11px;
+    font-weight: 600;
+    inline-size: 28px;
+    justify-content: center;
+    object-fit: cover;
+}
+
+.ismos-ccard__enrolled {
+    margin-inline-start: auto;
+}
+
+.ismos-catalogue__empty {
+    color: var(--ismos-text-muted);
+    margin-block-start: 48px;
+}

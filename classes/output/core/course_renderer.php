@@ -139,6 +139,25 @@ class course_renderer extends \core_course_renderer {
     }
 
     /**
+     * The course catalogue: all courses, or one level or subcategory, in the ISMOS look. Core's category select,
+     * collapsed tree, "Expand all" and actions menu are not printed. Called before the page header, so the body
+     * class can still be added.
+     *
+     * @param int|\stdClass|\core_course_category $category
+     * @return string
+     */
+    public function course_category($category) {
+        if (!in_array($this->page->pagetype, ['course-index', 'course-index-category'], true)) {
+            return parent::course_category($category);
+        }
+        $this->page->add_body_class('ismos-catalog');
+        $id = is_object($category) ? (int) $category->id : (int) $category;
+        $data = (new \theme_ismos\local\catalogue())->export($id);
+        $data['label'] = get_string('courses', 'theme_ismos');
+        return $this->output->render_from_template('theme_ismos/catalogue', $data);
+    }
+
+    /**
      * Core echoes the site section 1 (summary and activities) before the front page main content, which
      * would put it above the hero and outside the content column. On the site index it is rendered by
      * frontpage() instead, so this returns nothing there.
