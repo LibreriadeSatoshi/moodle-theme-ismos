@@ -57,7 +57,6 @@ $templatecontext = [
     'secondarymoremenu' => $secondarynavigation ?: false,
     'mobileprimarynav' => $primarymenu['mobileprimarynav'],
     'usermenu' => $primarymenu['user'],
-    'langmenu' => $primarymenu['lang'],
     'overflow' => $overflow,
     'headeractions' => $headeractions,
     'hasheaderactions' => trim($headeractions) !== '',

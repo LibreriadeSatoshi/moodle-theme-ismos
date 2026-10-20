@@ -14,10 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 namespace theme_ismos\output;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Font Awesome icon system with the icons the ISMOS guide bans swapped for neutral ones.

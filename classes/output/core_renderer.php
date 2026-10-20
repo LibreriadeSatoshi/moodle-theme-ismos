@@ -14,12 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 namespace theme_ismos\output;
 
 use moodle_url;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Core renderer for the ISMOS theme: bundled mark, favicon and the dark mode toggle.

@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Returns the main SCSS content: Boost's default preset plus the ISMOS entry file.
  *
@@ -69,16 +67,6 @@ function theme_ismos_get_pre_scss(theme_config $theme): string {
 }
 
 /**
- * Returns SCSS to append after the main SCSS. Filled in by later tasks.
- *
- * @param theme_config $theme The theme config object.
- * @return string
- */
-function theme_ismos_get_extra_scss(theme_config $theme): string {
-    return '';
-}
-
-/**
  * Registers the dark mode preference (shared with theme_scholastica; the definitions are identical).
  *
  * @return array
@@ -116,6 +104,7 @@ function theme_ismos_page_init(moodle_page $page): void {
  * @return string
  */
 function theme_ismos_default_testimonials(): string {
+    // phpcs:disable moodle.Files.LineLength
     return <<<'TESTIMONIALS'
 When you become part of Librería you realize that everything makes sense. Being taught by them has been the best thing that's happened to me. I hope one day I can give back with my collaboration for everything they've given me. | Yuri Delgado, from Cuba
 A beautiful experience to be part of this seminar, from the technical knowledge to the human quality that you learn from all the people who are part of the bookstore. | Joni, from Argentina
@@ -125,3 +114,4 @@ Librería is an excellent place to learn, develop yourself and specialize your k
 Participating in Librería's seminars opened my eyes about Bitcoin and Lightning. Thank you for making it accessible in Spanish. | anónimo, from the global south
 TESTIMONIALS;
 }
+// phpcs:enable moodle.Files.LineLength
