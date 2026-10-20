@@ -1,0 +1,123 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ismos/catalogue
+
+    ISMOS course catalogue: heading, level tabs, search and one section per level with the course cards.
+
+    Context variables required for this template:
+    * label, title, lead, haslead - the mono label, the h1 and the line under it
+    * tabs, hastabs - name, count, url, active (the first is "All")
+    * searchurl - Moodle's course search
+    * canmanage, manageurl - the "Manage courses" link, for people who can manage
+    * sections, hassections - name, description, url, showonly, haslevel, level, kicker, cards
+      * cards - url, name, summary, when, haswhen, open, past, code, hascode, teacher (name, initials, picture), hasfoot, enrolled
+
+    Example context (json):
+    {
+        "label": "Courses",
+        "title": "All courses",
+        "lead": "9 courses in 3 levels, live or at your own pace.",
+        "haslead": true,
+        "hastabs": true,
+        "tabs": [{"name": "All", "count": 9, "url": "/course/index.php", "active": true},
+                 {"name": "Bitcoin Dev", "count": 4, "url": "/course/index.php?categoryid=2", "active": false}],
+        "searchurl": "/course/search.php",
+        "canmanage": true,
+        "manageurl": "/course/management.php",
+        "hassections": true,
+        "sections": [{
+            "name": "Bitcoin Dev", "description": "Nodes and Nostr.", "hasdescription": true, "url": "/course/index.php?categoryid=2",
+            "showonly": true, "haslevel": true, "level": [{"on": true}, {"on": false}, {"on": false}], "kicker": "To start",
+            "hascards": true,
+            "cards": [{
+                "url": "/course/view.php?id=3", "name": "Nostr", "summary": "Build a client.", "when": "Starts 5 Nov", "haswhen": true,
+                "open": true, "past": false, "code": "ES", "hascode": true, "hasteacher": true,
+                "teacher": {"name": "Ana Diaz", "initials": "AD", "haspicture": false}, "hasenrolled": true, "enrolled": "31 enrolled",
+                "hasfoot": true
+            }]
+        }]
+    }
+}}
+<div class="ismos-catalogue">
+    <header class="ismos-catalogue__head">
+        <div class="ismos-catalogue__top">
+            <span class="ismos-label">{{label}}</span>
+            {{#canmanage}}<a class="ismos-catalogue__manage" href="{{{manageurl}}}">{{#str}}catalogmanage, theme_ismos{{/str}}</a>{{/canmanage}}
+        </div>
+        <h1>{{title}}</h1>
+        {{#haslead}}<p class="ismos-catalogue__lead">{{lead}}</p>{{/haslead}}
+    </header>
+    <div class="ismos-catalogue__tools">
+        {{#hastabs}}
+            <nav class="ismos-catalogue__tabs" aria-label="{{#str}}catalogtabs, theme_ismos{{/str}}">
+                {{#tabs}}
+                    <a href="{{{url}}}"{{#active}} aria-current="page" class="active"{{/active}}>{{name}} <span>{{count}}</span></a>
+                {{/tabs}}
+            </nav>
+        {{/hastabs}}
+        <form class="ismos-catalogue__search" action="{{{searchurl}}}" method="get" role="search">
+            <label class="visually-hidden" for="ismos-catalogue-search">{{#str}}catalogsearch, theme_ismos{{/str}}</label>
+            <input id="ismos-catalogue-search" type="search" name="search" placeholder="{{#str}}catalogsearch, theme_ismos{{/str}}" autocomplete="off">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        </form>
+    </div>
+    {{#sections}}
+        <section class="ismos-level" aria-label="{{name}}">
+            <div class="ismos-level__head">
+                <div>
+                    {{#haslevel}}
+                        <span class="ismos-path__level" aria-hidden="true">{{#level}}<i{{#on}} class="on"{{/on}}></i>{{/level}}</span>
+                        <span class="ismos-label ismos-level__kicker">{{kicker}}</span>
+                    {{/haslevel}}
+                    <h2>{{name}}</h2>
+                    {{#hasdescription}}<p class="ismos-level__text">{{description}}</p>{{/hasdescription}}
+                </div>
+                {{#showonly}}<a href="{{{url}}}">{{#str}}catalogonly, theme_ismos{{/str}}</a>{{/showonly}}
+            </div>
+            {{#hascards}}
+                <ul class="ismos-cards">
+                    {{#cards}}
+                        <li>
+                            <a class="ismos-ccard{{#past}} ismos-ccard--past{{/past}}" href="{{{url}}}">
+                                <span class="ismos-ccard__top">
+                                    <span class="ismos-ccard__when{{#open}} ismos-ccard__when--open{{/open}}">{{#haswhen}}{{when}}{{/haswhen}}</span>
+                                    {{#hascode}}<span class="ismos-chip">{{code}}</span>{{/hascode}}
+                                </span>
+                                <span class="ismos-ccard__title">{{name}}</span>
+                                {{#summary}}<span class="ismos-ccard__text">{{.}}</span>{{/summary}}
+                                {{#hasfoot}}
+                                    <span class="ismos-ccard__foot">
+                                        {{#hasteacher}}{{#teacher}}
+                                            {{#haspicture}}<img class="ismos-ccard__avatar" src="{{{picture}}}" alt="" width="28" height="28">{{/haspicture}}
+                                            {{^haspicture}}<span class="ismos-ccard__avatar" aria-hidden="true">{{initials}}</span>{{/haspicture}}
+                                            <span>{{name}}</span>
+                                        {{/teacher}}{{/hasteacher}}
+                                        {{#hasenrolled}}<span class="ismos-ccard__enrolled">{{enrolled}}</span>{{/hasenrolled}}
+                                    </span>
+                                {{/hasfoot}}
+                            </a>
+                        </li>
+                    {{/cards}}
+                </ul>
+            {{/hascards}}
+        </section>
+    {{/sections}}
+    {{^hassections}}
+        <p class="ismos-catalogue__empty">{{#str}}catalogempty, theme_ismos{{/str}}</p>
+    {{/hassections}}
+</div>

@@ -47,6 +47,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * The page header with the title, the context and the actions. The course catalogue prints its own heading,
+     * so core's (the site name and a settings menu) is left out there.
+     *
+     * @return string
+     */
+    public function full_header() {
+        if (in_array($this->page->pagetype, ['course-index', 'course-index-category'], true)) {
+            return '';
+        }
+        return parent::full_header();
+    }
+
+    /**
      * Returns the favicon: the theme's own SVG, not the shared core favicon setting.
      *
      * @return moodle_url
