@@ -45,7 +45,10 @@ final class frontpage_test extends \advanced_testcase {
         $this->resetAfterTest();
         $this->setGuestUser();
         $visible = $this->getDataGenerator()->create_category(['name' => 'Bitcoin']);
-        $this->getDataGenerator()->create_category(['name' => 'Secret', 'visible' => 0]);
+        $secret = $this->getDataGenerator()->create_category(['name' => 'Secret', 'visible' => 0]);
+        // Paths only list categories that have a visible course.
+        $this->getDataGenerator()->create_course(['category' => $visible->id]);
+        $this->getDataGenerator()->create_course(['category' => $secret->id]);
         $data = $this->export();
         $names = array_column($data['paths'], 'name');
         $this->assertContains('Bitcoin', $names);
