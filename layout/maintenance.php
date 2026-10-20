@@ -32,6 +32,27 @@ $templatecontext = [
     'markpaper' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
     'homeurl' => $CFG->wwwroot . '/',
     'wordmark' => get_string('wordmark', 'theme_ismos'),
+    // The footer mark: this layout's output is not always the theme renderer, so the URL is passed in.
+    'footermark' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
 ];
+
+// The maintenance message page gets its own calm layout; other pages on this layout (installation, upgrade
+// progress) keep the core content. Nothing here may touch the database.
+if ($PAGE->pagetype === 'maintenance-message') {
+    $templatecontext['ismaintenance'] = true;
+    $templatecontext['label'] = get_string('maintenancelabel', 'theme_ismos');
+    $templatecontext['heading'] = get_string('maintenanceheading', 'theme_ismos');
+    if (isset($CFG->maintenance_message) && !html_is_blank($CFG->maintenance_message)) {
+        $templatecontext['message'] = $CFG->maintenance_message;
+    }
+    if (!empty($CFG->supportemail)) {
+        $email = s($CFG->supportemail);
+        $templatecontext['questions'] = get_string(
+            'maintenancequestions',
+            'theme_ismos',
+            \html_writer::link('mailto:' . $email, $email)
+        );
+    }
+}
 
 echo $OUTPUT->render_from_template('theme_ismos/maintenance', $templatecontext);

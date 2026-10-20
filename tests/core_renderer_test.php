@@ -224,6 +224,7 @@ final class core_renderer_test extends \advanced_testcase {
         $out = $this->ismos_renderer();
         $context = [
             'cansignup' => true,
+            'showloginform' => true,
             'signupurl' => 'https://example.com/login/signup.php',
             'hasinstructions' => true,
             'instructions' => 'FIRSTTIME-INSTRUCTIONS',
@@ -232,6 +233,9 @@ final class core_renderer_test extends \advanced_testcase {
         ];
         $html = $out->render_from_template('core/loginform', $context);
         $this->assertStringContainsString('New here?', $html);
+        // The line sits directly under the heading, before any field.
+        $this->assertLessThan(strpos($html, 'New here?'), strpos($html, '</h1>'));
+        $this->assertLessThan(strpos($html, 'id="loginbtn"'), strpos($html, 'New here?'));
         $this->assertStringContainsString('href="https://example.com/login/signup.php">Create an account</a>', $html);
         $this->assertStringNotContainsString('FIRSTTIME-INSTRUCTIONS', $html);
         $this->assertStringNotContainsString('login-instructions', $html);
@@ -250,6 +254,67 @@ final class core_renderer_test extends \advanced_testcase {
         $html = $out->render_from_template('core/signup_form_layout', ['formhtml' => '<form></form>']);
         $this->assertStringContainsString('Already have an account?', $html);
         $this->assertStringContainsString($CFG->wwwroot . '/login/index.php">Log in</a>', $html);
+    }
+
+    /**
+     * The footer mark has a URL, also where the output is not the theme renderer (maintenance).
+     */
+    public function test_footer_mark_has_a_url_on_the_maintenance_layout(): void {
+        global $CFG, $PAGE;
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('theme_boost/footer', [
+            'output' => new \core_renderer($PAGE, RENDERER_TARGET_GENERAL),
+            'footermark' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
+        ]);
+        $this->assertStringContainsString('src="' . $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg"', $html);
+        $this->assertDoesNotMatchRegularExpression('/<img[^>]*\ssrc=""/', $html);
+    }
+
+    /**
+     * The maintenance page has the label, the heading, the message and the questions line.
+     */
+    public function test_maintenance_message_page(): void {
+        global $CFG;
+        $out = $this->ismos_renderer();
+        $context = [
+            'output' => $out,
+            'markink' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-ink.svg',
+            'markpaper' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
+            'footermark' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
+            'homeurl' => $CFG->wwwroot . '/',
+            'wordmark' => 'ISMOS',
+            'ismaintenance' => true,
+            'label' => get_string('maintenancelabel', 'theme_ismos'),
+            'heading' => get_string('maintenanceheading', 'theme_ismos'),
+        ];
+        $html = $out->render_from_template('theme_ismos/maintenance', $context + [
+            'message' => '<p>Back at noon.</p>',
+            'questions' => 'Questions? Write to <a href="mailto:a@b.c">a@b.c</a>',
+        ]);
+        $this->assertStringContainsString('ismos-maintenance__label">Maintenance<', $html);
+        $this->assertStringContainsString('class="ismos-maintenance__heading">We', $html);
+        $this->assertStringContainsString('Back at noon.', $html);
+        $this->assertStringContainsString('ismos-maintenance__questions', $html);
+        $this->assertDoesNotMatchRegularExpression('/<img[^>]*\ssrc=""/', $html);
+
+        // Without a message or a support address, neither block is printed.
+        $html = $out->render_from_template('theme_ismos/maintenance', $context);
+        $this->assertStringNotContainsString('ismos-maintenance__message', $html);
+        $this->assertStringNotContainsString('ismos-maintenance__questions', $html);
+    }
+
+    /**
+     * The Spanish "create an account" wording is the same on the hero and in the login line; the maintenance strings exist.
+     */
+    public function test_spanish_strings(): void {
+        $string = [];
+        include(__DIR__ . '/../lang/es/theme_ismos.php');
+        $this->assertSame('Crea una cuenta', $string['herosignup']);
+        $this->assertSame($string['createaccountlink'], $string['herosignup']);
+        foreach (['maintenancelabel', 'maintenanceheading', 'maintenancequestions'] as $key) {
+            $this->assertArrayHasKey($key, $string);
+        }
+        $this->assertStringContainsString('{$a}', $string['maintenancequestions']);
     }
 
     /**
