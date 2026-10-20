@@ -33,14 +33,30 @@
     border-color: var(--ismos-hairline);
 }
 
-// Editing dividers (dashed rules between activities and sections).
-.course-content .divider hr {
+// Editing dividers (dashed rules between activities and sections), also when disabled.
+.course-content .divider hr,
+.course-content .changenumsections.disabled .divider hr {
     border-top-color: var(--ismos-hairline);
+}
+
+// Dashed drop targets stay visible: muted ink.
+.section li.movehere a {
+    border-color: var(--ismos-text-muted);
+}
+
+.course-content .section.dropready.main.drop-down,
+.course-content .section.dropready li.activity.dropready.drop-down {
+    border-bottom-color: var(--ismos-text-muted);
+}
+
+.course-content .section.dropready li.activity.dropready.drop-up {
+    border-top-color: var(--ismos-text-muted);
 }
 
 // Availability and restriction notes: the info status. Light Logwood 800 on Logwood 50, dark Logwood 200
 // on Logwood. The lock icon and links keep the text ink; links stay underlined.
-.availabilityinfo {
+.course-section .availabilityinfo,
+.availabilityinfo.availabilityinfo {
     background-color: var(--ismos-info-bg);
     border: 1px solid var(--ismos-info-border);
     border-radius: 4px;
