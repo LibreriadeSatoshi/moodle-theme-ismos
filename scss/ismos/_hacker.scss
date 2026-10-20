@@ -159,6 +159,22 @@ $ismos-state-cell-list: '[class*="overridden"]', '[class*="excluded"]', '[class*
         background-color: transparent;
         color: var(--ismos-text);
     }
+
+    // Boost's light grey wrappers and icon buttons: the gradebook setup frame, section collapse buttons and the
+    // messaging send button.
+    .gradetree-wrapper {
+        background-color: var(--ismos-surface-raised);
+    }
+
+    .btn-icon.icons-collapse-expand,
+    .message-app .btn-submit {
+        background-color: var(--ismos-surface-raised);
+        color: var(--ismos-text);
+
+        &:hover {
+            background-color: var(--ismos-overlay-bg);
+        }
+    }
 }
 
 .ismos-mode-dark {

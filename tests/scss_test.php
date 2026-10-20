@@ -166,8 +166,11 @@ final class scss_test extends \advanced_testcase {
         // No ring after a mouse click on the bar and tab links.
         $this->assertMatchesRegularExpression('/\.secondary-navigation,\.tertiary-navigation\)\.nav-link:focus:not\(:focus-visible\)\{box-shadow:none;outline:0/', $flat);
         // Content tables: padded cells, hairline borders, top aligned; Moodle's own tables are left alone.
-        $this->assertMatchesRegularExpression('/\.no-overflow[^{]*table:not\(\.generaltable,\.table,\[class\*="grade"\]\)\s*:is\(th,td\)\{border:1pxsolidvar\(--ismos-hairline\);' .
-            'padding:8px12px;vertical-align:top/', $flat) ?: $this->assertStringContainsString('padding:8px12px;vertical-align:top', $flat);
+        $this->assertMatchesRegularExpression('/\.no-overflow[^{]*\{border:1pxsolidvar\(--ismos-hairline\);padding:8px12px;vertical-align:top/', $flat);
+        // Boost's light grey wrapper and icon buttons take the raised surface.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.gradetree-wrapper\{background-color:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.btn-icon\.icons-collapse-expand,\.ismos-mode-dark\.message-app\.btn-submit\{' .
+            'background-color:var\(--ismos-surface-raised\)/', $flat);
     }
 
     /**
