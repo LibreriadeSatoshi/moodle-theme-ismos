@@ -148,13 +148,15 @@ final class landing {
         $context = \context_course::instance($course['id']);
         $summary = format_text($course['summary'], $course['summaryformat'], ['context' => $context, 'noclean' => false]);
         $summary = shorten_text(trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($summary)))), self::EXCERPT);
+        $enrolled = $this->count_enrolled((int) $course['id']);
         return [
             'startslabel' => get_string('cardstarts', 'theme_ismos', self::short_date((int) $course['startdate'])),
             'name' => $this->course_name($course),
             'summary' => $summary,
             'hassummary' => $summary !== '',
             'category' => format_string($course['catname'], true, ['context' => \context_course::instance($course['id']), 'escape' => false]),
-            'enrolled' => get_string('enrolledcount', 'theme_ismos', $this->count_enrolled((int) $course['id'])),
+            // A zero count reads as "nobody is coming", so the card only shows it once someone has enrolled.
+            'enrolled' => $enrolled > 0 ? get_string('enrolledcount', 'theme_ismos', $enrolled) : null,
             'code' => $course['code'],
             'url' => (new \moodle_url('/course/view.php', ['id' => $course['id']]))->out(false),
         ];

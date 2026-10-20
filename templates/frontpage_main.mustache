@@ -101,7 +101,7 @@
                     <h2 id="ismos-next-title" class="ismos-next__title">{{name}}</h2>
                     {{#hassummary}}<p class="ismos-next__text">{{summary}}</p>{{/hassummary}}
                     <p class="ismos-next__meta">
-                        <span>{{category}}</span><span aria-hidden="true">·</span><span>{{enrolled}}</span>{{#code}}<span aria-hidden="true">·</span><span>{{.}}</span>{{/code}}
+                        <span>{{category}}</span>{{#enrolled}}<span aria-hidden="true">·</span><span>{{.}}</span>{{/enrolled}}{{#code}}<span aria-hidden="true">·</span><span>{{.}}</span>{{/code}}
                     </p>
                     <a class="ismos-next__btn" href="{{{url}}}">{{#str}}enrolbutton, theme_ismos{{/str}}</a>
                 </aside>

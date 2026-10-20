@@ -91,6 +91,12 @@ final class landing_test extends \advanced_testcase {
         $this->assertSame('1 enrolled', (new landing())->get_next_cohort()['enrolled']);
     }
 
+    public function test_zero_enrolments_hide_the_count(): void {
+        $this->resetAfterTest();
+        $this->course('Empty cohort', null, 4);
+        $this->assertNull((new landing())->get_next_cohort()['enrolled']);
+    }
+
     public function test_facts_count_real_students_and_courses_and_languages(): void {
         $this->resetAfterTest();
         $gen = $this->getDataGenerator();
