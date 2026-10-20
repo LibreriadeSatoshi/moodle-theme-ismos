@@ -52,17 +52,19 @@
 
     <div class="ismos-login">
         <div class="ismos-login__block">
-            <a class="ismos-login__brand" href="{{{ config.homeurl }}}">
-                <img src="{{{ output.get_ismos_mark_url }}}" width="32" height="32" alt="" aria-hidden="true">
-                <span>{{wordmark}}</span>
-            </a>
-            <div class="ismos-login__message">
-                <p class="ismos-login__line">{{line}}</p>
-                {{#haslead}}
-                    <p class="ismos-login__lead">{{lead}}</p>
-                {{/haslead}}
+            <div class="ismos-login__block-inner">
+                <a class="ismos-login__brand" href="{{{ config.homeurl }}}">
+                    <img src="{{{ output.get_ismos_mark_url }}}" width="32" height="32" alt="" aria-hidden="true">
+                    <span>{{wordmark}}</span>
+                </a>
+                <div class="ismos-login__message">
+                    <p class="ismos-login__line">{{line}}</p>
+                    {{#haslead}}
+                        <p class="ismos-login__lead">{{lead}}</p>
+                    {{/haslead}}
+                </div>
+                <p class="ismos-login__address">{{address}}</p>
             </div>
-            <p class="ismos-login__address">{{address}}</p>
         </div>
         <div class="ismos-login__side">
             <div id="page-content" class="ismos-login__form">

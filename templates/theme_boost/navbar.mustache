@@ -18,7 +18,8 @@
 
     @template theme_boost/navbar
 
-    ISMOS override: Ink top bar with the mark and wordmark, language menu for visitors, dark mode toggle.
+    ISMOS override: light top bar (Ink in Hacker mode) with the mark and wordmark, a divider, the language code menu,
+    the plugin icons, the dark mode toggle and the user menu.
 
     This template renders the top navbar.
 
@@ -65,7 +66,8 @@
         </button>
 
         <a href="{{{ config.homeurl }}}" class="navbar-brand ismos-wordmark d-flex align-items-center m-0 me-4 p-0 aabtn">
-            <img src="{{{ output.get_ismos_mark_url }}}" class="ismos-mark" width="20" height="20" alt="" aria-hidden="true">
+            <img src="{{{ output.get_ismos_mark_url }}}" class="ismos-mark ismos-mark-paper" width="20" height="20" alt="" aria-hidden="true">
+            <img src="{{{ output.get_ismos_mark_url_ink }}}" class="ismos-mark ismos-mark-ink" width="20" height="20" alt="" aria-hidden="true">
             <span class="ismos-wordmark-text">{{#str}}wordmark, theme_ismos{{/str}}</span>
         </a>
         {{#primarymoremenu}}
@@ -86,15 +88,14 @@
                 {{{ output.search_box }}}
                 <div class="divider border-start h-75 align-self-center mx-1"></div>
             {{/output.search_box}}
+            <div class="divider ismos-divider border-start h-75 align-self-center mx-2"></div>
             {{#output.ismos_lang_menu}}
                 {{{ . }}}
-                <div class="divider border-start h-75 align-self-center mx-1"></div>
             {{/output.ismos_lang_menu}}
+            {{{ output.navbar_plugin_output }}}
             <div class="ismos-darkmode d-flex align-items-center">
                 {{{ output.ismos_darkmode_toggle }}}
             </div>
-            <div class="divider border-start h-75 align-self-center mx-1"></div>
-            {{{ output.navbar_plugin_output }}}
             <div class="d-flex align-items-stretch usermenu-container" data-region="usermenu">
                 {{#usermenu}}
                     {{> core/user_menu }}

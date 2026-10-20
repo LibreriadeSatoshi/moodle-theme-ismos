@@ -29,6 +29,48 @@ use PHPUnit\Framework\Attributes\CoversFunction;
 #[CoversFunction('theme_ismos_get_main_scss_content')]
 final class scss_test extends \advanced_testcase {
     /**
+     * The light top bar, the full-bleed footer, the login block, the Nostr button, maintenance and category rules.
+     */
+    public function test_bar_footer_login_and_page_rules(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $css = \theme_config::load('ismos')->get_css_content();
+        $flat = strtolower(preg_replace('/\s+/', '', $css));
+
+        // Top bar: nav ground, 6 px band, hairline; Ink in light and white in Hacker mode through the tokens.
+        $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\{background-color:var\(--ismos-nav-bg\);' .
+            'border-block-end:1pxsolidvar\(--ismos-hairline\);border-block-start:6pxsolidvar\(--ismos-bar\)/', $flat);
+        $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-nav-bg:var\(--ismos-logwood-50\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-nav-bg:var\(--ismos-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.navigation\.nav-link\.active[^{]*\{[^}]*' .
+            'border-block-end-color:var\(--ismos-text\)[^}]*font-weight:600/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.dropdown-toggle::after\{[^}]*' .
+            'border-block-end:1\.5pxsolidcurrentcolor/', $flat);
+        $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\.ismos-mark-paper\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.navbar\.fixed-top\.ismos-navbar\.ismos-mark-paper\{display:block/', $flat);
+        // The Ink-bar overrides are gone: no Paper text forced on bar controls.
+        $this->assertDoesNotMatchRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\{[^}]*background-color:var\(--ismos-ink\)/', $flat);
+
+        // Footer: full-bleed band that does not depend on the padded #page.
+        $this->assertMatchesRegularExpression('/#page-footer\.ismos-footer\{[^}]*box-shadow:000100vmaxvar\(--ismos-ink\),0-1px0100vmax' .
+            'var\(--ismos-logwood-700\);clip-path:inset\(-1px-100vmax0\)/', $flat);
+
+        // Login: the block cell stretches, its content is the sticky full-height part; Nostr like the other providers.
+        $this->assertMatchesRegularExpression('/\.ismos-login__block-inner\{[^}]*block-size:100dvh[^}]*position:sticky/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-login__form#auth-nostr-btn\.btn\{[^}]*background:(?:transparent|#fff0);' .
+            'border:1\.5pxsolidvar\(--ismos-text\);border-radius:4px/', $flat);
+        $this->assertMatchesRegularExpression('/\.loginform:has\(\.login-divider-or\)\.auth-nostr-sep\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/#id_cancel\{display:none/', $flat);
+
+        // Maintenance and category pages.
+        $this->assertMatchesRegularExpression('/\.ismos-maintenance\.maintenance_message[^{]*\{[^}]*' .
+            'background-color:var\(--ismos-info-bg\)[^}]*border-radius:4px/', $flat);
+        $this->assertMatchesRegularExpression('/#region-main\.box\.generalbox\.info\{[^}]*background:none[^}]*' .
+            'max-inline-size:680px/', $flat);
+        $this->assertMatchesRegularExpression('/#action_bar\.tertiary-navigation\{padding-inline:0/', $flat);
+    }
+
+    /**
      * The compiled CSS carries the tokens and self-hosted fonts, and none of the forbidden things.
      */
     public function test_compiled_css_contains_tokens_and_fonts(): void {
@@ -52,8 +94,17 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.bg-white[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.main-inner[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark#topofscroll[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
-        $this->assertMatchesRegularExpression('/button\.btn\[data-action="theme_ismos\/toggle-darkmode"\]\{[^}]*background-color:(?:transparent|#fff0);' .
-            '[^}]*color:var\(--ismos-paper\)/', $flat);
+        $toggle = 'button\.btn\[data-action="theme_ismos\/toggle-darkmode"\]';
+        $this->assertMatchesRegularExpression('/' . $toggle . '\{[^}]*background-color:(?:transparent|#fff0);' .
+            '[^}]*border:0;[^}]*border-radius:4px;[^}]*color:var\(--ismos-text\)[^}]*min-block-size:44px;[^}]*min-inline-size:44px/', $flat);
+        $this->assertMatchesRegularExpression('/' . $toggle . '\.icon\{[^}]*font-size:20px/', $flat);
+        $this->assertMatchesRegularExpression('/' . $toggle . '\.ismos-darkmode-icon-sun\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.navbar[^{]*' . $toggle . '\.ismos-darkmode-icon-moon\{display:none\}' .
+            '[^{]*\.ismos-darkmode-icon-sun\{display:inline-block/', $flat);
+        $this->assertMatchesRegularExpression('/prefers-color-scheme:dark\)\{\.ismos-mode-auto\.navbar[^{]*' . $toggle .
+            '\.ismos-darkmode-icon-moon\{display:none\}[^{]*\.ismos-darkmode-icon-sun\{display:inline-block/', $flat);
+        $this->assertMatchesRegularExpression('/' . $toggle . ':focus-visible\{[^}]*outline:2pxsolidvar\(--ismos-focus\)/', $flat);
+        $this->assertDoesNotMatchRegularExpression('/' . $toggle . '\[aria-checked/', $flat);
         foreach (['#frontpage-available-course-list', '#frontpage-course-list', '.course-search-result'] as $scope) {
             $this->assertMatchesRegularExpression('/' . preg_quote($scope, '/') . '\.ismos-coursebox\.coursebox[^{]*\{[^}]*border:0;' .
                 '[^}]*border-radius:0;[^}]*margin:0;[^}]*padding:0/', $flat);
@@ -164,11 +215,9 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.form-switch\.form-check-input:checked\{--bs-form-switch-bg:var\(--ismos-knob-on-image\)/', $flat);
         $this->assertMatchesRegularExpression('/\.form-switch\.form-check-input\{--bs-form-switch-bg:var\(--ismos-knob-off-image\)/', $flat);
 
-        // The edit mode switch on the Ink bar always takes the Hacker mode controls and a Paper label.
-        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-form\{[^}]*--ismos-control-border:var\(--ismos-paper\)' .
-            '[^}]*--ismos-control-checked-bg:var\(--ismos-mauveine-200\)/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-formlabel[^{]*\{color:var\(--ismos-paper\)!important/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-form\.form-check-input:focus-visible\{outline-color:var\(--ismos-weld\)/', $flat);
+        // The edit mode switch on the bar uses the controls of the current mode and a label in the text colour.
+        $this->assertDoesNotMatchRegularExpression('/\.ismos-navbar\.editmode-switch-form\{[^}]*--ismos-control-border/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-formlabel[^{]*\{color:var\(--ismos-text\)!important/', $flat);
 
         // Outline buttons: text colour border and label, hover inverts onto the surface.
         $this->assertMatchesRegularExpression('/\.btn-outline-primary,\.btn-outline-secondary\{[^}]*--bs-btn-color:var\(--ismos-text\)' .

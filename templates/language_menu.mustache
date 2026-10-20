@@ -1,0 +1,52 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ismos/language_menu
+
+    Language menu for the top bar: the short code of the current language ("EN", "ES") opens the list.
+
+    Context variables required for this template:
+    * code - Upper case short code of the current language.
+    * title - The name of the current language.
+    * items - The languages, each with link.url, link.text, link.isactive and optional link.attributes.
+
+    Example context (json):
+    {
+        "code": "EN",
+        "title": "English (en)",
+        "items": [
+            {"link": {"title": "English (en)", "text": "English (en)", "url": "#", "isactive": 1}}
+        ]
+    }
+}}
+<div class="langmenu">
+    <div class="dropdown show">
+        <a href="#" role="button" id="ismos-lang-menu-toggle" data-bs-toggle="dropdown" aria-label="{{#str}}language{{/str}}: {{title}}" title="{{title}}" aria-haspopup="true" aria-controls="ismos-lang-action-menu" class="btn dropdown-toggle ismos-lang-toggle">
+            <span class="langbutton">{{code}}</span>
+        </a>
+        <div role="menu" aria-labelledby="ismos-lang-menu-toggle" id="ismos-lang-action-menu" class="dropdown-menu dropdown-menu-end">
+            {{#items}}
+                {{#link}}
+                    <a href="{{{url}}}" class="dropdown-item" role="menuitem" {{#isactive}}aria-current="true"{{/isactive}}
+                            {{#attributes}}{{key}}="{{value}}" {{/attributes}}>
+                        {{text}}
+                    </a>
+                {{/link}}
+            {{/items}}
+        </div>
+    </div>
+</div>

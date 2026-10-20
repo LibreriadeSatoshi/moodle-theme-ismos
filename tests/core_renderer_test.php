@@ -167,6 +167,12 @@ final class core_renderer_test extends \advanced_testcase {
         $html = $out->ismos_darkmode_toggle();
         $this->assertStringContainsString('aria-checked="false"', $html);
         $this->assertStringContainsString('data-persist="0"', $html);
+        $this->assertStringContainsString('role="switch"', $html);
+        $this->assertStringContainsString('aria-label="Dark mode"', $html);
+        $this->assertStringContainsString('title="Dark mode"', $html);
+        $this->assertStringContainsString('fa-moon ismos-darkmode-icon-moon" aria-hidden="true"', $html);
+        $this->assertStringContainsString('fa-sun ismos-darkmode-icon-sun" aria-hidden="true"', $html);
+        $this->assertDoesNotMatchRegularExpression('/<\/i>\s*Dark mode\s*<\/button>/', $html);
 
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
@@ -203,7 +209,62 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertStringContainsString('ismos-wordmark-text">ISMOS<', $html);
         $this->assertStringContainsString('alt="" aria-hidden="true"', $html);
         $this->assertStringContainsString('ismos-mark-paper.svg', $html);
+        $this->assertStringContainsString('ismos-mark-ink.svg', $html);
         $this->assertStringContainsString('data-action="theme_ismos/toggle-darkmode"', $html);
+    }
+
+    /**
+     * The login form has no first-time instructions; one "New here?" line links to the signup page.
+     */
+    public function test_loginform_signup_line(): void {
+        $out = $this->ismos_renderer();
+        $context = [
+            'cansignup' => true,
+            'signupurl' => 'https://example.com/login/signup.php',
+            'hasinstructions' => true,
+            'instructions' => 'FIRSTTIME-INSTRUCTIONS',
+            'hasidentityproviders' => false,
+            'loginurl' => 'https://example.com/login/index.php',
+        ];
+        $html = $out->render_from_template('core/loginform', $context);
+        $this->assertStringContainsString('New here?', $html);
+        $this->assertStringContainsString('href="https://example.com/login/signup.php">Create an account</a>', $html);
+        $this->assertStringNotContainsString('FIRSTTIME-INSTRUCTIONS', $html);
+        $this->assertStringNotContainsString('login-instructions', $html);
+
+        $context['cansignup'] = false;
+        $html = $out->render_from_template('core/loginform', $context);
+        $this->assertStringNotContainsString('New here?', $html);
+    }
+
+    /**
+     * The signup page has an "Already have an account? Log in" link.
+     */
+    public function test_signup_layout_login_link(): void {
+        global $CFG;
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('core/signup_form_layout', ['formhtml' => '<form></form>']);
+        $this->assertStringContainsString('Already have an account?', $html);
+        $this->assertStringContainsString($CFG->wwwroot . '/login/index.php">Log in</a>', $html);
+    }
+
+    /**
+     * The maintenance layout shows the mark through direct static URLs and the message area.
+     */
+    public function test_maintenance_template(): void {
+        global $CFG;
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('theme_ismos/maintenance', [
+            'output' => $out,
+            'markink' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-ink.svg',
+            'markpaper' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
+            'homeurl' => $CFG->wwwroot . '/',
+            'wordmark' => 'ISMOS',
+        ]);
+        $this->assertStringContainsString('ismos-maintenance__bar', $html);
+        $this->assertStringContainsString($CFG->wwwroot . '/theme/ismos/pix/ismos-mark-ink.svg', $html);
+        $this->assertStringContainsString('ismos-wordmark-text">ISMOS<', $html);
+        $this->assertStringNotContainsString('image.php', $html);
     }
 
     /**
@@ -260,6 +321,7 @@ final class core_renderer_test extends \advanced_testcase {
             $html = $out->ismos_lang_menu();
             $this->assertStringContainsString('class="langmenu"', $html);
             $this->assertStringContainsString('Español', $html);
+            $this->assertStringContainsString('<span class="langbutton">EN</span>', $html);
 
             $navbar = $out->render_from_template('theme_boost/navbar', [
                 'output' => $out,

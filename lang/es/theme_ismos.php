@@ -25,12 +25,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['address'] = 'ISMOS.XYZ';
+$string['alreadyhaveaccount'] = '¿Ya tienes una cuenta?';
 $string['browseby'] = 'Explorar por categoría';
 $string['cardstarts'] = 'Empieza el {$a}';
 $string['choosereadme'] = 'El tema de ISMOS: un tema hijo de Boost, sobrio y de alto contraste, para estudiar.';
 $string['configtitle'] = 'Ajustes de ISMOS';
 $string['courses'] = 'Cursos';
 $string['coursesheading'] = 'Elige por dónde empezar';
+$string['createaccountlink'] = 'Crea una cuenta';
 $string['darkmode'] = 'Modo oscuro';
 $string['frontpagesettings'] = 'Página de inicio';
 $string['gotocourse'] = 'Ir al curso';
@@ -40,7 +42,9 @@ $string['herolead'] = 'Cohortes en vivo y cursos a tu ritmo. No necesitas saber 
 $string['herosignup'] = 'Crear una cuenta';
 $string['herotitle'] = 'Aprende a manejar tu propio dinero, una lección a la vez.';
 $string['loginline'] = 'Bienvenido de vuelta. Retoma donde lo dejaste.';
+$string['loginlink'] = 'Inicia sesión';
 $string['loginor'] = 'o';
+$string['newhere'] = '¿Primera vez aquí?';
 $string['pluginname'] = 'ISMOS';
 $string['privacy:darkmodeoff'] = 'La preferencia actual del modo Hacker (oscuro) está desactivada.';
 $string['privacy:darkmodeon'] = 'La preferencia actual del modo Hacker (oscuro) está activada.';

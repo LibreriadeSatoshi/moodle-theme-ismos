@@ -1,12 +1,15 @@
-// Top bar: Ink ground with Paper type in both modes (Ink and Paper tokens do not change with the mode).
+// Top bar: Logwood 50 ground with a 6 px Mauveine band on the top edge and a Logwood 200 hairline below.
+// Hacker mode: Ink ground, Logwood 700 hairline, Mauveine 300 band. Text and icons follow --ismos-text
+// (Ink in light, white in dark); focus follows --ismos-focus (Mauveine in light, Weld in dark).
 .navbar.fixed-top.ismos-navbar {
-    background-color: var(--ismos-ink);
-    border-block-end: 1px solid var(--ismos-logwood-700);
-    color: var(--ismos-paper);
+    background-color: var(--ismos-nav-bg);
+    border-block-end: 1px solid var(--ismos-hairline);
+    border-block-start: 6px solid var(--ismos-bar);
+    color: var(--ismos-text);
 
     :focus-visible,
     .btn.btn:focus-visible {
-        outline: 2px solid var(--ismos-weld);
+        outline: 2px solid var(--ismos-focus);
         outline-offset: 2px;
     }
 
@@ -14,27 +17,44 @@
     .nav-link,
     .btn,
     .dropdown-toggle {
-        color: var(--ismos-paper);
+        color: var(--ismos-text);
         text-decoration: none;
     }
 
     .navbar-toggler-icon {
-        // Boost's hamburger is a dark data-URI; draw it in Paper.
-        filter: invert(1);
+        // Boost's hamburger is a dark data-URI: it stays as drawn on the light bar and is inverted in Hacker mode.
+        filter: none;
     }
 
     .divider {
-        background-color: var(--ismos-logwood-700);
-        border-color: var(--ismos-logwood-700) !important;
+        background-color: var(--ismos-hairline);
+        border-color: var(--ismos-hairline) !important; // stylelint-disable-line declaration-no-important
     }
 
     .icon,
     a .icon {
-        color: var(--ismos-paper);
+        color: var(--ismos-text);
+    }
+
+    // Boost paints the more menu white at compile time.
+    .moremenu,
+    .moremenu .nav-tabs {
+        background-color: transparent;
     }
 }
 
-// Wordmark: the placed mark and the word, Bricolage Grotesque 500, 0.04em.
+.ismos-mode-dark .navbar.fixed-top.ismos-navbar .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto .navbar.fixed-top.ismos-navbar .navbar-toggler-icon {
+        filter: invert(1);
+    }
+}
+
+// Wordmark: the placed mark and the word, Bricolage Grotesque 500, 0.04em. Ink mark on the light bar,
+// Paper mark in Hacker mode.
 .ismos-wordmark {
     gap: 8px;
 
@@ -54,29 +74,73 @@
     }
 }
 
-// Primary navigation on Ink.
+.navbar.fixed-top.ismos-navbar .ismos-mark-paper {
+    display: none;
+}
+
+.ismos-mode-dark .navbar.fixed-top.ismos-navbar {
+    .ismos-mark-paper {
+        display: block;
+    }
+
+    .ismos-mark-ink {
+        display: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto .navbar.fixed-top.ismos-navbar {
+        .ismos-mark-paper {
+            display: block;
+        }
+
+        .ismos-mark-ink {
+            display: none;
+        }
+    }
+}
+
+// Primary navigation: Logwood 800 links (Logwood 200 in Hacker mode), Plex Sans 500. The current item is
+// stronger (Ink or white, weight 600) and carries a 2 px underline, so it never relies on colour alone.
 .ismos-navbar .primary-navigation {
     .navigation .nav-link {
-        border-block-start: 3px solid transparent;
-        color: var(--ismos-paper);
+        border-block-end: 2px solid transparent;
+        border-block-start: 0;
+        color: var(--ismos-text-muted);
+        font-family: var(--ismos-font-sans);
+        font-size: 16.5px;
         font-weight: 500;
 
         &:hover,
         &:focus {
-            background-color: var(--ismos-logwood-950);
-            border-color: transparent;
-            text-decoration: underline;
+            background-color: var(--ismos-nav-hover);
+            color: var(--ismos-text);
+            text-decoration: none;
         }
 
         &.active,
         &[aria-current="true"] {
             background-color: transparent;
-            border-block-start-color: var(--ismos-paper);
+            border-block-end-color: var(--ismos-text);
+            color: var(--ismos-text);
+            font-weight: 600;
         }
+    }
+
+    // A thin chevron instead of Bootstrap's filled caret.
+    .dropdown-toggle::after {
+        block-size: 6px;
+        border: 0;
+        border-block-end: 1.5px solid currentcolor;
+        border-inline-end: 1.5px solid currentcolor;
+        inline-size: 6px;
+        margin-inline-start: 8px;
+        transform: translateY(-2px) rotate(45deg);
+        vertical-align: middle;
     }
 }
 
-// Right side: icon buttons are 44 px targets, Plex Mono labels.
+// Right side: a hairline divider, the language code, then line icons in one ink. Targets are 44 px.
 .ismos-navbar #usernavigation {
     align-items: center;
     gap: 4px;
@@ -90,26 +154,34 @@
 
         &:hover,
         &:focus {
-            background-color: var(--ismos-logwood-950);
-            color: var(--ismos-paper);
+            background-color: var(--ismos-nav-hover);
+            color: var(--ismos-text);
         }
     }
 
     .langmenu .dropdown-toggle {
+        align-items: center;
+        display: inline-flex;
         font-family: var(--ismos-font-mono);
-        font-size: 13px;
+        font-size: 14px;
+        font-weight: 500;
         justify-content: center;
+        letter-spacing: 0.06em;
+
+        &::after {
+            display: none;
+        }
     }
 
-    // "Log in" button: Paper on Ink.
+    // "Log in" button: Ink on the light bar, white with Ink type in Hacker mode.
     .usermenu .login {
-        padding-inline-start: 0 !important;
+        padding-inline-start: 0 !important; // stylelint-disable-line declaration-no-important
 
         a {
             align-items: center;
-            background-color: var(--ismos-paper);
+            background-color: var(--ismos-action);
             border-radius: 4px;
-            color: var(--ismos-ink);
+            color: var(--ismos-on-action);
             display: inline-flex;
             font-weight: 500;
             min-block-size: 44px;
@@ -117,17 +189,22 @@
             text-decoration: none;
 
             &:hover {
-                background-color: var(--ismos-logwood-100);
-                color: var(--ismos-ink);
+                background-color: var(--ismos-action-hover);
+                color: var(--ismos-on-action);
                 text-decoration: underline;
             }
         }
     }
 
-    // Count badge keeps a word-free Madder 800 box with Paper type.
+    // Counts are small Plex Mono labels beside the icon, not pills.
     .count-container {
-        background-color: var(--ismos-madder-800);
-        color: var(--ismos-paper);
+        background-color: transparent;
+        border-radius: 0;
+        color: var(--ismos-alert);
+        font-family: var(--ismos-font-mono);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 0;
     }
 }
 
@@ -173,11 +250,6 @@
     .dropdown-item:focus {
         background-color: var(--ismos-surface-raised);
         color: var(--ismos-text);
-    }
-
-    .count-container {
-        background-color: var(--ismos-madder-800);
-        color: var(--ismos-paper);
     }
 
     :focus-visible,
@@ -249,49 +321,71 @@
     }
 }
 
-// Dark mode toggle in the bar: compact Paper outline, Plex Mono label.
-.navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
-    background-color: transparent;
-    border: 1.5px solid var(--ismos-paper);
-    border-radius: 4px;
-    color: var(--ismos-paper);
-    font-family: var(--ismos-font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    min-block-size: 44px;
-    padding-inline: 12px;
-    text-transform: uppercase;
-    white-space: nowrap;
-
-    &:hover,
-    &:focus {
-        background-color: var(--ismos-logwood-950);
-        color: var(--ismos-paper);
-    }
-
-    &:focus-visible {
-        outline: 2px solid var(--ismos-weld);
-        outline-offset: 2px;
-    }
-
-    &[aria-checked="true"] {
-        background-color: var(--ismos-paper);
-        color: var(--ismos-ink);
+// Edit mode switch on the bar: the normal controls of the current mode, with a readable label.
+.navbar.fixed-top.ismos-navbar .editmode-switch-form {
+    label,
+    label.text-primary {
+        color: var(--ismos-text) !important; // stylelint-disable-line declaration-no-important
     }
 }
 
-// Edit mode switch on the Ink bar: Hacker mode controls in both modes (Paper border, Mauveine 200 when on)
-// and Paper label type. Bootstrap's .text-primary label (black) would vanish on Ink.
-.navbar.fixed-top.ismos-navbar .editmode-switch-form {
-    @include ismos-controls-hacker;
+// Dark mode toggle in the bar: icon only, 44 px target, no border. Moon while light, sun while dark.
+.navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    border-radius: 4px;
+    color: var(--ismos-text);
+    display: inline-flex;
+    justify-content: center;
+    min-block-size: 44px;
+    min-inline-size: 44px;
+    padding: 0;
 
-    label,
-    label.text-primary {
-        color: var(--ismos-paper) !important; // stylelint-disable-line declaration-no-important
+    .icon {
+        block-size: 20px;
+        color: var(--ismos-text);
+        font-size: 20px;
+        inline-size: 20px;
+        margin: 0;
     }
 
-    .form-check-input:focus-visible {
-        outline-color: var(--ismos-weld);
+    .ismos-darkmode-icon-sun {
+        display: none;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: var(--ismos-nav-hover);
+        color: var(--ismos-text);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
+// The icon shows the action: sun while dark (explicit, or auto with a dark device), moon otherwise.
+.ismos-mode-dark .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+    .ismos-darkmode-icon-moon {
+        display: none;
+    }
+
+    .ismos-darkmode-icon-sun {
+        display: inline-block;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+        .ismos-darkmode-icon-moon {
+            display: none;
+        }
+
+        .ismos-darkmode-icon-sun {
+            display: inline-block;
+        }
     }
 }
 
@@ -299,7 +393,7 @@
 .ismos-navbar .rui-topbar-special-btn {
     align-items: center;
     border-radius: 4px;
-    color: var(--ismos-paper);
+    color: var(--ismos-text);
     display: inline-flex;
     justify-content: center;
     min-block-size: 44px;
@@ -313,8 +407,8 @@
 
     &:hover,
     &:focus {
-        background-color: var(--ismos-logwood-950);
-        color: var(--ismos-paper);
+        background-color: var(--ismos-nav-hover);
+        color: var(--ismos-text);
     }
 }
 
@@ -346,9 +440,16 @@
         .divider {
             display: none;
         }
-    }
 
-    .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
-        padding-inline: 8px;
+        .nav-link,
+        .usermenu .dropdown-toggle,
+        .langmenu .dropdown-toggle,
+        .rui-topbar-special-btn {
+            min-inline-size: 40px;
+        }
+
+        button.btn[data-action="theme_ismos/toggle-darkmode"] {
+            min-inline-size: 44px;
+        }
     }
 }

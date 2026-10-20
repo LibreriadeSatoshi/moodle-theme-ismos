@@ -20,7 +20,8 @@
     Moodle template for the login page.
 
     ISMOS override of core/loginform: the divider before the identity providers is an OR label with hairlines,
-    and the providers heading is kept for screen readers only. Everything else is as in core.
+    the providers heading is kept for screen readers only, and the first-time instructions are replaced by one
+    "New here? Create an account" line. Everything else is as in core.
 
     Context variables required for this template:
     * autofocusform: Auto focus on form ?,
@@ -171,17 +172,11 @@
             {{/identityproviders}}
         </div>
     {{/hasidentityproviders}}
-    {{#hasinstructions}}
-        <div class="login-divider"></div>
-        <div class="login-instructions {{#cansignup}}mb-3{{/cansignup}}">
-            <h2 class="login-heading">{{#str}}firsttime{{/str}}</h2>
-            {{{instructions}}}
-        </div>
-    {{/hasinstructions}}
     {{#cansignup}}
-        <div class="login-signup">
-            <a class="btn btn-secondary" href="{{signupurl}}">{{#str}}startsignup{{/str}}</a>
-        </div>
+        <p class="ismos-login-alt">
+            {{#str}} newhere, theme_ismos {{/str}}
+            <a href="{{signupurl}}">{{#str}} createaccountlink, theme_ismos {{/str}}</a>
+        </p>
     {{/cansignup}}
     {{#canloginasguest}}
         <div class="login-divider"></div>
