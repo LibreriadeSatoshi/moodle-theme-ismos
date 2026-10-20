@@ -206,13 +206,22 @@ final class landing {
      * @return array[]
      */
     public function get_paths(): array {
-        $categories = array_values(\core_course_category::top()->get_children());
+        $courses = $this->get_courses();
+        // Only categories with at least one visible course become a path: an empty card promises courses that aren't there.
+        $categories = [];
+        $owncourses = [];
+        foreach (\core_course_category::top()->get_children() as $category) {
+            $own = array_values(array_filter($courses, fn(array $c): bool => $c['topid'] === (int) $category->id));
+            if ($own) {
+                $categories[] = $category;
+                $owncourses[] = $own;
+            }
+        }
         $levels = count($categories) === 3;
         $kickers = ['pathkicker1', 'pathkicker2', 'pathkicker3'];
-        $courses = $this->get_courses();
         $paths = [];
         foreach ($categories as $index => $category) {
-            $own = array_values(array_filter($courses, fn(array $c): bool => $c['topid'] === (int) $category->id));
+            $own = $owncourses[$index];
             $names = [];
             foreach ($this->order_for_path($own) as $course) {
                 $names[] = ['name' => $this->course_name($course), 'url' => (new \moodle_url('/course/view.php', ['id' => $course['id']]))->out(false)];

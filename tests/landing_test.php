@@ -139,6 +139,7 @@ final class landing_test extends \advanced_testcase {
         $child = $gen->create_category(['name' => 'Child', 'parent' => $b->id]);
         $gen->create_category(['name' => 'Bitcoin Master']);
         $gen->create_category(['name' => 'Hidden', 'visible' => 0]);
+        $this->course('Intro', $a, 10);
         $this->course('Old', $b, -50);
         $this->course('Older', $b, -80);
         $this->course('Soon', $child, 5);
@@ -161,13 +162,13 @@ final class landing_test extends \advanced_testcase {
         $this->resetAfterTest();
         \core_course_category::get_default()->hide();
         $gen = $this->getDataGenerator();
-        $gen->create_category(['name' => 'One']);
-        $gen->create_category(['name' => 'Two']);
+        $this->course('In one', $gen->create_category(['name' => 'One']), 3);
+        $this->course('In two', $gen->create_category(['name' => 'Two']), 4);
         $paths = (new landing())->get_paths();
         $this->assertCount(2, $paths);
         $this->assertFalse($paths[0]['haslevel']);
         $this->assertSame('', $paths[0]['kicker']);
-        $gen->create_category(['name' => 'Three']);
+        $this->course('In three', $gen->create_category(['name' => 'Three']), 5);
         $paths = (new landing())->get_paths();
         $this->assertCount(3, $paths);
         $this->assertSame([true, false, false], array_column($paths[0]['level'], 'on'));
@@ -175,6 +176,16 @@ final class landing_test extends \advanced_testcase {
         $this->assertSame('To start', $paths[0]['kicker']);
         $this->assertSame('To build', $paths[1]['kicker']);
         $this->assertSame('To go deep', $paths[2]['kicker']);
+    }
+
+    public function test_categories_without_visible_courses_are_not_paths(): void {
+        $this->resetAfterTest();
+        \core_course_category::get_default()->hide();
+        $gen = $this->getDataGenerator();
+        $this->course('Course', $gen->create_category(['name' => 'Full']), 3);
+        $gen->create_category(['name' => 'Empty']);
+        $this->course('Only hidden', $gen->create_category(['name' => 'Hidden only']), 3, ['visible' => 0]);
+        $this->assertSame(['Full'], array_column((new landing())->get_paths(), 'name'));
     }
 
     public function test_calendar_is_upcoming_only_ascending_and_limited_to_six(): void {

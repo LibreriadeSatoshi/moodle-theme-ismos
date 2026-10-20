@@ -51,7 +51,8 @@ final class frontpage_parts_test extends \advanced_testcase {
         global $CFG, $PAGE;
         $CFG->frontpage = $layout;
         $CFG->frontpageloggedin = $layout;
-        $this->getDataGenerator()->create_category(['name' => 'Bitcoin & LN']);
+        $category = $this->getDataGenerator()->create_category(['name' => 'Bitcoin & LN']);
+        $this->getDataGenerator()->create_course(['category' => $category->id]);
         $this->getDataGenerator()->create_course();
         return $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL)->frontpage();
     }
@@ -167,7 +168,8 @@ final class frontpage_parts_test extends \advanced_testcase {
 
     public function test_category_names_are_not_double_escaped(): void {
         $this->setGuestUser();
-        $this->getDataGenerator()->create_category(['name' => 'Bitcoin & LN']);
+        $category = $this->getDataGenerator()->create_category(['name' => 'Bitcoin & LN']);
+        $this->getDataGenerator()->create_course(['category' => $category->id]);
         $data = (new \theme_ismos\output\frontpage())->export_for_template($this->get_renderer());
         $names = array_column($data['paths'], 'name');
         $this->assertContains('Bitcoin & LN', $names);
