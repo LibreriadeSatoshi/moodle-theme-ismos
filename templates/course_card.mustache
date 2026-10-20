@@ -54,7 +54,7 @@
         "facts": ["Starts Monday, 2 November 2026"]
     }
 }}
-<a class="ismos-card{{#hidden}} ismos-card--hidden{{/hidden}}" href="{{{url}}}" aria-labelledby="{{uid}}-title{{#hidden}} {{uid}}-hidden{{/hidden}}"{{#summary}} aria-describedby="{{uid}}-text"{{/summary}}>
+<a class="ismos-card{{#hidden}} ismos-card--hidden{{/hidden}}" href="{{{url}}}" aria-labelledby="{{uid}}-title{{#hidden}} {{uid}}-hidden{{/hidden}}"{{#summary}} aria-describedby="{{uid}}-text{{#hasfacts}} {{uid}}-facts{{/hasfacts}}"{{/summary}}{{^summary}}{{#hasfacts}} aria-describedby="{{uid}}-facts"{{/hasfacts}}{{/summary}}>
     {{#image}}<img class="ismos-card__cover" src="{{{url}}}" alt="" width="{{width}}" height="{{height}}" {{#prioritise}}loading="eager" fetchpriority="high"{{/prioritise}}{{^prioritise}}loading="lazy" decoding="async"{{/prioritise}}>{{/image}}
     <span class="ismos-card__bar" aria-hidden="true"></span>
     {{#label}}<span class="ismos-card__label">{{label}}</span>{{/label}}
@@ -73,7 +73,7 @@
     </span>
     {{/hasteachers}}
     {{#hasfacts}}
-    <span class="ismos-card__facts">
+    <span class="ismos-card__facts" id="{{uid}}-facts">
         {{#facts}}<span>{{.}}</span>{{/facts}}
     </span>
     {{/hasfacts}}

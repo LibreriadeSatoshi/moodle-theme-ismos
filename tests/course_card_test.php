@@ -130,17 +130,33 @@ final class course_card_test extends \advanced_testcase {
         $uid = card::export($this->element($course))['uid'];
         $html = $this->render($course);
         $this->assertMatchesRegularExpression('/aria-labelledby="(ismos-card-' . $course->id . '-[^"\s]+)-title"/', $html);
-        preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m);
+        $this->assertSame(1, preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m));
         $this->assertStringContainsString('aria-describedby="' . $m[1] . '-text"', $html);
         $this->assertStringContainsString('id="' . $m[1] . '-text"', $html);
         $this->assertStringNotContainsString($m[1] . '-hidden', $html);
         $this->assertNotSame($uid, card::export($this->element($course))['uid']);
     }
 
+    public function test_description_includes_the_facts(): void {
+        $course = $this->getDataGenerator()->create_course(['summary' => 'About it', 'startdate' => time() + DAYSECS * 30]);
+        $html = $this->render($course);
+        $this->assertSame(1, preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m));
+        $this->assertStringContainsString('aria-describedby="' . $m[1] . '-text ' . $m[1] . '-facts"', $html);
+        $this->assertStringContainsString('id="' . $m[1] . '-facts"', $html);
+
+        // Without a summary the facts alone describe the link; with neither there is no attribute.
+        $nosummary = $this->getDataGenerator()->create_course(['summary' => '', 'startdate' => time() + DAYSECS * 30]);
+        $html = $this->render($nosummary);
+        $this->assertSame(1, preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m));
+        $this->assertStringContainsString('aria-describedby="' . $m[1] . '-facts"', $html);
+        $plain = $this->getDataGenerator()->create_course(['summary' => '', 'startdate' => time() - DAYSECS]);
+        $this->assertStringNotContainsString('aria-describedby', $this->render($plain));
+    }
+
     public function test_hidden_label_is_part_of_the_link_name(): void {
         $course = $this->getDataGenerator()->create_course(['visible' => 0]);
         $html = $this->render($course);
-        preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m);
+        $this->assertSame(1, preg_match('/id="(ismos-card-[^"]+)-title"/', $html, $m));
         $this->assertStringContainsString('aria-labelledby="' . $m[1] . '-title ' . $m[1] . '-hidden"', $html);
         $this->assertStringContainsString('id="' . $m[1] . '-hidden"', $html);
     }
@@ -222,7 +238,7 @@ final class course_card_test extends \advanced_testcase {
         $enabled = enrol_get_plugins(true);
         $enabled['fee'] = true;
         set_config('enrol_plugins_enabled', implode(',', array_keys($enabled)));
-        $course = $this->getDataGenerator()->create_course(['startdate' => time() - DAYSECS]);
+        $course = $this->getDataGenerator()->create_course(['summary' => '', 'startdate' => time() - DAYSECS]);
         $studentrole = \core\di::get(\moodle_database::class)->get_record('role', ['shortname' => 'student']);
         enrol_get_plugin('fee')->add_instance($course, [
             'status' => ENROL_INSTANCE_ENABLED, 'roleid' => $studentrole->id, 'cost' => 10, 'currency' => 'USD',
@@ -243,7 +259,7 @@ final class course_card_test extends \advanced_testcase {
     }
 
     public function test_no_facts_hides_hairline(): void {
-        $course = $this->getDataGenerator()->create_course(['startdate' => time() - DAYSECS]);
+        $course = $this->getDataGenerator()->create_course(['summary' => '', 'startdate' => time() - DAYSECS]);
         $this->assertSame([], card::export($this->element($course))['facts']);
         $this->assertStringNotContainsString('ismos-card__facts', $this->render($course));
     }

@@ -58,6 +58,8 @@ final class frontpage_parts_test extends \advanced_testcase {
 
     public function test_every_part_has_a_label_and_one_h2_and_keeps_the_skip_link(): void {
         $this->setGuestUser();
+        // The testimonials section has its own h2; leave it out so only the parts are counted.
+        set_config('testimonials', '', 'theme_ismos');
         $html = $this->render('6,4,7');
         foreach (['skipavailablecourses', 'skipcourses'] as $skip) {
             $this->assertStringContainsString('href="#' . $skip . '"', $html);
@@ -70,8 +72,36 @@ final class frontpage_parts_test extends \advanced_testcase {
         $this->assertStringContainsString(get_string('coursesheading', 'theme_ismos'), $html);
     }
 
+    public function test_front_page_main_content_holds_hero_and_testimonials(): void {
+        $this->setGuestUser();
+        set_config('testimonials', 'Great | Ana', 'theme_ismos');
+        $html = $this->render('6');
+        // The hero, with the page's only h1, and the testimonials are part of the main content, around the parts.
+        $this->assertSame(1, preg_match_all('/<h1[ >]/', $html));
+        $this->assertSame(1, preg_match_all('/<section class="ismos-hero"/', $html));
+        $this->assertLessThan(strpos($html, 'ismos-frontpage-courses'), strpos($html, 'ismos-hero'));
+        $this->assertLessThan(strpos($html, 'ismos-testimonials'), strpos($html, 'frontpage-available-course-list'));
+        $this->assertStringContainsString(get_string('herotitle', 'theme_ismos'), $html);
+    }
+
+    public function test_front_page_layout_template_leaves_the_main_content_to_the_renderer(): void {
+        $template = file_get_contents(__DIR__ . '/../templates/frontpage.mustache');
+        $this->assertStringNotContainsString('ismos-hero', $template);
+        $this->assertStringNotContainsString('ismos-testimonials', $template);
+        $this->assertStringContainsString('output.main_content', $template);
+    }
+
+    public function test_other_pages_keep_the_plain_front_page_parts(): void {
+        global $PAGE;
+        $this->setGuestUser();
+        $PAGE->set_pagetype('course-index');
+        $html = $this->render('6');
+        $this->assertStringNotContainsString('ismos-hero', $html);
+    }
+
     public function test_combo_list_is_headed_with_categories(): void {
         $this->setGuestUser();
+        set_config('testimonials', '', 'theme_ismos');
         $html = $this->render('4');
         $this->assertStringContainsString('id="frontpage-category-combo"', $html);
         $this->assertStringContainsString('>' . get_string('categories') . '</h2>', $html);

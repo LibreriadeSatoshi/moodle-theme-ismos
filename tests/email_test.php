@@ -53,7 +53,10 @@ final class email_test extends \advanced_testcase {
         $this->assertStringContainsString('Hello', $html);
         $this->assertStringContainsString('ISMOS.XYZ', $html);
         $this->assertStringContainsString('<a href="' . $CFG->wwwroot . '"', $html);
-        $this->assertStringContainsString('alt="ISMOS"', $html);
+        // The logo is decorative: the word next to it names the link.
+        $this->assertStringContainsString('email-logo.png" width="18" height="18" alt=""', $html);
+        $this->assertStringNotContainsString('alt="ISMOS"', $html);
+        $this->assertStringContainsString(get_string('wordmark', 'theme_ismos') . '</td>', $html);
         $this->assertStringContainsString('max-width:600px', str_replace(' ', '', $html));
         $this->assertStringContainsString('Tom &lt;b&gt;&amp;amp; Co', $html);
         $this->assertStringNotContainsString('Tom <b>', $html);

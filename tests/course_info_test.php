@@ -92,6 +92,8 @@ final class course_info_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/<img[^>]*width="2"/', $html);
         $this->assertMatchesRegularExpression('/<img[^>]*height="3"/', $html);
         $this->assertStringContainsString('loading="eager"', $html);
+        // The title above already names the course, so the cover is decorative.
+        $this->assertMatchesRegularExpression('/<img class="ismos-courseinfo__cover"[^>]*alt=""/', $html);
     }
 
     public function test_custom_field_with_value_renders_and_empty_does_not(): void {

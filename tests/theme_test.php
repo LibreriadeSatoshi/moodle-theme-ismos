@@ -39,6 +39,17 @@ final class theme_test extends \advanced_testcase {
     }
 
     /**
+     * Editor styles are inherited from Boost: the theme declares none of its own (no missing editor.scss).
+     */
+    public function test_editor_styles_come_from_boost(): void {
+        $this->resetAfterTest();
+        $this->assertFileDoesNotExist(__DIR__ . '/../scss/editor.scss');
+        $theme = \theme_config::load('ismos');
+        $this->assertEmpty($theme->editor_scss);
+        $this->assertNotSame('', trim($theme->editor_scss_to_css()));
+    }
+
+    /**
      * Required strings exist in English and Spanish, and Spanish is translated.
      */
     public function test_strings_exist_in_english_and_spanish(): void {

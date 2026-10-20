@@ -1,0 +1,92 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ismos/frontpage_main
+
+    ISMOS front page main content: Mauveine hero, category browse row, the front page parts (course
+    list, search and so on, already rendered by core) and testimonials. Rendered inside the main landmark.
+
+    Context variables required for this template:
+    * hero - label, title, lead, cta, ctaurl, signup, signupurl (null when not offered)
+    * categories, hascategories - top-level categories (name, url)
+    * content - HTML of the front page parts
+    * testimonials, hastestimonials - quote and name
+
+    Example context (json):
+    {
+        "hero": {
+            "label": "Bitcoin and Lightning school",
+            "title": "Learn to run your own money, one lesson at a time.",
+            "lead": "Live cohorts and self-paced courses.",
+            "cta": "See the courses",
+            "ctaurl": "/course/index.php",
+            "signup": "Create an account",
+            "signupurl": "/login/signup.php"
+        },
+        "hascategories": true,
+        "categories": [{"name": "Bitcoin", "url": "/course/index.php?categoryid=1"}],
+        "content": "<div class='courses'></div>",
+        "hastestimonials": true,
+        "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}]
+    }
+}}
+{{#hero}}
+<section class="ismos-hero" aria-labelledby="ismos-hero-title">
+    <div class="ismos-frontpage-column">
+        <span class="ismos-hero__bar"></span>
+        <p class="ismos-hero__label">{{label}}</p>
+        <h1 id="ismos-hero-title" class="ismos-hero__title">{{title}}</h1>
+        <p class="ismos-hero__lead">{{lead}}</p>
+        <div class="ismos-hero__actions">
+            <a class="ismos-hero__btn ismos-hero__btn--primary" href="{{{ctaurl}}}">{{cta}}</a>
+            {{#signupurl}}
+                <a class="ismos-hero__btn ismos-hero__btn--secondary" href="{{{signupurl}}}">{{signup}}</a>
+            {{/signupurl}}
+        </div>
+    </div>
+</section>
+{{/hero}}
+{{#hascategories}}
+<nav class="ismos-browse" aria-label="{{#str}}browseby, theme_ismos{{/str}}">
+    <ul class="ismos-frontpage-column ismos-browse__list">
+        {{#categories}}
+            <li><a href="{{{url}}}">{{name}}</a></li>
+        {{/categories}}
+    </ul>
+</nav>
+{{/hascategories}}
+<div class="ismos-frontpage-column ismos-frontpage-courses">
+    {{{content}}}
+</div>
+{{#hastestimonials}}
+<section class="ismos-testimonials" aria-labelledby="ismos-testimonials-title">
+    <div class="ismos-frontpage-column">
+        <span class="ismos-label ismos-testimonials__label">{{#str}}testimonials, theme_ismos{{/str}}</span>
+        <h2 id="ismos-testimonials-title">{{#str}}testimonialsheading, theme_ismos{{/str}}</h2>
+        <ul class="ismos-testimonials__list">
+            {{#testimonials}}
+                <li>
+                    <figure class="ismos-testimonial">
+                        <blockquote><p>{{quote}}</p></blockquote>
+                        <figcaption>{{name}}</figcaption>
+                    </figure>
+                </li>
+            {{/testimonials}}
+        </ul>
+    </div>
+</section>
+{{/hastestimonials}}

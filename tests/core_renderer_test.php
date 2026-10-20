@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 namespace theme_ismos;
 
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -85,8 +84,10 @@ final class core_renderer_test extends \advanced_testcase {
      */
     public function test_pix_files_exist(): void {
         global $CFG;
-        foreach (['ismos-mark-paper.svg', 'ismos-mark-ink.svg', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png',
-                'email-logo.png'] as $file) {
+        foreach (
+            ['ismos-mark-paper.svg', 'ismos-mark-ink.svg', 'favicon.svg', 'favicon.ico', 'apple-touch-icon.png',
+                'email-logo.png'] as $file
+        ) {
             $this->assertFileExists("$CFG->dirroot/theme/ismos/pix/$file");
         }
     }

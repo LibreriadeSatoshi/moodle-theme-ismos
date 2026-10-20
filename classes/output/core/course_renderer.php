@@ -99,7 +99,6 @@ class course_renderer extends \core_course_renderer {
             'hiddenlabel' => get_string('hiddenfromstudents'),
             'label' => $category ? format_string($category->name, true, ['context' => $category->get_context(), 'escape' => false]) : '',
             'image' => $image,
-            'imagealt' => html_entity_decode(strip_tags($fullname), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
             'summary' => $chelper->get_course_formatted_summary($element, ['overflowdiv' => false, 'noclean' => false]),
             'hasteachers' => !empty($teachers),
             'teachers' => $teachers,
@@ -109,6 +108,23 @@ class course_renderer extends \core_course_renderer {
             'customfields' => $customfields,
             'courseurl' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
         ]);
+    }
+
+    /**
+     * Front page main content: the hero, the category browse row, the parts core renders, then the
+     * testimonials. Everything is inside the main landmark, after the skip link target, so the single
+     * h1 (the hero title) and its buttons are not skipped. Other pages keep core's output.
+     *
+     * @return string
+     */
+    public function frontpage() {
+        $parts = parent::frontpage();
+        if ($this->page->pagetype !== 'site-index') {
+            return $parts;
+        }
+        $data = (new \theme_ismos\output\frontpage())->export_for_template($this->output);
+        $data['content'] = $parts;
+        return $this->output->render_from_template('theme_ismos/frontpage_main', $data);
     }
 
     /**

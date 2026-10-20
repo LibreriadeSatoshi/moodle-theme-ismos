@@ -177,7 +177,7 @@ final class login_layout_test extends \advanced_testcase {
         global $PAGE;
         $this->resetAfterTest();
         $this->setup_page();
-        $output = new class($PAGE, RENDERER_TARGET_GENERAL) extends \theme_ismos\output\core_renderer {
+        $output = new class ($PAGE, RENDERER_TARGET_GENERAL) extends \theme_ismos\output\core_renderer {
             #[\Override]
             public function standard_footer_html() {
                 return '<a id="ismos-footer-marker" href="#">Policies marker</a>';
@@ -194,6 +194,38 @@ final class login_layout_test extends \advanced_testcase {
             '/ismos-login__footer[^>]*>.*ismos-footer-marker.*<\/footer>/s',
             $html
         );
+    }
+
+    /**
+     * Core's main_content already provides the main landmark: the layout adds no second one.
+     */
+    public function test_login_layout_has_no_main_element(): void {
+        global $PAGE;
+        $this->resetAfterTest();
+        $this->setup_page();
+        $html = $this->render('theme_ismos/login', [
+            'output' => $PAGE->get_renderer('core'),
+            'bodyattributes' => '',
+            'line' => 'x',
+            'wordmark' => 'ISMOS',
+            'address' => 'ISMOS.XYZ',
+        ]);
+        $this->assertStringNotContainsString('<main', $html);
+        $this->assertStringContainsString('ismos-login__side', $html);
+    }
+
+    /**
+     * The "or" divider is plain text, not a separator role (which would hide the word).
+     */
+    public function test_or_divider_has_no_separator_role(): void {
+        $this->resetAfterTest();
+        $html = $this->render('core/loginform', [
+            'sitename' => 'ISMOS',
+            'hasidentityproviders' => true,
+            'identityproviders' => [['url' => '#', 'name' => 'Provider']],
+        ]);
+        $this->assertStringContainsString('login-divider-or', $html);
+        $this->assertStringNotContainsString('role="separator"', $html);
     }
 
     /**
