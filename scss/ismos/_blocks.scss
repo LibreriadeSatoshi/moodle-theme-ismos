@@ -77,49 +77,55 @@
     }
 }
 
-// Course cards: hairline edge, 4 px corners, no shadow, a 6 x 32 px bar, a mono category label, a Literata name.
-.course-card.card {
-    background-color: var(--ismos-card-bg);
-    border: 1px solid var(--ismos-hairline);
-    border-radius: 4px;
-    box-shadow: none;
-    color: var(--ismos-text);
-    overflow: hidden;
+// Course cards in the overview block (and the other course blocks): the ISMOS course card from _course_card.scss. The
+// markup is core_course/coursecard in this theme, with the same ismos-ccard classes as the catalogue.
+// The grid: 20 px apart, 3 columns on desktop, 2 on a tablet, 1 on a phone; a row has cards of one height.
+.block [data-region="card-deck"] {
+    display: grid !important; // stylelint-disable-line declaration-no-important
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
 
-    &:hover {
-        border-color: var(--ismos-text);
+    @media (min-width: 600px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    // Moodle's generated pattern is a data URI: no cover at all. A real overview image is a file URL.
-    .card-img-top[style*="data:image"] {
-        display: none;
+    @media (min-width: 1001px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .card-img-top {
-        block-size: auto;
-        aspect-ratio: 16 / 9;
-        border-block-end: 1px solid var(--ismos-hairline);
+    > .col {
+        flex: none;
+        margin: 0 !important; // stylelint-disable-line declaration-no-important
+        max-inline-size: none;
+        padding: 0;
+        inline-size: auto;
+    }
+}
+
+// The loading placeholder has the picture's 16:9 frame, so the cards do not jump when they load.
+.block .card-img-top.bg-pulse-grey {
+    aspect-ratio: 16 / 9;
+    block-size: auto !important; // stylelint-disable-line declaration-no-important
+}
+
+.course-card.ismos-ccard {
+    block-size: 100%;
+    margin: 0 !important; // stylelint-disable-line declaration-no-important
+
+    // The picture is a link around the 16:9 frame.
+    .ismos-ccard__imagelink {
+        color: inherit;
+        display: block;
+        text-decoration: none;
     }
 
-    // The loading placeholder has the same 16:9 ratio, so the cards do not jump when they load.
-    .card-img-top.bg-pulse-grey {
-        aspect-ratio: 16 / 9;
-        block-size: auto !important; // stylelint-disable-line declaration-no-important
+    .ismos-ccard__body {
+        padding-block-end: 0;
     }
 
-    .card-body.course-info-container {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        padding: 24px !important; // stylelint-disable-line declaration-no-important
-    }
-
-    .ismos-course-card__bar {
-        @include ismos-bar(32px);
-    }
-
-    .ismos-course-card__category,
-    .ismos-course-card__shortname,
+    // The category is the mono kicker over the title.
+    .ismos-ccard__category,
     .categoryname {
         @include ismos-label;
 
@@ -127,18 +133,13 @@
         white-space: normal;
     }
 
-    .ismos-course-card__category:empty {
+    .ismos-ccard__category:empty {
         display: none;
     }
 
-    .ismos-course-card__name,
-    .ismos-course-card__name:hover {
+    .ismos-ccard__title,
+    .ismos-ccard__title:hover {
         color: var(--ismos-text-heading) !important; // stylelint-disable-line declaration-no-important
-        font-family: var(--ismos-font-serif);
-        font-size: 21px;
-        font-weight: 500;
-        line-height: 28px;
-        overflow-wrap: anywhere;
         text-decoration: none;
         white-space: normal;
     }
@@ -147,35 +148,51 @@
         white-space: normal;
     }
 
-    .ismos-course-card__foot {
-        gap: 12px;
+    // "Hidden from students": a small hairline mono label, like the language chip.
+    .ismos-ccard__hidden {
+        align-self: flex-start;
+        color: var(--ismos-text-muted);
+    }
 
-        // Padding sits on the children, so an empty foot (no progress, no menu) takes no space.
-        > * {
-            padding: 0 24px 16px;
-        }
+    // Progress and the actions menu on one row.
+    .ismos-ccard__foot {
+        align-items: center;
+        gap: 12px;
+        margin-block-end: 0;
+        padding-block: 14px;
 
         .card-footer {
             background: transparent !important; // stylelint-disable-line declaration-no-important
             border: 0;
-            color: var(--ismos-text-muted);
+            padding: 0;
         }
 
-        .progress-text {
-            color: var(--ismos-text-muted);
-            font-size: 13px;
-            line-height: 20px;
-        }
-
-        .progress {
-            margin-block-start: 6px;
+        .card-footer.w-100 {
+            flex: 1;
+            min-inline-size: 0;
         }
 
         .card-footer.menu {
             flex: none;
             margin-inline-start: auto;
-            padding-inline: 0 16px;
         }
+    }
+
+    .progress-text {
+        color: var(--ismos-text-muted);
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    // A 4 px track in Logwood 200, filled in Mauveine, full width.
+    .progress {
+        background: var(--ismos-track);
+        block-size: 4px;
+        margin-block-start: 6px;
+    }
+
+    .progress-bar {
+        background: var(--ismos-bar);
     }
 
     // The actions button: no box, the icon in the text colour, a 44 px target.

@@ -166,6 +166,49 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertSame('5 enrolled', $cards['Many']['enrolled']);
     }
 
+    public function test_cover_image_comes_from_the_overview_files_and_the_placeholder_keeps_the_frame(): void {
+        $this->resetAfterTest();
+        [$one] = $this->setup_levels();
+        $with = $this->course('With picture', $one, 1);
+        $this->course('Without picture', $one, 2);
+        $context = \context_course::instance($with->id);
+        get_file_storage()->create_file_from_string([
+            'contextid' => $context->id, 'component' => 'course', 'filearea' => 'overviewfiles', 'itemid' => 0,
+            'filepath' => '/', 'filename' => 'cover.png',
+        ], base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='));
+        \cache::make('core', 'course_image')->purge();
+        $cards = array_column((new catalogue())->export()['sections'][0]['cards'], null, 'name');
+        $this->assertTrue($cards['With picture']['hasimage']);
+        $this->assertStringContainsString('/course/overviewfiles/cover.png', $cards['With picture']['image']);
+        $this->assertFalse($cards['Without picture']['hasimage']);
+        $this->assertSame('', $cards['Without picture']['image']);
+    }
+
+    public function test_catalogue_card_markup_has_a_frame_with_or_without_a_picture(): void {
+        global $PAGE, $SITE;
+        $this->resetAfterTest();
+        $PAGE->set_course($SITE);
+        $PAGE->set_url('/course/index.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->force_theme('ismos');
+        [$one] = $this->setup_levels();
+        $with = $this->course('With picture', $one, 1);
+        $this->course('Without picture', $one, 2);
+        get_file_storage()->create_file_from_string([
+            'contextid' => \context_course::instance($with->id)->id, 'component' => 'course', 'filearea' => 'overviewfiles',
+            'itemid' => 0, 'filepath' => '/', 'filename' => 'cover.png',
+        ], base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='));
+        \cache::make('core', 'course_image')->purge();
+        $out = $PAGE->get_renderer('core', null, RENDERER_TARGET_GENERAL);
+        $html = $out->render_from_template('theme_ismos/catalogue', (new catalogue())->export());
+        // Two cards, two frames with the mark, one picture with empty alt text, lazily loaded.
+        $this->assertSame(2, substr_count($html, 'class="ismos-ccard__image" aria-hidden="true"'));
+        $this->assertSame(2, substr_count($html, 'class="ismos-ccard__mark"'));
+        $this->assertSame(1, substr_count($html, 'class="ismos-ccard__photo"'));
+        $this->assertMatchesRegularExpression('/<img class="ismos-ccard__photo" src="[^"]*cover\.png" alt="" loading="lazy"/', $html);
+        $this->assertSame(2, substr_count($html, 'class="ismos-ccard__body"'));
+    }
+
     public function test_the_first_course_contact_is_the_teacher(): void {
         global $DB;
         $this->resetAfterTest();

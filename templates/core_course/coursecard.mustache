@@ -17,9 +17,9 @@
 {{!
     @template core_course/coursecard
 
-    ISMOS course card for the course overview block: a 6 x 32 px bar, the category as a mono label, the course
-    name, then the progress and the actions menu. The cover only shows for a real course image; Moodle's
-    generated pattern (a data URI) is hidden by theme CSS. Every region and data attribute of core is kept.
+    ISMOS course card for the course overview block, the same card as the catalogue: a 16:9 picture (the mark when the
+    course has none; Moodle's generated pattern is a data URI that theme CSS hides), the category as a mono kicker,
+    the name, then the progress and the actions menu. Every region and data attribute of core is kept.
 
     Context variables required for this template:
     * id, viewurl, courseimage, fullname, shortname, showshortname, visible, uniqid
@@ -39,28 +39,29 @@
         ]
     }
 }}
-<div class="card course-card ismos-course-card" role="listitem"
+<div class="card course-card ismos-ccard" role="listitem"
     data-region="course-content"
     data-course-id="{{{id}}}">
-    <a href="{{viewurl}}" tabindex="-1" class="ismos-course-card__cover">
-        <div class="card-img-top" style='background-image: url("{{{courseimage}}}");'>
-            <span class="visually-hidden">{{fullname}}</span>
-        </div>
+    <a href="{{viewurl}}" tabindex="-1" class="ismos-ccard__imagelink">
+        <span class="ismos-ccard__image" aria-hidden="true">
+            {{> theme_ismos/ccard_mark}}
+            <span class="ismos-ccard__photo" style='background-image: url("{{{courseimage}}}");'></span>
+        </span>
+        <span class="visually-hidden">{{fullname}}</span>
     </a>
-    <div class="card-body course-info-container" id="course-info-container-{{id}}-{{uniqid}}">
-        <span class="ismos-course-card__bar" aria-hidden="true"></span>
-        <div class="ismos-course-card__category">
+    <div class="ismos-ccard__body course-info-container" id="course-info-container-{{id}}-{{uniqid}}">
+        <div class="ismos-ccard__category">
             {{$coursecategory}}{{/coursecategory}}
         </div>
         {{#showshortname}}
-            <div class="ismos-course-card__shortname">
+            <div class="ismos-ccard__category">
                 <span class="visually-hidden">
                     {{#str}}aria:courseshortname, core_course{{/str}}
                 </span>
                 {{{shortname}}}
             </div>
         {{/showshortname}}
-        <a href="{{viewurl}}" class="aalink coursename ismos-course-card__name">
+        <a href="{{viewurl}}" class="aalink coursename ismos-ccard__title">
             {{> core_course/favouriteicon }}
             <span class="visually-hidden">
                 {{#str}}aria:coursename, core_course{{/str}}
@@ -68,13 +69,11 @@
             {{$coursename}}{{/coursename}}
         </a>
         {{^visible}}
-            <div class="d-flex flex-wrap">
-                <span class="badge bg-info text-white">{{#str}} hiddenfromstudents {{/str}}</span>
-            </div>
+            <span class="ismos-chip ismos-ccard__hidden">{{#str}} hiddenfromstudents {{/str}}</span>
         {{/visible}}
-    </div>
-    <div class="ismos-course-card__foot d-flex align-items-center">
-        {{$progress}}{{/progress}}
-        {{$menu}}{{/menu}}
+        <div class="ismos-ccard__foot d-flex align-items-center">
+            {{$progress}}{{/progress}}
+            {{$menu}}{{/menu}}
+        </div>
     </div>
 </div>

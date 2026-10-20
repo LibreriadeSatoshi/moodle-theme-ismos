@@ -25,7 +25,7 @@
     * searchurl - Moodle's course search
     * canmanage, manageurl - the "Manage courses" link, for people who can manage
     * sections, hassections - name, description, url, showonly, haslevel, level, kicker, cards
-      * cards - url, name, summary, when, haswhen, open, past, code, hascode, teacher (name, initials, picture), hasfoot, enrolled
+      * cards - url, image, hasimage, name, summary, when, haswhen, open, past, code, hascode, teacher (name, initials, picture), hasfoot, enrolled
 
     Example context (json):
     {
@@ -45,7 +45,7 @@
             "showonly": true, "haslevel": true, "level": [{"on": true}, {"on": false}, {"on": false}], "kicker": "To start",
             "hascards": true,
             "cards": [{
-                "url": "/course/view.php?id=3", "name": "Nostr", "summary": "Build a client.", "when": "Starts 5 Nov", "haswhen": true,
+                "url": "/course/view.php?id=3", "image": "/pluginfile.php/1/course/overviewfiles/a.jpg", "hasimage": true, "name": "Nostr", "summary": "Build a client.", "when": "Starts 5 Nov", "haswhen": true,
                 "open": true, "past": false, "code": "ES", "hascode": true, "hasteacher": true,
                 "teacher": {"name": "Ana Diaz", "initials": "AD", "haspicture": false}, "hasenrolled": true, "enrolled": "31 enrolled",
                 "hasfoot": true
@@ -94,22 +94,28 @@
                     {{#cards}}
                         <li>
                             <a class="ismos-ccard{{#past}} ismos-ccard--past{{/past}}" href="{{{url}}}">
-                                <span class="ismos-ccard__top">
-                                    <span class="ismos-ccard__when{{#open}} ismos-ccard__when--open{{/open}}">{{#haswhen}}{{when}}{{/haswhen}}</span>
-                                    {{#hascode}}<span class="ismos-chip">{{code}}</span>{{/hascode}}
+                                <span class="ismos-ccard__image" aria-hidden="true">
+                                    {{> theme_ismos/ccard_mark}}
+                                    {{#hasimage}}<img class="ismos-ccard__photo" src="{{{image}}}" alt="" loading="lazy" width="640" height="360">{{/hasimage}}
                                 </span>
-                                <span class="ismos-ccard__title">{{name}}</span>
-                                {{#summary}}<span class="ismos-ccard__text">{{.}}</span>{{/summary}}
-                                {{#hasfoot}}
-                                    <span class="ismos-ccard__foot">
-                                        {{#hasteacher}}{{#teacher}}
-                                            {{#haspicture}}<img class="ismos-ccard__avatar" src="{{{picture}}}" alt="" width="28" height="28">{{/haspicture}}
-                                            {{^haspicture}}<span class="ismos-ccard__avatar" aria-hidden="true">{{initials}}</span>{{/haspicture}}
-                                            <span>{{name}}</span>
-                                        {{/teacher}}{{/hasteacher}}
-                                        {{#hasenrolled}}<span class="ismos-ccard__enrolled">{{enrolled}}</span>{{/hasenrolled}}
+                                <span class="ismos-ccard__body">
+                                    <span class="ismos-ccard__top">
+                                        <span class="ismos-ccard__when{{#open}} ismos-ccard__when--open{{/open}}">{{#haswhen}}{{when}}{{/haswhen}}</span>
+                                        {{#hascode}}<span class="ismos-chip">{{code}}</span>{{/hascode}}
                                     </span>
-                                {{/hasfoot}}
+                                    <span class="ismos-ccard__title">{{name}}</span>
+                                    {{#summary}}<span class="ismos-ccard__text">{{.}}</span>{{/summary}}
+                                    {{#hasfoot}}
+                                        <span class="ismos-ccard__foot">
+                                            {{#hasteacher}}{{#teacher}}
+                                                {{#haspicture}}<img class="ismos-ccard__avatar" src="{{{picture}}}" alt="" width="28" height="28">{{/haspicture}}
+                                                {{^haspicture}}<span class="ismos-ccard__avatar" aria-hidden="true">{{initials}}</span>{{/haspicture}}
+                                                <span>{{name}}</span>
+                                            {{/teacher}}{{/hasteacher}}
+                                            {{#hasenrolled}}<span class="ismos-ccard__enrolled">{{enrolled}}</span>{{/hasenrolled}}
+                                        </span>
+                                    {{/hasfoot}}
+                                </span>
                             </a>
                         </li>
                     {{/cards}}
