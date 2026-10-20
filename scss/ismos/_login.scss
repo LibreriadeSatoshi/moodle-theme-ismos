@@ -309,6 +309,11 @@
     display: none;
 }
 
+// Signup: the "required fields" legend is dropped, every required field already carries a REQUIRED label.
+#page-login-signup .ismos-login__form .mform .fdescription.required {
+    display: none;
+}
+
 // "New here? Create an account" and "Already have an account? Log in": one quiet line with a text link.
 .ismos-login__form .ismos-login-alt {
     color: var(--ismos-text-muted);

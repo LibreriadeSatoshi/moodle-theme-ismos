@@ -36,10 +36,14 @@
         color: var(--ismos-text);
     }
 
-    // Boost paints the more menu white at compile time.
+    // Boost paints the more menu white at compile time, and gives it a fixed height that would cover the
+    // bar's bottom hairline. It is transparent and as tall as its links, so the hairline runs unbroken in
+    // both modes. The important beats the Hacker mode surface rule.
     .moremenu,
     .moremenu .nav-tabs {
-        background-color: transparent;
+        background-color: transparent !important; // stylelint-disable-line declaration-no-important
+        block-size: auto;
+        border: 0;
     }
 }
 
@@ -110,10 +114,15 @@
         font-size: 16.5px;
         font-weight: 500;
 
+        // Hover and focus: the text colour and the same 2 px underline as the current item, in the hairline
+        // colour (Logwood 200 in light, Logwood 700 in Hacker mode). No background box.
         &:hover,
         &:focus {
-            background-color: var(--ismos-nav-hover);
+            background-color: transparent;
             color: var(--ismos-text);
+            text-decoration: underline 2px;
+            text-decoration-color: var(--ismos-hairline);
+            text-underline-offset: 8px;
         }
 
         &.active,
@@ -123,6 +132,7 @@
             color: var(--ismos-text);
             font-weight: 600;
             text-decoration: underline 2px;
+            text-decoration-color: currentcolor;
             text-underline-offset: 8px;
         }
     }
@@ -152,11 +162,25 @@
         min-block-size: 44px;
         min-inline-size: 44px;
 
+        // Hover, focus and open: a quiet tint, no border or shadow. The keyboard ring is :focus-visible only.
         &:hover,
-        &:focus {
+        &:focus,
+        &.show,
+        &[aria-expanded="true"] {
             background-color: var(--ismos-nav-hover);
+            border-color: transparent;
+            box-shadow: none;
             color: var(--ismos-text);
         }
+
+        &:focus:not(:focus-visible) {
+            outline: 0;
+        }
+    }
+
+    .usermenu .dropdown-toggle,
+    .langmenu .dropdown-toggle {
+        border: 0;
     }
 
     .langmenu .dropdown-toggle {

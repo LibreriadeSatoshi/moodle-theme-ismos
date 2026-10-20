@@ -272,6 +272,42 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
+     * The overview course card keeps the regions and data attributes the block's JS needs and has no pattern.
+     */
+    public function test_course_card_and_progress_templates(): void {
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('core_course/coursecard', [
+            'id' => 7,
+            'uniqid' => 'u1',
+            'viewurl' => 'https://example.com/course/view.php?id=7',
+            'courseimage' => 'https://example.com/pluginfile.php/1/course/overviewfiles/a.jpg',
+            'fullname' => 'Bitcoin 101',
+            'visible' => true,
+            'isfavourite' => false,
+        ]);
+        $this->assertStringContainsString('data-region="course-content"', $html);
+        $this->assertStringContainsString('data-course-id="7"', $html);
+        $this->assertStringContainsString('data-region="is-favourite"', $html);
+        $this->assertStringContainsString('ismos-course-card__bar', $html);
+        $this->assertStringNotContainsString('data:image', $html);
+        $this->assertStringNotContainsString('}}', $html);
+
+        $html = $out->render_from_template('block_myoverview/progress-bar', ['progress' => 40]);
+        $this->assertStringContainsString('class="progress ismos-progress" aria-hidden="true"', $html);
+        $this->assertStringContainsString('style="width: 40%"', $html);
+    }
+
+    /**
+     * The bell and messages icons are outline (FA regular) so the bar has one icon style.
+     */
+    public function test_bar_icons_are_outline(): void {
+        $map = \core\output\icon_system::instance(\theme_ismos\output\icon_system_fontawesome::class)->get_icon_name_map();
+        $this->assertSame('fa-regular fa-bell', $map['core:i/notifications']);
+        $this->assertSame('fa-regular fa-message', $map['core:t/message']);
+        $this->assertStringNotContainsString('fa-star', implode(' ', $map));
+    }
+
+    /**
      * The directory of the fake language pack; skips the test if a real one is already there.
      *
      * @return string

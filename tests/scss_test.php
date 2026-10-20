@@ -43,7 +43,7 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-nav-bg:var\(--ismos-logwood-50\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-nav-bg:var\(--ismos-ink\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.navigation\.nav-link\.active[^{]*\{[^}]*' .
-            'border:0;[^}]*font-weight:600;text-decoration:underline2px;text-underline-offset:8px/', $flat);
+            'border:0;[^}]*font-weight:600;text-decoration:underline2px;text-decoration-color:currentcolor;text-underline-offset:8px/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.dropdown-toggle::after\{[^}]*' .
             'border-block-end:1\.5pxsolidcurrentcolor/', $flat);
         $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\.ismos-mark-paper\{display:none/', $flat);
@@ -68,6 +68,61 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/#region-main\.box\.generalbox\.info\{[^}]*background:none[^}]*' .
             'max-inline-size:680px/', $flat);
         $this->assertMatchesRegularExpression('/#action_bar\.tertiary-navigation\{padding-inline:0/', $flat);
+    }
+
+    /**
+     * Bar states, blocks and course overview cards.
+     */
+    public function test_nav_states_blocks_and_course_cards(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $css = \theme_config::load('ismos')->get_css_content();
+        $flat = strtolower(preg_replace('/\s+/', '', $css));
+
+        // The more menu has no box over the hairline.
+        $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\.moremenu,[^{]*\{[^}]*' .
+            'background-color:(?:transparent|#fff0)!important;block-size:auto;border:0/', $flat);
+        // Hover: underline in the hairline colour, no background box.
+        $this->assertMatchesRegularExpression('/\.navigation\.nav-link:hover,[^{]*\{background-color:#fff0;color:var\(--ismos-text\);' .
+            'text-decoration:underline2px;text-decoration-color:var\(--ismos-hairline\)/', $flat);
+        // The user menu keeps a tint, no border or shadow.
+        $this->assertMatchesRegularExpression('/\.usermenu\.dropdown-toggle:hover,[^{]*\{background-color:var\(--ismos-nav-hover\);' .
+            'border-color:#fff0;box-shadow:none/', $flat);
+        // Blocks.
+        $this->assertMatchesRegularExpression('/\.block\.card\{[^}]*border-radius:4px/', $flat);
+        $this->assertMatchesRegularExpression('/\.block\.card>\.card-body\{padding:24px!important/', $flat);
+        $this->assertMatchesRegularExpression('/\.block\.card>\.card-body>\.d-flex:first-child\{border-block-end:1pxsolidvar\(--ismos-hairline\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.block\.card\.card-title\{[^}]*font-family:var\(--ismos-font-serif\)/', $flat);
+        $this->assertMatchesRegularExpression('/\[data-region="filter"\]\.btn,[^{]*\{[^}]*border:1pxsolidvar\(--ismos-border-input\)/', $flat);
+        // Course cards: edge, radius, no generated pattern, a bar, no box on the actions button.
+        $this->assertMatchesRegularExpression('/\.course-card\.card\{[^}]*border:1pxsolidvar\(--ismos-hairline\);border-radius:4px;box-shadow:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-card\.card\.card-img-top\[style\*="data:image"\]\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-card\.card\.ismos-course-card__bar\{[^}]*height:6px;width:32px/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-card\.card\.coursemenubtn\{[^}]*background:#fff0;border:0[^}]*min-block-size:44px;min-inline-size:44px/', $flat);
+        // Secondary and tertiary tabs: no box, a hairline underline on hover, a current underline.
+        $this->assertMatchesRegularExpression('/:is\(\.secondary-navigation,\.tertiary-navigation\)\.moremenu\.nav-link:hover,[^{]*\{' .
+            'background-color:(?:transparent|#fff0)!important;color:var\(--ismos-text\);text-decoration:underline2px;' .
+            'text-decoration-color:var\(--ismos-hairline\)/', $flat);
+        $this->assertMatchesRegularExpression('/:is\(\.secondary-navigation,\.tertiary-navigation\)\.moremenu\.nav-link\.active,[^{]*\{' .
+            '[^}]*font-weight:600;text-decoration:underline2px/', $flat);
+        $this->assertMatchesRegularExpression('/\.nav-tabs\.nav-link:focus-visible\{outline:2pxsolidvar\(--ismos-focus\)/', $flat);
+        // Tables read their Bootstrap variables from the tokens.
+        $this->assertMatchesRegularExpression('/\.table,\.generaltable\{--bs-table-bg:var\(--ismos-surface\);--bs-table-color:var\(--ismos-text\);' .
+            '--bs-table-border-color:var\(--ismos-hairline\);--bs-table-striped-bg:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/--bs-table-hover-bg:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.table-light,\.thead-lightth[^{]*\{[^}]*background-color:var\(--ismos-surface-raised\);color:var\(--ismos-text\)/', $flat);
+        // Completion badges: square, hairline, readable.
+        $this->assertMatchesRegularExpression('/\.activity-information\.badge,[^{]*\{background-color:(?:transparent|#fff0)!important;' .
+            'border:1pxsolidvar\(--ismos-hairline\);border-radius:4px!important;color:var\(--ismos-text\)!important;[^}]*font-size:13px/', $flat);
+        // Light utilities and outline buttons.
+        $this->assertMatchesRegularExpression('/\.alert-light\{background-color:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.btn-light\{--bs-btn-bg:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.btn-outline-secondary\{border-color:var\(--ismos-border-input\)/', $flat);
+        // Help and action icons follow the ink.
+        $this->assertMatchesRegularExpression('/\.icon\.text-info,[^{]*\{color:var\(--ismos-text\)!important/', $flat);
+        $this->assertMatchesRegularExpression('/\.icon\.fa:not\(\.text-danger,\.text-warning\)\{color:var\(--ismos-text-muted\)/', $flat);
+        // Signup legend.
+        $this->assertMatchesRegularExpression('/#page-login-signup\.ismos-login__form\.mform\.fdescription\.required\{display:none/', $flat);
     }
 
     /**

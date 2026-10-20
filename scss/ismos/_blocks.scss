@@ -1,0 +1,190 @@
+// Blocks on the dashboard and My courses, and the course overview cards (block_myoverview, also the starred
+// and recent course blocks that share the core card). Tokens only, so one rule serves both modes.
+
+// A block: 4 px corners, hairline edge, 24 px inside, a Literata h3 title over a hairline separator.
+.block.card {
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    box-shadow: none;
+
+    > .card-body {
+        padding: 24px !important; // stylelint-disable-line declaration-no-important
+
+        > .d-flex:first-child {
+            border-block-end: 1px solid var(--ismos-hairline);
+            padding-block-end: 16px;
+        }
+    }
+
+    .card-title {
+        color: var(--ismos-text-heading);
+        font-family: var(--ismos-font-serif);
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 32px;
+        margin: 0;
+    }
+
+    .card-text.content {
+        margin-block-start: 16px !important; // stylelint-disable-line declaration-no-important
+    }
+}
+
+// Course overview filters: the theme's select look (input border, input ground, 44 px).
+.block_myoverview [data-region="filter"] {
+    .btn,
+    .form-control {
+        background-color: var(--ismos-input-bg);
+        border: 1px solid var(--ismos-border-input);
+        border-radius: 4px;
+        color: var(--ismos-text);
+        min-block-size: 44px;
+    }
+
+    .btn:hover,
+    .btn:focus,
+    .btn.show {
+        background-color: var(--ismos-surface-raised);
+        border-color: var(--ismos-border-input);
+        color: var(--ismos-text);
+    }
+
+    .icon {
+        color: var(--ismos-text);
+    }
+}
+
+// Course cards: hairline edge, 4 px corners, no shadow, a 6 x 32 px bar, a mono category label, a Literata name.
+.course-card.card {
+    background-color: var(--ismos-card-bg);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    box-shadow: none;
+    color: var(--ismos-text);
+    overflow: hidden;
+
+    &:hover {
+        border-color: var(--ismos-text);
+    }
+
+    // Moodle's generated pattern is a data URI: no cover at all. A real overview image is a file URL.
+    .card-img-top[style*="data:image"] {
+        display: none;
+    }
+
+    .card-img-top {
+        block-size: auto;
+        aspect-ratio: 16 / 9;
+        border-block-end: 1px solid var(--ismos-hairline);
+    }
+
+    .card-body.course-info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 24px !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .ismos-course-card__bar {
+        @include ismos-bar(32px);
+    }
+
+    .ismos-course-card__category,
+    .ismos-course-card__shortname,
+    .categoryname {
+        @include ismos-label;
+
+        color: var(--ismos-text-muted) !important; // stylelint-disable-line declaration-no-important
+        white-space: normal;
+    }
+
+    .ismos-course-card__category:empty {
+        display: none;
+    }
+
+    .ismos-course-card__name,
+    .ismos-course-card__name:hover {
+        color: var(--ismos-text-heading) !important; // stylelint-disable-line declaration-no-important
+        font-family: var(--ismos-font-serif);
+        font-size: 21px;
+        font-weight: 500;
+        line-height: 28px;
+        overflow-wrap: anywhere;
+        text-decoration: none;
+        white-space: normal;
+    }
+
+    .multiline {
+        white-space: normal;
+    }
+
+    .ismos-course-card__foot {
+        gap: 12px;
+        padding: 0 24px 16px;
+
+        .card-footer {
+            background: transparent !important; // stylelint-disable-line declaration-no-important
+            border: 0;
+            color: var(--ismos-text-muted);
+            padding: 0;
+        }
+
+        .progress-text {
+            color: var(--ismos-text-muted);
+            font-size: 13px;
+            line-height: 20px;
+        }
+
+        .progress {
+            margin-block-start: 6px;
+        }
+
+        .card-footer.menu {
+            flex: none;
+            margin-inline-start: auto;
+        }
+    }
+
+    // The actions button: no box, the icon in the text colour, a 44 px target.
+    .coursemenubtn {
+        align-items: center;
+        background: transparent;
+        border: 0;
+        border-radius: 4px;
+        box-shadow: none;
+        color: var(--ismos-text);
+        display: inline-flex;
+        justify-content: center;
+        margin: 0;
+        min-block-size: 44px;
+        min-inline-size: 44px;
+
+        .icon {
+            color: var(--ismos-text);
+            margin: 0;
+        }
+
+        &:hover,
+        &:focus,
+        &.show {
+            background-color: var(--ismos-nav-hover);
+            color: var(--ismos-text);
+        }
+    }
+}
+
+// List and summary views of the overview block: same ground, edge and text colours.
+.block_myoverview {
+    .list-group-item,
+    .course-summaryitem {
+        background-color: transparent;
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    .progress-text,
+    .categoryname,
+    .btn-link {
+        color: var(--ismos-text-muted);
+    }
+}
