@@ -1,5 +1,11 @@
 // Hacker mode surface overrides. Boost bakes $body-bg (white) into several selectors at compile time and
 // the footer uses .bg-white, so the page chrome is mapped to the tokens here. Dark scopes only.
+// Cells that carry a state (overridden or excluded grade, submission status, late and early marks, the selected
+// row) keep the plugin's own ground; their text is Ink instead, see below.
+$ismos-state-cell: '[class*="overridden"], [class*="excluded"], [class*="submission"], .latesubmission, .earlysubmission, .gradingreminder, .quickgrademodified';
+
+$ismos-state-cell-list: '[class*="overridden"]', '[class*="excluded"]', '[class*="submission"]', '.latesubmission', '.earlysubmission', '.gradingreminder', '.quickgrademodified';
+
 @mixin ismos-hacker-surfaces {
     #page,
     #page-wrapper,
@@ -92,6 +98,66 @@
     h5,
     h6 {
         color: var(--ismos-text-heading);
+    }
+
+    // Tables in the main region: Boost fixes light grounds ($gray-100, white) on many cell classes (grader report,
+    // gradebook setup, assignment grading). Cells go to the tokens: headers raised, the rest on the surface, hairline
+    // borders. State cells and selected rows keep their ground and take Ink text, so they stay readable.
+    #region-main table tr:not(.selectedrow) > :is(th, td):not(#{$ismos-state-cell}) {
+        background-color: var(--ismos-surface);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    #region-main table tr:not(.selectedrow) > th:not(#{$ismos-state-cell}),
+    #region-main table tr:not(.selectedrow) > :is(td, th):is(.range, .avg, .average):not(#{$ismos-state-cell}) {
+        background-color: var(--ismos-surface-raised);
+    }
+
+    @each $state in $ismos-state-cell-list {
+        #region-main table #{$state},
+        #region-main table #{$state} :is(a, span, div, strong, label) {
+            color: var(--ismos-ink);
+        }
+    }
+
+    #region-main table .selectedrow > td,
+    #region-main table .selectedrow > td :is(a, span, div, strong, label) {
+        color: var(--ismos-ink);
+    }
+
+    // Bootstrap's dark text utilities read as the text colour on the dark ground (not on warning, info or success
+    // fills, which keep Ink).
+    .text-dark:not([class*="bg-warning"], [class*="bg-info"], [class*="bg-success"], [class*="bg-secondary"], [class*="alert-"], [class*="btn-"]),
+    .text-black:not([class*="bg-warning"], [class*="bg-info"], [class*="bg-success"], [class*="bg-secondary"], [class*="alert-"], [class*="btn-"]),
+    .text-body:not([class*="bg-warning"], [class*="bg-info"], [class*="bg-success"], [class*="bg-secondary"], [class*="alert-"], [class*="btn-"]) {
+        color: var(--ismos-text) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    // The form-autocomplete arrow is a black glyph.
+    .form-autocomplete-downarrow {
+        color: var(--ismos-text);
+    }
+
+    // Alert links follow the alert: link colour on the surface, Ink on the warning fill.
+    .alert a:not(.btn) {
+        color: var(--ismos-link);
+    }
+
+    .alert-warning a:not(.btn) {
+        color: var(--ismos-warning-text);
+    }
+
+    // The activity header (intro, dates, completion) is a raised panel, not Boost's light grey.
+    #page .activity-header {
+        background-color: var(--ismos-surface-raised);
+        color: var(--ismos-text);
+    }
+
+    // Intro boxes (quiz, activity descriptions) keep the surface.
+    #region-main .no-overflow {
+        background-color: transparent;
+        color: var(--ismos-text);
     }
 }
 
