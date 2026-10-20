@@ -88,7 +88,8 @@
 .thead-light th,
 thead.table-light th,
 .table > thead.table-light > tr > *,
-.generaltable thead th {
+.generaltable thead th,
+.generaltable thead td {
     --bs-table-bg: var(--ismos-surface-raised);
     --bs-table-color: var(--ismos-text);
     --bs-table-border-color: var(--ismos-hairline);

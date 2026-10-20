@@ -109,6 +109,10 @@ final class scss_test extends \advanced_testcase {
             '--bs-table-border-color:var\(--ismos-hairline\);--bs-table-striped-bg:var\(--ismos-surface-raised\)/', $flat);
         $this->assertMatchesRegularExpression('/--bs-table-hover-bg:var\(--ismos-surface-raised\)/', $flat);
         $this->assertMatchesRegularExpression('/\.table-light,\.thead-lightth[^{]*\{[^}]*background-color:var\(--ismos-surface-raised\);color:var\(--ismos-text\)/', $flat);
+        // A td in a header row (empty actions column) gets the same band and rule as the th cells.
+        $this->assertMatchesRegularExpression('/\.generaltabletheadth,\.generaltabletheadtd\{[^}]*background-color:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.tabletheadth,\.tabletheadtd\{border-bottom:2pxsolidvar\(--ismos-rule-strong\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#region-maintabletheadtr:not\(\.selectedrow\)>td:not\(/', $flat);
         // Completion badges: square, hairline, readable.
         $this->assertMatchesRegularExpression('/\.activity-information\.badge,[^{]*\{background-color:(?:transparent|#fff0)!important;' .
             'border:1pxsolidvar\(--ismos-hairline\);border-radius:4px!important;color:var\(--ismos-text\)!important;[^}]*font-size:13px/', $flat);
