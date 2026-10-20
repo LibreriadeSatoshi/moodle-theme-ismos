@@ -170,9 +170,9 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertStringContainsString('role="switch"', $html);
         $this->assertStringContainsString('aria-label="Dark mode"', $html);
         $this->assertStringContainsString('title="Dark mode"', $html);
-        $this->assertStringContainsString('fa-moon ismos-darkmode-icon-moon" aria-hidden="true"', $html);
-        $this->assertStringContainsString('fa-sun ismos-darkmode-icon-sun" aria-hidden="true"', $html);
-        $this->assertDoesNotMatchRegularExpression('/<\/i>\s*Dark mode\s*<\/button>/', $html);
+        $this->assertMatchesRegularExpression('/<svg class="ismos-darkmode-icon ismos-darkmode-icon-moon" aria-hidden="true"/', $html);
+        $this->assertMatchesRegularExpression('/<svg class="ismos-darkmode-icon ismos-darkmode-icon-sun" aria-hidden="true"/', $html);
+        $this->assertDoesNotMatchRegularExpression('/<\/svg>\s*Dark mode\s*<\/button>/', $html);
 
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
@@ -210,6 +210,10 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertStringContainsString('alt="" aria-hidden="true"', $html);
         $this->assertStringContainsString('ismos-mark-paper.svg', $html);
         $this->assertStringContainsString('ismos-mark-ink.svg', $html);
+        // No stray template text (a broken Mustache comment leaks its example context into the bar).
+        $this->assertStringNotContainsString('}}', $html);
+        $this->assertStringNotContainsString('] }', $html);
+        $this->assertDoesNotMatchRegularExpression('/\]\s*\}/', $html);
         $this->assertStringContainsString('data-action="theme_ismos/toggle-darkmode"', $html);
     }
 
@@ -322,6 +326,8 @@ final class core_renderer_test extends \advanced_testcase {
             $this->assertStringContainsString('class="langmenu"', $html);
             $this->assertStringContainsString('Español', $html);
             $this->assertStringContainsString('<span class="langbutton">EN</span>', $html);
+            $this->assertStringContainsString('aria-label="Language: EN, English', $html);
+            $this->assertStringNotContainsString('}}', $html);
 
             $navbar = $out->render_from_template('theme_boost/navbar', [
                 'output' => $out,
@@ -329,6 +335,8 @@ final class core_renderer_test extends \advanced_testcase {
                 'sitename' => 'ISMOS',
             ]);
             $this->assertStringContainsString('class="langmenu"', $navbar);
+            $this->assertStringNotContainsString('}}', $navbar);
+            $this->assertDoesNotMatchRegularExpression('/\]\s*\}/', $navbar);
         } finally {
             remove_dir($dir);
             purge_all_caches();

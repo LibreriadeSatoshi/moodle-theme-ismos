@@ -43,7 +43,7 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-nav-bg:var\(--ismos-logwood-50\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-nav-bg:var\(--ismos-ink\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.navigation\.nav-link\.active[^{]*\{[^}]*' .
-            'border-block-end-color:var\(--ismos-text\)[^}]*font-weight:600/', $flat);
+            'border:0;[^}]*font-weight:600;text-decoration:underline2px;text-underline-offset:8px/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.dropdown-toggle::after\{[^}]*' .
             'border-block-end:1\.5pxsolidcurrentcolor/', $flat);
         $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\.ismos-mark-paper\{display:none/', $flat);
@@ -60,7 +60,7 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-login__form#auth-nostr-btn\.btn\{[^}]*background:(?:transparent|#fff0);' .
             'border:1\.5pxsolidvar\(--ismos-text\);border-radius:4px/', $flat);
         $this->assertMatchesRegularExpression('/\.loginform:has\(\.login-divider-or\)\.auth-nostr-sep\{display:none/', $flat);
-        $this->assertMatchesRegularExpression('/#id_cancel\{display:none/', $flat);
+        $this->assertMatchesRegularExpression('/#page-login-signup\.ismos-login__form\.mform\[data-groupname="buttonar"\]#id_cancel\{display:none/', $flat);
 
         // Maintenance and category pages.
         $this->assertMatchesRegularExpression('/\.ismos-maintenance\.maintenance_message[^{]*\{[^}]*' .
@@ -97,12 +97,12 @@ final class scss_test extends \advanced_testcase {
         $toggle = 'button\.btn\[data-action="theme_ismos\/toggle-darkmode"\]';
         $this->assertMatchesRegularExpression('/' . $toggle . '\{[^}]*background-color:(?:transparent|#fff0);' .
             '[^}]*border:0;[^}]*border-radius:4px;[^}]*color:var\(--ismos-text\)[^}]*min-block-size:44px;[^}]*min-inline-size:44px/', $flat);
-        $this->assertMatchesRegularExpression('/' . $toggle . '\.icon\{[^}]*font-size:20px/', $flat);
+        $this->assertMatchesRegularExpression('/' . $toggle . '\.ismos-darkmode-icon\{[^}]*block-size:20px[^}]*inline-size:20px[^}]*stroke:currentcolor/', $flat);
         $this->assertMatchesRegularExpression('/' . $toggle . '\.ismos-darkmode-icon-sun\{display:none/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.navbar[^{]*' . $toggle . '\.ismos-darkmode-icon-moon\{display:none\}' .
-            '[^{]*\.ismos-darkmode-icon-sun\{display:inline-block/', $flat);
+            '[^{]*\.ismos-darkmode-icon-sun\{display:block/', $flat);
         $this->assertMatchesRegularExpression('/prefers-color-scheme:dark\)\{\.ismos-mode-auto\.navbar[^{]*' . $toggle .
-            '\.ismos-darkmode-icon-moon\{display:none\}[^{]*\.ismos-darkmode-icon-sun\{display:inline-block/', $flat);
+            '\.ismos-darkmode-icon-moon\{display:none\}[^{]*\.ismos-darkmode-icon-sun\{display:block/', $flat);
         $this->assertMatchesRegularExpression('/' . $toggle . ':focus-visible\{[^}]*outline:2pxsolidvar\(--ismos-focus\)/', $flat);
         $this->assertDoesNotMatchRegularExpression('/' . $toggle . '\[aria-checked/', $flat);
         foreach (['#frontpage-available-course-list', '#frontpage-course-list', '.course-search-result'] as $scope) {

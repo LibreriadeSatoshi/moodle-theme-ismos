@@ -303,6 +303,12 @@
     }
 }
 
+// Signup only: "Already have an account? Log in" under the form replaces Cancel. The button stays in the form
+// (hidden), so the form keeps working. Other login-layout forms (set password and so on) keep their Cancel.
+#page-login-signup .ismos-login__form .mform [data-groupname="buttonar"] #id_cancel {
+    display: none;
+}
+
 // "New here? Create an account" and "Already have an account? Log in": one quiet line with a text link.
 .ismos-login__form .ismos-login-alt {
     color: var(--ismos-text-muted);
@@ -371,6 +377,11 @@
                 flex: 1;
             }
         }
+    }
+
+    // Nothing to say yet: no gap between the button and the next provider (16 px, as between providers).
+    .auth-nostr-status:empty {
+        display: none;
     }
 
     &:has(.login-divider-or) .auth-nostr-sep {
@@ -517,12 +528,6 @@
         .btn {
             inline-size: 100%;
             min-block-size: 44px;
-        }
-
-        // Signup: "Already have an account? Log in" under the form replaces Cancel. The button stays in the
-        // form (hidden), so the form keeps working.
-        #id_cancel {
-            display: none;
         }
 
         .btn-secondary {

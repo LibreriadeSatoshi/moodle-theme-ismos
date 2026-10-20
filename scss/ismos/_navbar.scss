@@ -104,8 +104,7 @@
 // stronger (Ink or white, weight 600) and carries a 2 px underline, so it never relies on colour alone.
 .ismos-navbar .primary-navigation {
     .navigation .nav-link {
-        border-block-end: 2px solid transparent;
-        border-block-start: 0;
+        border: 0;
         color: var(--ismos-text-muted);
         font-family: var(--ismos-font-sans);
         font-size: 16.5px;
@@ -115,15 +114,16 @@
         &:focus {
             background-color: var(--ismos-nav-hover);
             color: var(--ismos-text);
-            text-decoration: none;
         }
 
         &.active,
         &[aria-current="true"] {
             background-color: transparent;
-            border-block-end-color: var(--ismos-text);
+            border: 0;
             color: var(--ismos-text);
             font-weight: 600;
+            text-decoration: underline 2px;
+            text-underline-offset: 8px;
         }
     }
 
@@ -198,13 +198,14 @@
 
     // Counts are small Plex Mono labels beside the icon, not pills.
     .count-container {
-        background-color: transparent;
-        border-radius: 0;
+        background-color: var(--ismos-nav-bg);
+        border-radius: 2px;
         color: var(--ismos-alert);
         font-family: var(--ismos-font-mono);
         font-size: 11px;
         font-weight: 600;
-        padding: 0;
+        padding: 0 2px;
+        transform: translate(3px, -3px);
     }
 }
 
@@ -342,12 +343,16 @@
     min-inline-size: 44px;
     padding: 0;
 
-    .icon {
+    // 20 px line icons, 1.5 px stroke in the bar's ink (Ink in light, white in Hacker mode).
+    .ismos-darkmode-icon {
         block-size: 20px;
-        color: var(--ismos-text);
-        font-size: 20px;
+        display: block;
+        fill: none;
         inline-size: 20px;
-        margin: 0;
+        stroke: currentcolor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5;
     }
 
     .ismos-darkmode-icon-sun {
@@ -373,7 +378,7 @@
     }
 
     .ismos-darkmode-icon-sun {
-        display: inline-block;
+        display: block;
     }
 }
 
@@ -384,7 +389,7 @@
         }
 
         .ismos-darkmode-icon-sun {
-            display: inline-block;
+            display: block;
         }
     }
 }
