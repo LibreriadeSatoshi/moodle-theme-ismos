@@ -240,7 +240,9 @@ a.card:hover {
         border-color: var(--ismos-hairline);
     }
 
-    thead th {
+    // Header rows sometimes use td for an empty actions column (payment accounts); style it like th.
+    thead th,
+    thead td {
         border-bottom: 2px solid var(--ismos-rule-strong);
     }
 

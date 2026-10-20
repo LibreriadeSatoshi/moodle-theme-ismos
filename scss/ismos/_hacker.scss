@@ -110,6 +110,7 @@ $ismos-state-cell-list: '[class*="overridden"]', '[class*="excluded"]', '[class*
     }
 
     #region-main table tr:not(.selectedrow) > th:not(#{$ismos-state-cell}),
+    #region-main table thead tr:not(.selectedrow) > td:not(#{$ismos-state-cell}),
     #region-main table tr:not(.selectedrow) > :is(td, th):is(.range, .avg, .average):not(#{$ismos-state-cell}) {
         background-color: var(--ismos-surface-raised);
     }
