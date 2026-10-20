@@ -217,6 +217,8 @@ final class catalogue {
                 $this->excerpt((string) $cat->description, (int) $cat->descriptionformat, $cat->get_context(), 300);
             $sections[] = [
                 'name' => $cat->get_formatted_name(['escape' => false]),
+                // The level's own page already has its name as the page title; a subcategory page keeps the level name.
+                'showname' => !($selected && (int) $selected->id === (int) $cat->id),
                 'description' => $description,
                 'hasdescription' => $description !== '',
                 'url' => (new \moodle_url('/course/index.php', ['categoryid' => $cat->id]))->out(false),

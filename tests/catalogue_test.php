@@ -95,6 +95,7 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertFalse($data['sections'][0]['haslevel']);
         $this->assertTrue($data['tabs'][0]['active']);
         $this->assertTrue($data['sections'][0]['showonly']);
+        $this->assertTrue($data['sections'][0]['showname']);
     }
 
     public function test_exactly_three_levels_have_bars_and_kickers(): void {
@@ -123,6 +124,8 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertCount(1, $data['sections']);
         $this->assertSame(['Direct', 'In child'], array_column($data['sections'][0]['cards'], 'name'));
         $this->assertFalse($data['sections'][0]['showonly']);
+        // The level's own page has its name as the title, so the section heading is only for screen readers.
+        $this->assertFalse($data['sections'][0]['showname']);
         // The level's description is the lead, so the section does not repeat it.
         $this->assertFalse($data['sections'][0]['hasdescription']);
         $this->assertFalse($data['tabs'][0]['active']);

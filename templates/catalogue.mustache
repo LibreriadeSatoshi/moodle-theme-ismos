@@ -84,7 +84,7 @@
                         <span class="ismos-path__level" aria-hidden="true">{{#level}}<i{{#on}} class="on"{{/on}}></i>{{/level}}</span>
                         <span class="ismos-label ismos-level__kicker">{{kicker}}</span>
                     {{/haslevel}}
-                    <h2>{{name}}</h2>
+                    {{#showname}}<h2>{{name}}</h2>{{/showname}}{{^showname}}<h2 class="visually-hidden">{{name}}</h2>{{/showname}}
                     {{#hasdescription}}<p class="ismos-level__text">{{description}}</p>{{/hasdescription}}
                 </div>
                 {{#showonly}}<a href="{{{url}}}">{{#str}}catalogonly, theme_ismos{{/str}}</a>{{/showonly}}
