@@ -26,7 +26,7 @@
     * facts - value and label
     * paths, haspaths - name, description, hasdescription, courses (name, url), hascourses, url, haslevel, level (on), kicker
     * calendar, hascalendar - day, month, year, name, category, code, hascode, url
-    * steps - number, title, text
+    * steps - number ("01"), title, text, and one of form, room, cert for its drawing
     * testimonials, hastestimonials - quote and name
     * final - heading, cta, url
     * hasextra, section1, content - HTML of the other front page parts, empty when there is none
@@ -73,7 +73,7 @@
             "day": "03", "month": "NOV", "year": "2026", "name": "Bitcoin Privacy Diploma", "category": "Bitcoin Dev",
             "code": "ES", "hascode": true, "url": "/course/view.php?id=2"
         }],
-        "steps": [{"number": 1, "title": "Create your account", "text": "One minute."}],
+        "steps": [{"number": "01", "title": "Create your account", "text": "One minute.", "form": true}],
         "hastestimonials": true,
         "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}],
         "final": {"heading": "Your first class starts here.", "cta": "Create a free account", "url": "/login/signup.php"}
@@ -168,7 +168,45 @@
         <h2 id="ismos-how-title">{{#str}}howheading, theme_ismos{{/str}}</h2>
         <ol class="ismos-steps">
             {{#steps}}
-                <li class="ismos-step"><span class="ismos-step__n" aria-hidden="true">{{number}}</span><h3>{{title}}</h3><p>{{text}}</p></li>
+                <li class="ismos-step">
+                    <div class="ismos-step__pane" aria-hidden="true">
+                        {{#form}}
+                            <div class="ismos-ill-form">
+                                <span class="ismos-ill-form__title">{{#str}}signupheading, theme_ismos{{/str}}</span>
+                                <span class="ismos-ill-form__input"></span><span class="ismos-ill-form__input"></span>
+                                <span class="ismos-ill-form__submit"></span>
+                                <span class="ismos-ill-form__provider"><i style="background: #662482"></i>Nostr</span>
+                                <span class="ismos-ill-form__provider"><i style="background: #000"></i>GitHub</span>
+                                <span class="ismos-ill-form__provider"><i style="background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc05, #34a853)"></i>Google</span>
+                            </div>
+                        {{/form}}
+                        {{#room}}
+                            <div class="ismos-ill-room">
+                                <div class="ismos-ill-room__side">
+                                    <span class="ismos-ill-room__bar"></span>
+                                    <span class="ismos-ill-room__bubble">{{#str}}howchat1, theme_ismos{{/str}}</span>
+                                    <span class="ismos-ill-room__bubble">{{#str}}howchat2, theme_ismos{{/str}}</span>
+                                </div>
+                                <div class="ismos-ill-room__stage">
+                                    <div class="ismos-ill-room__slide">
+                                        <span class="ismos-ill-room__welcome">{{#str}}howwelcome, theme_ismos{{/str}}</span>
+                                        <span class="ismos-ill-room__lines"><i style="inline-size: 70%"></i><i></i><i style="inline-size: 85%"></i><i style="inline-size: 55%"></i></span>
+                                    </div>
+                                    <span class="ismos-ill-room__buttons"><i></i><i></i><i class="on"></i><i></i></span>
+                                </div>
+                            </div>
+                        {{/room}}
+                        {{#cert}}
+                            <div class="ismos-ill-cert">
+                                <span class="ismos-ill-cert__head"><svg class="ismos-ill-cert__mark" aria-hidden="true" focusable="false" viewBox="0 0 600 600" fill="currentColor"><polygon points="426.7 431.22 426.7 571.5 309.05 447.51 345.25 349.77 426.7 431.22"></polygon><polygon points="173.3 431.22 173.3 571.5 290.95 447.51 254.75 349.77 173.3 431.22"></polygon><polygon points="426.7 168.77 426.7 28.5 309.05 152.48 345.25 250.22 426.7 168.77"></polygon><polygon points="173.3 168.77 173.3 28.5 290.95 152.48 254.75 250.22 173.3 168.77"></polygon><polygon points="431.23 173.3 571.5 173.3 446.61 290.95 349.78 254.75 431.23 173.3"></polygon><polygon points="431.22 426.7 571.5 426.7 446.61 309.05 349.78 345.25 431.22 426.7"></polygon><polygon points="168.78 173.3 28.5 173.3 152.48 290.95 250.22 254.75 168.78 173.3"></polygon><polygon points="168.77 426.7 28.5 426.7 152.48 309.05 250.22 345.25 168.77 426.7"></polygon></svg>{{#str}}wordmark, theme_ismos{{/str}}</span>
+                                <span class="ismos-ill-cert__lines"><i></i><i></i><i></i></span>
+                                <span class="ismos-ill-cert__foot"><span class="ismos-ill-cert__sign"></span><span class="ismos-ill-cert__seal"><svg class="ismos-ill-cert__sealmark" aria-hidden="true" focusable="false" viewBox="0 0 600 600" fill="currentColor"><polygon points="426.7 431.22 426.7 571.5 309.05 447.51 345.25 349.77 426.7 431.22"></polygon><polygon points="173.3 431.22 173.3 571.5 290.95 447.51 254.75 349.77 173.3 431.22"></polygon><polygon points="426.7 168.77 426.7 28.5 309.05 152.48 345.25 250.22 426.7 168.77"></polygon><polygon points="173.3 168.77 173.3 28.5 290.95 152.48 254.75 250.22 173.3 168.77"></polygon><polygon points="431.23 173.3 571.5 173.3 446.61 290.95 349.78 254.75 431.23 173.3"></polygon><polygon points="431.22 426.7 571.5 426.7 446.61 309.05 349.78 345.25 431.22 426.7"></polygon><polygon points="168.78 173.3 28.5 173.3 152.48 290.95 250.22 254.75 168.78 173.3"></polygon><polygon points="168.77 426.7 28.5 426.7 152.48 309.05 250.22 345.25 168.77 426.7"></polygon></svg></span></span>
+                            </div>
+                        {{/cert}}
+                    </div>
+                    <h3><span class="ismos-step__n">{{number}}</span>{{title}}</h3>
+                    <p>{{text}}</p>
+                </li>
             {{/steps}}
         </ol>
     </div>
