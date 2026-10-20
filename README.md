@@ -22,7 +22,7 @@ upgrade.
 
 | Template | Core file it shadows | What changed and why |
 | --- | --- | --- |
-| `core/loginform` | `lib/templates/loginform.mustache` | The divider before the identity providers is an "or" label with hairlines (`login-divider-or`); the providers heading is visually hidden. Matches the ISMOS login design. |
+| `core/loginform` | `lib/templates/loginform.mustache` | The divider before the identity providers is an "or" label with hairlines (`login-divider-or`); the providers heading is visually hidden. Matches the ISMOS login design. The core site logo (`logourl`) is no longer rendered above the form, since the login layout already carries the ISMOS mark and wordmark; the visible "Log in to site" heading is always used. |
 | `core/signup_form_layout` | `lib/templates/signup_form_layout.mustache` | Heading reads "Create your account" (theme string) instead of core's "New account". |
 | `core/email_html` | `lib/templates/email_html.mustache` | Branded HTML email frame (table layout, inline styles, ISMOS wordmark, address footer) around `{{{body}}}`. Email clients ignore the theme CSS, so it is all inline. |
 | `core_payment/gateway` | `payment/templates/gateway.mustache` | Gateway choice as an ISMOS option row (radio, icon badge, name, description) instead of Bootstrap's `bg-light border` card. Keeps the `payby` radio and `data-*` attributes the payment JS reads. |

@@ -123,8 +123,42 @@ class course_renderer extends \core_course_renderer {
             return $parts;
         }
         $data = (new \theme_ismos\output\frontpage())->export_for_template($this->output);
+        $data['section1'] = $this->site_section1();
         $data['content'] = $parts;
         return $this->output->render_from_template('theme_ismos/frontpage_main', $data);
+    }
+
+    /**
+     * Core echoes the site section 1 (summary and activities) before the front page main content, which
+     * would put it above the hero and outside the content column. On the site index it is rendered by
+     * frontpage() instead, so this returns nothing there.
+     *
+     * @return string
+     */
+    public function frontpage_section1() {
+        if ($this->page->pagetype === 'site-index') {
+            return '';
+        }
+        return parent::frontpage_section1();
+    }
+
+    /**
+     * Site section 1 as core would render it on the front page, under the same conditions as
+     * public/index.php (no custom front page include, and the site format has sections).
+     *
+     * @return string
+     */
+    protected function site_section1(): string {
+        global $CFG, $SITE;
+        require_once($CFG->dirroot . '/course/lib.php');
+        if (!empty($CFG->customfrontpageinclude)) {
+            return '';
+        }
+        $options = course_get_format($SITE)->get_format_options();
+        if (empty($options['numsections'])) {
+            return '';
+        }
+        return parent::frontpage_section1();
     }
 
     /**

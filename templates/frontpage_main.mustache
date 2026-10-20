@@ -23,6 +23,7 @@
     Context variables required for this template:
     * hero - label, title, lead, cta, ctaurl, signup, signupurl (null when not offered)
     * categories, hascategories - top-level categories (name, url)
+    * section1 - HTML of the site summary and activities (section 1), empty when there is none
     * content - HTML of the front page parts
     * testimonials, hastestimonials - quote and name
 
@@ -70,6 +71,7 @@
 </nav>
 {{/hascategories}}
 <div class="ismos-frontpage-column ismos-frontpage-courses">
+    {{{section1}}}
     {{{content}}}
 </div>
 {{#hastestimonials}}

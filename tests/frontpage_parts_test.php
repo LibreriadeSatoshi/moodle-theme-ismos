@@ -91,6 +91,56 @@ final class frontpage_parts_test extends \advanced_testcase {
         $this->assertStringContainsString('output.main_content', $template);
     }
 
+    /**
+     * Give the site section 1 a summary.
+     *
+     * @param string $summary
+     */
+    private function set_section1_summary(string $summary): void {
+        global $DB, $SITE;
+        course_create_sections_if_missing($SITE, 1);
+        $DB->set_field('course_sections', 'summary', $summary, ['course' => $SITE->id, 'section' => 1]);
+        rebuild_course_cache($SITE->id, true);
+    }
+
+    public function test_section1_is_inside_the_content_column_between_browse_row_and_courses(): void {
+        global $CFG, $PAGE;
+        require_once($CFG->dirroot . '/course/lib.php');
+        $this->setGuestUser();
+        $this->set_section1_summary('<p>Site summary marker</p>');
+        $html = $this->render('6');
+        $this->assertSame(1, substr_count($html, 'Site summary marker'));
+        $hero = strpos($html, '<h1');
+        $browse = strpos($html, 'ismos-browse');
+        $section1 = strpos($html, 'Site summary marker');
+        $courses = strpos($html, 'frontpage-available-course-list');
+        $this->assertNotFalse($hero);
+        $this->assertLessThan($browse, $hero);
+        $this->assertLessThan($section1, $browse);
+        $this->assertLessThan($courses, $section1);
+        // Inside the content column, not before it.
+        $this->assertLessThan($section1, strpos($html, 'ismos-frontpage-column ismos-frontpage-courses'));
+        // Core's own call from index.php adds nothing on the site index.
+        $renderer = $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL);
+        $this->assertSame('', $renderer->frontpage_section1());
+    }
+
+    public function test_section1_is_left_alone_outside_the_site_index(): void {
+        global $CFG, $PAGE;
+        require_once($CFG->dirroot . '/course/lib.php');
+        $this->setGuestUser();
+        $this->set_section1_summary('<p>Site summary marker</p>');
+        $PAGE->set_pagetype('course-index');
+        $renderer = $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL);
+        $this->assertStringContainsString('Site summary marker', $renderer->frontpage_section1());
+    }
+
+    public function test_empty_section1_renders_nothing_unless_editing(): void {
+        $this->setGuestUser();
+        $html = $this->render('6');
+        $this->assertStringNotContainsString('frontpage-section', $html);
+    }
+
     public function test_other_pages_keep_the_plain_front_page_parts(): void {
         global $PAGE;
         $this->setGuestUser();

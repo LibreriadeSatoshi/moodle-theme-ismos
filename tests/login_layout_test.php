@@ -250,4 +250,30 @@ final class login_layout_test extends \advanced_testcase {
             $flat
         );
     }
+
+    /**
+     * The core site logo is not rendered above the login form, even when one is configured.
+     */
+    public function test_login_form_does_not_show_the_core_logo(): void {
+        global $PAGE;
+        $this->resetAfterTest();
+        $PAGE->set_url('/login/index.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->force_theme('ismos');
+        set_config('logo', '/old-brand.png', 'core_admin');
+        $output = $PAGE->get_renderer('core');
+        $logourl = 'https://example.com/pluginfile.php/1/core_admin/logo/old-brand.png';
+        $html = $output->render_from_template('core/loginform', [
+            'logourl' => $logourl,
+            'sitename' => 'Test site',
+            'logintoken' => 'x',
+            'username' => '',
+            'loginurl' => '/login/index.php',
+        ]);
+        $this->assertStringContainsString('class="loginform"', $html);
+        $this->assertStringNotContainsString($logourl, $html);
+        $this->assertStringNotContainsString('old-brand', $html);
+        $this->assertStringNotContainsString('id="logoimage"', $html);
+        $this->assertSame(1, substr_count($html, '<h1 class="login-heading mb-4">'));
+    }
 }
