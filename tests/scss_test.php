@@ -206,7 +206,7 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.course-section\.section-item\{border-color:var\(--ismos-hairline\);border-radius:4px/', $flat);
         $this->assertMatchesRegularExpression('/\.course-section\.activity\{border-top-color:var\(--ismos-hairline\)/', $flat);
         $this->assertMatchesRegularExpression('/\.max-section-alert,[^{]*\.activity-afterlink[^{]*\{border-color:var\(--ismos-hairline\)/', $flat);
-        $this->assertMatchesRegularExpression('/\.course-content\.divider hr\{border-top-color:var\(--ismos-hairline\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-content\.dividerhr\{border-top-color:var\(--ismos-hairline\)/', $flat);
         $this->assertMatchesRegularExpression('/\.availabilityinfo\{background-color:var\(--ismos-info-bg\);[^}]*border-radius:4px;color:var\(--ismos-info-text\)/', $flat);
         $this->assertMatchesRegularExpression('/\.availabilityinfoa:not\(\.btn\)\{color:var\(--ismos-link\);text-decoration:underline/', $flat);
         $this->assertMatchesRegularExpression('/\.activityiconcontainer:not\(\.isbranded\)\.activityicon:not\(\.nofilter\)[^{]*\{filter:var\(--ismos-icon-filter\)/', $flat);
