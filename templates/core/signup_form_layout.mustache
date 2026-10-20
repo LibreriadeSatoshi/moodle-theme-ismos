@@ -1,0 +1,16 @@
+{{!
+    @template core/signup_form_layout
+
+    ISMOS override: the heading reads "Create your account" (theme string) instead of core's "New account".
+
+    Example context (json):
+    {
+        "logourl": "https://moodle.org/logo/moodle-logo.svg",
+        "sitename": "Site name",
+        "formhtml": "<p>(Form html would go here)</p>"
+    }
+}}
+<div class="signupform">
+    <h1 class="login-heading">{{#str}} signupheading, theme_ismos {{/str}}</h1>
+    {{{formhtml}}}
+</div>

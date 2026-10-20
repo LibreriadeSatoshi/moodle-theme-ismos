@@ -42,6 +42,7 @@ $string['herotitle'] = 'Learn to run your own money, one lesson at a time.';
 $string['loginline'] = 'Welcome back. Pick up where you left off.';
 $string['loginor'] = 'or';
 $string['pluginname'] = 'ISMOS';
+$string['signupheading'] = 'Create your account';
 $string['signuplead'] = 'Create your account in a minute. You don\'t need to know anything yet.';
 $string['signupline'] = 'Free, in your own language.';
 $string['sitenews'] = 'Site news';

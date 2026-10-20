@@ -90,7 +90,7 @@ final class login_layout_test extends \advanced_testcase {
     public function test_spanish_strings_exist(): void {
         $string = [];
         require(__DIR__ . '/../lang/es/theme_ismos.php');
-        foreach (['loginline', 'signupline', 'signuplead'] as $key) {
+        foreach (['loginline', 'signupline', 'signuplead', 'signupheading', 'loginor'] as $key) {
             $this->assertNotEmpty($string[$key] ?? '', $key);
         }
     }
@@ -126,5 +126,73 @@ final class login_layout_test extends \advanced_testcase {
             $rtl
         );
         $this->assertDoesNotMatchRegularExpression('/select\[multiple\][^{]*\{[^}]*background-image:url\("data:image\/svg/', $flat);
+    }
+
+    /** @var bool Whether the page was already pointed at the theme in this test. */
+    private bool $pageready = false;
+
+    /**
+     * Point the page at the ismos theme, once.
+     */
+    private function setup_page(): void {
+        global $PAGE, $SITE;
+        if ($this->pageready) {
+            return;
+        }
+        $this->pageready = true;
+        $PAGE->set_course($SITE);
+        $PAGE->set_url('/login/index.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->force_theme('ismos');
+    }
+
+    /**
+     * Render a template through the ismos theme.
+     *
+     * @param string $template
+     * @param array $context
+     * @return string
+     */
+    private function render(string $template, array $context): string {
+        global $PAGE;
+        $this->setup_page();
+        return $PAGE->get_renderer('core')->render_from_template($template, $context);
+    }
+
+    /**
+     * The signup heading is the theme's, not core's "New account".
+     */
+    public function test_signup_heading_override(): void {
+        $this->resetAfterTest();
+        $html = $this->render('core/signup_form_layout', ['formhtml' => '<p>form</p>']);
+        $this->assertStringContainsString('Create your account', $html);
+        $this->assertStringNotContainsString(get_string('newaccount'), $html);
+        $this->assertStringContainsString('<p>form</p>', $html);
+    }
+
+    /**
+     * The login layout keeps the standard footer output (site policies and the like) under the form.
+     */
+    public function test_login_layout_renders_standard_footer_output(): void {
+        global $PAGE;
+        $this->resetAfterTest();
+        $this->setup_page();
+        $output = new class($PAGE, RENDERER_TARGET_GENERAL) extends \theme_ismos\output\core_renderer {
+            #[\Override]
+            public function standard_footer_html() {
+                return '<a id="ismos-footer-marker" href="#">Policies marker</a>';
+            }
+        };
+        $html = $this->render('theme_ismos/login', [
+            'output' => $output,
+            'bodyattributes' => '',
+            'line' => 'x',
+            'wordmark' => 'ISMOS',
+            'address' => 'ISMOS.XYZ',
+        ]);
+        $this->assertMatchesRegularExpression(
+            '/ismos-login__footer[^>]*>.*ismos-footer-marker.*<\/footer>/s',
+            $html
+        );
     }
 }

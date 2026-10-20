@@ -20,7 +20,11 @@ select[size="1"]:not([multiple]) {
     text-overflow: ellipsis;
 
     // Nothing chosen yet: the placeholder option reads as muted text.
-    &:invalid,
+    // Separate rules: a browser without :has() must still apply :invalid.
+    &:invalid {
+        color: var(--ismos-text-muted);
+    }
+
     &:has(option[value=""]:checked) {
         color: var(--ismos-text-muted);
     }
@@ -65,4 +69,10 @@ select.is-invalid:not([multiple]):not([size]) {
     .ismos-mode-auto select.is-invalid:not([multiple]):not([size]) {
         background-image: url("#{$ismos-chevron-dark}");
     }
+}
+
+// The footer is always Ink, in both modes: its selects take the light chevron.
+#page-footer.ismos-footer select:not([multiple]):not([size]),
+#page-footer.ismos-footer select[size="1"]:not([multiple]) {
+    background-image: url("#{$ismos-chevron-dark}");
 }

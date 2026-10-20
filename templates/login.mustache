@@ -22,6 +22,7 @@
     Context variables required for this template:
     * output - The core renderer for the page
     * bodyattributes - attributes for the body tag
+    * output.standard_footer_html - site policies link and other footer output, shown as a quiet strip under the form
     * line, haslead, lead, address, wordmark - text of the block
 
     Example context (json):
@@ -75,6 +76,15 @@
                     </div>
                 </div>
             </div>
+            <footer class="ismos-login__footer" data-region="footer-content">
+                {{#output.has_popover_links}}
+                    {{#output.page_doc_link}}<div>{{{ output.page_doc_link }}}</div>{{/output.page_doc_link}}
+                    {{#output.services_support_link}}<div>{{{ output.services_support_link }}}</div>{{/output.services_support_link}}
+                    {{#output.supportemail}}<div>{{{ output.supportemail }}}</div>{{/output.supportemail}}
+                {{/output.has_popover_links}}
+                {{{ output.standard_footer_html }}}
+                {{{ output.debug_footer_html }}}
+            </footer>
         </main>
     </div>
     {{{ output.standard_after_main_region_html }}}

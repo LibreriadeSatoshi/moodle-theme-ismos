@@ -9,13 +9,18 @@
 
 .ismos-login__block {
     background: var(--ismos-block);
-    block-size: 100vh;
     box-sizing: border-box;
     color: var(--ismos-on-block);
     display: flex;
     flex-direction: column;
+    gap: 24px;
     inset-block-start: 0;
     justify-content: space-between;
+    max-block-size: 100vh;
+    max-block-size: 100dvh; // stylelint-disable-line declaration-block-no-duplicate-properties
+    min-block-size: 100vh;
+    min-block-size: 100dvh; // stylelint-disable-line declaration-block-no-duplicate-properties
+    overflow-y: auto;
     padding: 48px;
     position: sticky;
 }
@@ -62,12 +67,32 @@
 
 .ismos-login__side {
     background: var(--ismos-surface);
+    align-items: center;
     box-sizing: border-box;
     display: flex;
+    flex-direction: column;
     inline-size: 100%;
-    justify-content: center;
     margin: 0;
     padding: 48px 32px;
+}
+
+// Footer output (site policies, support contact, doc link): a quiet muted strip under the form.
+.ismos-login__footer {
+    color: var(--ismos-text-muted);
+    font-size: 13px;
+    inline-size: 100%;
+    line-height: 20px;
+    margin-block-start: 24px;
+    max-inline-size: 400px;
+
+    a {
+        color: var(--ismos-text-muted);
+        text-decoration: underline;
+    }
+
+    &:not(:has(*)) {
+        display: none;
+    }
 }
 
 .ismos-login__form {
@@ -117,8 +142,9 @@
     }
 
     .ismos-login__block {
-        block-size: auto;
         gap: 12px;
+        max-block-size: none;
+        min-block-size: 0;
         padding: 24px 16px;
         position: static;
     }
@@ -230,7 +256,6 @@
         inline-size: 20px;
     }
 
-    // Plex Mono hint for required fields.
 
     .login-divider {
         border-block-start: 1px solid var(--ismos-hairline);
@@ -316,12 +341,37 @@
         padding-block: 0;
     }
 
+    // The REQUIRED marker shares the label's baseline (core centres it at the start of the line).
+    .fitem .form-label-addon {
+        align-items: baseline !important; // stylelint-disable-line declaration-no-important
+        align-self: baseline !important; // stylelint-disable-line declaration-no-important
+    }
+
+    // Signup: the password policy sits under the password field, as a hint. Visual order only; the DOM
+    // and the policy text's association are core's. The rows are siblings, so flex order places it.
+    display: flex;
+    flex-direction: column;
+
+    #fitem_id_password {
+        order: 1;
+    }
+
+    #fitem_id_password ~ * {
+        order: 3;
+    }
+
+    #fitem_id_passwordpolicyinfo {
+        margin-block-start: -8px;
+        order: 2;
+    }
+
     // Required marker: Moodle's icon is replaced by its own translated title, as a Plex Mono label.
     .form-label-addon .text-danger {
         @include ismos-label;
 
         color: var(--ismos-text-muted) !important; // stylelint-disable-line declaration-no-important
 
+        align-self: baseline;
         margin-inline-start: 8px;
 
         &::after {
