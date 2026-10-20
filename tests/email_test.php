@@ -62,5 +62,8 @@ final class email_test extends \advanced_testcase {
         $this->assertStringNotContainsString('Tom <b>', $html);
         $this->assertStringNotContainsString('theme_scholastica', $html);
         $this->assertStringNotContainsString('scholastica', strtolower($html));
+        // The template's documentation comment never reaches the reader.
+        $this->assertStringNotContainsString('Example context', $html);
+        $this->assertStringNotContainsString('Context variables', $html);
     }
 }
