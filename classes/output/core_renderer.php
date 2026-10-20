@@ -65,6 +65,37 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * Swaps the dashboard welcome line for the theme's own wording (no emoji, no exclamation mark).
+     *
+     * Core builds the line from 'welcometosite' (first visit) or 'welcomeback'. Both carry an emoji and
+     * the first an exclamation mark, so the theme renders its own strings and leaves core untouched.
+     *
+     * @param string $templatename
+     * @param array|\stdClass $context
+     * @return string
+     */
+    public function render_from_template($templatename, $context) {
+        if ($templatename === 'core/full_header' && is_object($context) && !empty($context->welcomemessage)) {
+            $context->welcomemessage = $this->ismos_welcome_message($context->welcomemessage);
+        }
+        return parent::render_from_template($templatename, $context);
+    }
+
+    /**
+     * Returns the theme's welcome line matching core's welcome message.
+     *
+     * @param \lang_string|string $core the message core prepared
+     * @return string
+     */
+    public function ismos_welcome_message($core): string {
+        global $USER;
+        $a = (object) ['firstname' => $USER->firstname];
+        $first = get_string('welcometosite', 'core', $a);
+        $key = (string) $core === $first ? 'welcome' : 'welcomeback';
+        return get_string($key, 'theme_ismos', $USER->firstname);
+    }
+
+    /**
      * Renders the language menu for the top bar, for logged-in visitors as well as logged-out ones.
      *
      * Boost only puts the menu in the bar for logged-out visitors and moves it into the user menu

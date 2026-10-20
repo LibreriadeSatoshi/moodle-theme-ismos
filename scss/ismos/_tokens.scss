@@ -103,6 +103,8 @@
     --ismos-modal-edge: transparent;
     --ismos-selection-bg: var(--ismos-weld);
     --ismos-selection-text: var(--ismos-ink);
+    --ismos-icon-filter: brightness(0);
+    --ismos-placeholder: var(--ismos-logwood-100);
 
     // Status alerts: background, text and border.
     --ismos-info-bg: var(--ismos-logwood-50);
@@ -190,6 +192,8 @@
     --ismos-modal-edge: var(--ismos-logwood-400);
     --ismos-selection-bg: var(--ismos-weld);
     --ismos-selection-text: var(--ismos-ink);
+    --ismos-icon-filter: brightness(0) invert(1);
+    --ismos-placeholder: var(--ismos-logwood-700);
     --ismos-info-bg: var(--ismos-logwood);
     --ismos-info-text: var(--ismos-logwood-200);
     --ismos-info-border: var(--ismos-logwood-700);

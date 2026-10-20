@@ -52,4 +52,6 @@ $string['sitenews'] = 'Site news';
 $string['testimonials'] = 'Testimonials';
 $string['testimonials_desc'] = 'One testimonial per line, written as: quote | name. The name is whatever follows the last " | " on the line. Leave empty to hide the section.';
 $string['testimonialsheading'] = 'What our students say';
+$string['welcome'] = 'Welcome, {$a}.';
+$string['welcomeback'] = 'Welcome back, {$a}.';
 $string['wordmark'] = 'ISMOS';

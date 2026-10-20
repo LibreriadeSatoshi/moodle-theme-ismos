@@ -47,6 +47,26 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
+     * The dashboard welcome line loses core's emoji and exclamation mark.
+     */
+    public function test_welcome_message_has_no_emoji_or_exclamation(): void {
+        $renderer = $this->ismos_renderer();
+        $user = $this->getDataGenerator()->create_user(['firstname' => 'Sofia']);
+        $this->setUser($user);
+
+        $first = new \lang_string('welcometosite', 'core', (object) ['firstname' => 'Sofia']);
+        $this->assertSame('Welcome, Sofia.', $renderer->ismos_welcome_message($first));
+        $back = new \lang_string('welcomeback', 'core', (object) ['firstname' => 'Sofia']);
+        $this->assertSame('Welcome back, Sofia.', $renderer->ismos_welcome_message($back));
+
+        // The Spanish pack is not installed in tests, so read the file.
+        $string = [];
+        include(__DIR__ . '/../lang/es/theme_ismos.php');
+        $this->assertSame('Hola de nuevo, {$a}.', $string['welcomeback']);
+        $this->assertSame('Te damos la bienvenida, {$a}.', $string['welcome']);
+    }
+
+    /**
      * The favicon is the theme's own SVG.
      */
     public function test_favicon_comes_from_theme(): void {

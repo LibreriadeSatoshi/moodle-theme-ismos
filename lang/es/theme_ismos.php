@@ -52,4 +52,6 @@ $string['sitenews'] = 'Novedades del sitio';
 $string['testimonials'] = 'Testimonios';
 $string['testimonials_desc'] = 'Un testimonio por línea, con el formato: cita | nombre. El nombre es lo que sigue al último " | " de la línea. Déjalo vacío para ocultar la sección.';
 $string['testimonialsheading'] = 'Lo que dicen nuestros estudiantes';
+$string['welcome'] = 'Te damos la bienvenida, {$a}.';
+$string['welcomeback'] = 'Hola de nuevo, {$a}.';
 $string['wordmark'] = 'ISMOS';

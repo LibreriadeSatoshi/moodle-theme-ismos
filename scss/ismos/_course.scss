@@ -1,0 +1,119 @@
+// Course page: section boxes, titles, availability notes, activity icons, drawer toggles, loading
+// placeholders. Colours come from the tokens, so one rule serves both modes.
+
+// Section titles: the heading ink, not Boost's fixed grey.
+.course-section .sectionname > a,
+.course-section .sectionname {
+    color: var(--ismos-text-heading);
+}
+
+// Section boxes: 4 px corners and hairline edges; activity dividers use the same hairline.
+.course-section .section-item {
+    border-color: var(--ismos-hairline);
+    border-radius: 4px;
+}
+
+.course-section.hidden .section-item,
+.course-section.orphaned .section-item,
+.activity-item.hiddenactivity {
+    background-color: var(--ismos-surface-raised);
+}
+
+.course-section .activity {
+    border-top-color: var(--ismos-hairline);
+}
+
+// Availability and restriction notes: the info status. Light Logwood 800 on Logwood 50, dark Logwood 200
+// on Logwood. The lock icon and links keep the text ink; links stay underlined.
+.course-section .availabilityinfo,
+.availabilityinfo {
+    background-color: var(--ismos-info-bg);
+    border: 1px solid var(--ismos-info-border);
+    border-radius: 4px;
+    color: var(--ismos-info-text);
+
+    .icon,
+    .fa,
+    span {
+        color: inherit;
+    }
+
+    a:not(.btn) {
+        color: var(--ismos-link);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover {
+            color: var(--ismos-link-hover);
+        }
+    }
+
+    .editavailability a:hover {
+        background-color: transparent;
+    }
+}
+
+// Activity purpose icons: one ink. Core recolours the img per purpose with a filter; that filter is
+// replaced by the mode's ink. Branded icons (own logos) are left alone.
+.activityiconcontainer.activityiconcontainer.activityiconcontainer:not(.isbranded) {
+    .activityicon:not(.nofilter),
+    .icon:not(.nofilter) {
+        filter: var(--ismos-icon-filter);
+    }
+}
+
+.activityiconcontainer {
+    background-color: transparent;
+}
+
+// Drawer toggles: square, 4 px corners, surface ground and a visible edge.
+.drawer-toggles .drawer-toggler .btn {
+    background-color: var(--ismos-surface);
+    border: 1px solid var(--ismos-border-input);
+    border-radius: 4px;
+    box-shadow: none;
+    color: var(--ismos-text);
+
+    .icon {
+        color: var(--ismos-text);
+    }
+
+    &:hover {
+        background-color: var(--ismos-surface-raised);
+    }
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+// Loading placeholders (Bootstrap and Moodle's pulse blocks).
+.bg-pulse-grey,
+.placeholder {
+    background-color: var(--ismos-placeholder);
+}
+
+.placeholder {
+    opacity: 1;
+}
+
+.bg-pulse-grey {
+    animation: ismos-pulse 2s infinite linear;
+}
+
+@keyframes ismos-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .6;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bg-pulse-grey {
+        animation: none;
+    }
+}

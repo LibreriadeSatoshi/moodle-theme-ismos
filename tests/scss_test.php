@@ -195,6 +195,28 @@ final class scss_test extends \advanced_testcase {
     }
 
     /**
+     * Course page: section titles, boxes, availability notes, icons, drawer toggles and placeholders use tokens.
+     */
+    public function test_course_page_styles(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $flat = strtolower(preg_replace('/\s+/', '', \theme_config::load('ismos')->get_css_content()));
+
+        $this->assertMatchesRegularExpression('/\.course-section\.sectionname>a,\.course-section\.sectionname\{color:var\(--ismos-text-heading\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-section\.section-item\{border-color:var\(--ismos-hairline\);border-radius:4px/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-section\.activity\{border-top-color:var\(--ismos-hairline\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.availabilityinfo\{background-color:var\(--ismos-info-bg\);[^}]*border-radius:4px;color:var\(--ismos-info-text\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.availabilityinfoa:not\(\.btn\)\{color:var\(--ismos-link\);text-decoration:underline/', $flat);
+        $this->assertMatchesRegularExpression('/\.activityiconcontainer:not\(\.isbranded\)\.activityicon:not\(\.nofilter\)[^{]*\{filter:var\(--ismos-icon-filter\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-icon-filter:brightness\(0\)invert\(1\)/', $flat);
+        $this->assertStringContainsString('--ismos-icon-filter:brightness(0);', $flat);
+        $this->assertMatchesRegularExpression('/\.drawer-toggles\.drawer-toggler\.btn\{[^}]*border-radius:4px/', $flat);
+        $this->assertStringContainsString('--ismos-placeholder:var(--ismos-logwood-100)', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-placeholder:var\(--ismos-logwood-700\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.bg-pulse-grey,\.placeholder\{background-color:var\(--ismos-placeholder\)/', $flat);
+    }
+
+    /**
      * The navbar and footer take fonts and sizes from the tokens, not hard-coded stacks or rem values.
      */
     public function test_navbar_and_footer_use_tokens(): void {
