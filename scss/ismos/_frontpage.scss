@@ -41,8 +41,8 @@ body.ismos-frontpage {
         }
     }
 
-    // Boost pads [role=main] by 15 px; the column already sets the edge.
-    #page.drawers .ismos-frontpage-courses div[role="main"] {
+    // Boost pads [role=main] by 15 px; the columns already set the edge, and the hero is full bleed.
+    #page.drawers div[role="main"] {
         padding-inline: 0;
     }
 

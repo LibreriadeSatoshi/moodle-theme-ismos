@@ -75,8 +75,7 @@ body {
     }
 }
 
-.btn-secondary,
-.btn-outline-secondary {
+.btn-secondary {
     background: transparent;
     border: 2px solid var(--ismos-text);
     color: var(--ismos-text);
@@ -85,6 +84,26 @@ body {
         background: var(--ismos-surface-raised);
         color: var(--ismos-text);
     }
+}
+
+// Outline buttons: text and border in the text colour (Ink on light, Paper in Hacker mode); hover, press
+// and the toggled state invert it. Set through Bootstrap's button variables so every state follows.
+.btn-outline-primary,
+.btn-outline-secondary {
+    --bs-btn-color: var(--ismos-text);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: var(--ismos-text);
+    --bs-btn-hover-color: var(--ismos-surface);
+    --bs-btn-hover-bg: var(--ismos-text);
+    --bs-btn-hover-border-color: var(--ismos-text);
+    --bs-btn-active-color: var(--ismos-surface);
+    --bs-btn-active-bg: var(--ismos-text);
+    --bs-btn-active-border-color: var(--ismos-text);
+    --bs-btn-disabled-color: var(--ismos-disabled);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: var(--ismos-disabled);
+
+    border-width: 2px;
 }
 
 .badge,
@@ -138,16 +157,63 @@ body {
     }
 }
 
-// Cards: a 1 px hairline, never a shadow.
+// Check boxes, radios and switches: token colours, 1.5 px border. The glyphs are per-mode SVG tokens read
+// through Bootstrap 5.3's --bs-form-check-bg-image and --bs-form-switch-bg.
+.form-check-input {
+    background-color: var(--ismos-control-bg);
+    border: 1.5px solid var(--ismos-control-border);
+
+    &:focus {
+        border-color: var(--ismos-control-border);
+        box-shadow: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+
+    &:checked,
+    &[type="checkbox"]:indeterminate {
+        background-color: var(--ismos-control-checked-bg);
+        border-color: var(--ismos-control-checked-bg);
+    }
+
+    &[type="checkbox"]:checked {
+        --bs-form-check-bg-image: var(--ismos-check-image);
+    }
+
+    &[type="radio"]:checked {
+        --bs-form-check-bg-image: var(--ismos-radio-image);
+    }
+
+    &[type="checkbox"]:indeterminate {
+        --bs-form-check-bg-image: var(--ismos-dash-image);
+    }
+}
+
+.form-switch .form-check-input {
+    --bs-form-switch-bg: var(--ismos-knob-off-image);
+
+    &:focus {
+        --bs-form-switch-bg: var(--ismos-knob-off-image);
+    }
+
+    &:checked {
+        --bs-form-switch-bg: var(--ismos-knob-on-image);
+    }
+}
+
+// Cards: a 1 px hairline, never a shadow. Only the interactive ones (links) answer to hover.
 .card {
     background: var(--ismos-card-bg);
     border: 1px solid var(--ismos-hairline);
     border-radius: 4px;
     box-shadow: none;
+}
 
-    &:hover {
-        border-color: var(--ismos-text);
-    }
+a.card:hover {
+    border-color: var(--ismos-text);
 }
 
 // Menus and modals are the only things that float.

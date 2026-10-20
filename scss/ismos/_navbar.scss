@@ -46,8 +46,8 @@
     }
 
     .ismos-wordmark-text {
-        font-family: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
-        font-size: 1.25rem;
+        font-family: var(--ismos-font-brand);
+        font-size: 20px;
         font-weight: 500;
         letter-spacing: 0.04em;
         line-height: 1;
@@ -96,8 +96,8 @@
     }
 
     .langmenu .dropdown-toggle {
-        font-family: "IBM Plex Mono", ui-monospace, monospace;
-        font-size: 0.8125rem;
+        font-family: var(--ismos-font-mono);
+        font-size: 13px;
         justify-content: center;
     }
 
@@ -255,8 +255,8 @@
     border: 1.5px solid var(--ismos-paper);
     border-radius: 4px;
     color: var(--ismos-paper);
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.6875rem;
+    font-family: var(--ismos-font-mono);
+    font-size: 11px;
     letter-spacing: 0.08em;
     min-block-size: 44px;
     padding-inline: 12px;
@@ -277,6 +277,21 @@
     &[aria-checked="true"] {
         background-color: var(--ismos-paper);
         color: var(--ismos-ink);
+    }
+}
+
+// Edit mode switch on the Ink bar: Hacker mode controls in both modes (Paper border, Mauveine 200 when on)
+// and Paper label type. Bootstrap's .text-primary label (black) would vanish on Ink.
+.navbar.fixed-top.ismos-navbar .editmode-switch-form {
+    @include ismos-controls-hacker;
+
+    label,
+    label.text-primary {
+        color: var(--ismos-paper) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .form-check-input:focus-visible {
+        outline-color: var(--ismos-weld);
     }
 }
 

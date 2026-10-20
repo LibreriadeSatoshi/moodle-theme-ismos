@@ -41,8 +41,8 @@
     }
 
     .ismos-footer-address {
-        font-family: "IBM Plex Mono", ui-monospace, monospace;
-        font-size: 0.8125rem;
+        font-family: var(--ismos-font-mono);
+        font-size: 13px;
         font-weight: 500;
         letter-spacing: 0.14em;
         text-transform: uppercase;
@@ -56,8 +56,8 @@
             border: 1px solid var(--ismos-paper);
             border-radius: 4px;
             color: var(--ismos-paper);
-            font-family: "IBM Plex Mono", ui-monospace, monospace;
-            font-size: 0.8125rem;
+            font-family: var(--ismos-font-mono);
+            font-size: 13px;
             min-block-size: 44px;
         }
 
@@ -69,7 +69,7 @@
     .ismos-footer-links {
         align-items: flex-start;
         border-block-start: 1px solid var(--ismos-logwood-700);
-        font-size: 0.9375rem;
+        font-size: 15px;
         margin-block-start: 24px;
         padding-block-start: 24px;
     }

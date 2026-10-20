@@ -52,9 +52,11 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.bg-white[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.main-inner[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark#topofscroll[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
-        $this->assertMatchesRegularExpression('/button\.btn\[data-action="theme_ismos\/toggle-darkmode"\]\{[^}]*background-color:(?:transparent|#fff0);[^}]*color:var\(--ismos-paper\)/', $flat);
+        $this->assertMatchesRegularExpression('/button\.btn\[data-action="theme_ismos\/toggle-darkmode"\]\{[^}]*background-color:(?:transparent|#fff0);' .
+            '[^}]*color:var\(--ismos-paper\)/', $flat);
         foreach (['#frontpage-available-course-list', '#frontpage-course-list', '.course-search-result'] as $scope) {
-            $this->assertMatchesRegularExpression('/' . preg_quote($scope, '/') . '\.ismos-coursebox\.coursebox[^{]*\{[^}]*border:0;[^}]*border-radius:0;[^}]*margin:0;[^}]*padding:0/', $flat);
+            $this->assertMatchesRegularExpression('/' . preg_quote($scope, '/') . '\.ismos-coursebox\.coursebox[^{]*\{[^}]*border:0;' .
+                '[^}]*border-radius:0;[^}]*margin:0;[^}]*padding:0/', $flat);
         }
         $this->assertMatchesRegularExpression('/\.ismos-mode-auto#region-main[^{]*\{[^}]*background-color:var\(--ismos-surface\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.list-group-item\.active\{[^}]*border-inline-start:2pxsolidvar\(--ismos-bar\)[^}]*font-weight:600/', $flat);
@@ -117,5 +119,90 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.a\.content-item-container|a\.content-item-container[^{]*\{[^}]*text-decoration:none/', $flat);
         // The bar-level Weld ring is not applied to menu contents without that restore.
         $this->assertStringContainsString('.ismos-navbar:focus-visible', str_replace('.navbar.fixed-top', '', $flat));
+    }
+
+    /**
+     * Link hover has its own rgb token in both scopes, and Bootstrap's hover rgb reads it.
+     */
+    public function test_link_hover_rgb_token(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $flat = strtolower(preg_replace('/\s+/', '', \theme_config::load('ismos')->get_css_content()));
+
+        $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-link-hover-rgb:84,66,129/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-link-hover-rgb:255,255,255/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-auto\{[^}]*--ismos-link-hover-rgb:255,255,255/', $flat);
+        $this->assertSame(3, substr_count($flat, '--bs-link-hover-color-rgb:var(--ismos-link-hover-rgb)'));
+        $this->assertStringNotContainsString('--bs-link-hover-color-rgb:var(--ismos-text-rgb)', $flat);
+    }
+
+    /**
+     * Check boxes, radios and switches: token driven, per-mode glyphs, outline buttons visible in both modes.
+     */
+    public function test_form_controls_and_outline_buttons(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $flat = strtolower(preg_replace('/\s+/', '', \theme_config::load('ismos')->get_css_content()));
+
+        // Light: Logwood 800 border, Ink fill when checked, Paper check mark (%23ffffff).
+        $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-control-border:var\(--ismos-logwood-800\)/', $flat);
+        $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-control-checked-bg:var\(--ismos-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/:root\{[^}]*--ismos-check-image:url\("data:image\/svg\+xml[^"]*stroke=\'%23ffffff\'/', $flat);
+        // Hacker mode: Paper border, Mauveine 200 fill, Ink check mark (%23000000), light knob off.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-control-border:var\(--ismos-paper\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-control-checked-bg:var\(--ismos-mauveine-200\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-check-image:url\("data:image\/svg\+xml[^"]*stroke=\'%23000000\'/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-radio-image:url\([^)]*fill=\'%23000000\'/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-knob-off-image:url\([^)]*fill=\'%23ffffff\'/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-auto\{[^}]*--ismos-control-checked-bg:var\(--ismos-mauveine-200\)/', $flat);
+
+        // The control rules read the tokens and Bootstrap's image variables.
+        $this->assertMatchesRegularExpression('/\.form-check-input\{[^}]*background-color:var\(--ismos-control-bg\)[^}]*border:1\.5pxsolidvar\(--ismos-control-border\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.form-check-input:checked[^{]*\{[^}]*background-color:var\(--ismos-control-checked-bg\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.form-check-input\[type="checkbox"\]:checked\{--bs-form-check-bg-image:var\(--ismos-check-image\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.form-check-input\[type="radio"\]:checked\{--bs-form-check-bg-image:var\(--ismos-radio-image\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.form-switch\.form-check-input:checked\{--bs-form-switch-bg:var\(--ismos-knob-on-image\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.form-switch\.form-check-input\{--bs-form-switch-bg:var\(--ismos-knob-off-image\)/', $flat);
+
+        // The edit mode switch on the Ink bar always takes the Hacker mode controls and a Paper label.
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-form\{[^}]*--ismos-control-border:var\(--ismos-paper\)' .
+            '[^}]*--ismos-control-checked-bg:var\(--ismos-mauveine-200\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-formlabel[^{]*\{color:var\(--ismos-paper\)!important/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-navbar\.editmode-switch-form\.form-check-input:focus-visible\{outline-color:var\(--ismos-weld\)/', $flat);
+
+        // Outline buttons: text colour border and label, hover inverts onto the surface.
+        $this->assertMatchesRegularExpression('/\.btn-outline-primary,\.btn-outline-secondary\{[^}]*--bs-btn-color:var\(--ismos-text\)' .
+            '[^}]*--bs-btn-border-color:var\(--ismos-text\)[^}]*--bs-btn-hover-color:var\(--ismos-surface\)' .
+            '[^}]*--bs-btn-hover-bg:var\(--ismos-text\)/', $flat);
+    }
+
+    /**
+     * Cards: only links answer to hover; the course card takes the card background token; the login
+     * block's focus ring is not Mauveine on Mauveine.
+     */
+    public function test_card_hover_card_background_and_login_block_focus(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $flat = strtolower(preg_replace('/\s+/', '', \theme_config::load('ismos')->get_css_content()));
+
+        $this->assertDoesNotMatchRegularExpression('/(?<![\w-])\.card:hover/', $flat);
+        $this->assertMatchesRegularExpression('/a\.card:hover\{border-color:var\(--ismos-text\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-card\{background:var\(--ismos-card-bg\)[^}]*border:1pxsolidvar\(--ismos-hairline\)/', $flat);
+        // Hacker mode: Logwood card ground, Logwood 700 edge.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-card-bg:var\(--ismos-logwood\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-hairline:var\(--ismos-logwood-700\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-login__block:focus-visible\{outline-color:var\(--ismos-on-block\)/', $flat);
+    }
+
+    /**
+     * The navbar and footer take fonts and sizes from the tokens, not hard-coded stacks or rem values.
+     */
+    public function test_navbar_and_footer_use_tokens(): void {
+        foreach (['_navbar.scss', '_footer.scss'] as $file) {
+            $source = file_get_contents(__DIR__ . '/../scss/ismos/' . $file);
+            $this->assertStringNotContainsString('IBM Plex', $source, $file);
+            $this->assertStringNotContainsString('Bricolage Grotesque",', $source, $file);
+            $this->assertDoesNotMatchRegularExpression('/font-size:\s*[\d.]+rem/', $source, $file);
+        }
     }
 }

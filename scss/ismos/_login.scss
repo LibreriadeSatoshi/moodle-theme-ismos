@@ -41,6 +41,10 @@
     }
 }
 
+.ismos-login__block :focus-visible {
+    outline-color: var(--ismos-on-block);
+}
+
 .ismos-login__brand,
 .ismos-login__brand:hover {
     align-items: center;
@@ -258,7 +262,6 @@
         block-size: 20px;
         inline-size: 20px;
     }
-
 
     .login-divider {
         border-block-start: 1px solid var(--ismos-hairline);
