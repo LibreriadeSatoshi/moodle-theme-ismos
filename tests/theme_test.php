@@ -72,4 +72,24 @@ final class theme_test extends \advanced_testcase {
         }
         $this->assertNotSame($en, $string['choosereadme']);
     }
+
+    /**
+     * Every bundled translation has exactly the English keys, with nothing empty, so no language falls back to
+     * English for a single string.
+     */
+    public function test_bundled_translations_cover_every_english_string(): void {
+        $string = [];
+        require(__DIR__ . '/../lang/en/theme_ismos.php');
+        $en = $string;
+        foreach (['es', 'pt_br'] as $lang) {
+            $string = [];
+            require(__DIR__ . "/../lang/$lang/theme_ismos.php");
+            $this->assertSame([], array_diff(array_keys($en), array_keys($string)), "Missing in $lang");
+            $this->assertSame([], array_diff(array_keys($string), array_keys($en)), "Extra in $lang");
+            foreach ($string as $key => $value) {
+                $this->assertNotSame('', trim($value), "Empty $lang string $key");
+            }
+            $this->assertNotSame($en['herotitle'], $string['herotitle'], "$lang hero title is not translated");
+        }
+    }
 }
