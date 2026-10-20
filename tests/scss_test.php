@@ -180,6 +180,27 @@ final class scss_test extends \advanced_testcase {
     }
 
     /**
+     * The landing page: Ink hero with the mark, the next cohort card, facts, paths, calendar, steps, quotes, final band.
+     */
+    public function test_landing_rules(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $css = \theme_config::load('ismos')->get_css_content();
+        $flat = strtolower(preg_replace('/\s+/', '', $css));
+        $this->assertMatchesRegularExpression('/\.ismos-hero\{background:var\(--ismos-ink\);color:var\(--ismos-paper\);overflow:hidden/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-hero__mark\{[^}]*color:var\(--ismos-mauveine\)[^}]*opacity:\.55/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-next\{[^}]*background:var\(--ismos-paper\);border-block-start:6pxsolidvar\(--ismos-madder\)/', $flat);
+        // The card heading beats Hacker mode's white headings.
+        $this->assertMatchesRegularExpression('/\.ismos-next\.ismos-next__title\{color:var\(--ismos-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-paths\{[^}]*grid-template-columns:minmax\(0,1fr\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-path__leveli\.on\{background:var\(--ismos-bar\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-cal\{border-block-start:2pxsolidvar\(--ismos-rule-strong\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-quote\{border-inline-start:3pxsolidvar\(--ismos-bar\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-final\{background:var\(--ismos-block\)/', $flat);
+        $this->assertStringNotContainsString('.ismos-browse', $flat);
+    }
+
+    /**
      * The compiled CSS carries the tokens and self-hosted fonts, and none of the forbidden things.
      */
     public function test_compiled_css_contains_tokens_and_fonts(): void {

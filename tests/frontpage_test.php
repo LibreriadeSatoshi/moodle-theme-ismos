@@ -47,11 +47,11 @@ final class frontpage_test extends \advanced_testcase {
         $visible = $this->getDataGenerator()->create_category(['name' => 'Bitcoin']);
         $this->getDataGenerator()->create_category(['name' => 'Secret', 'visible' => 0]);
         $data = $this->export();
-        $names = array_column($data['categories'], 'name');
+        $names = array_column($data['paths'], 'name');
         $this->assertContains('Bitcoin', $names);
         $this->assertNotContains('Secret', $names);
-        $this->assertTrue($data['hascategories']);
-        $found = array_values(array_filter($data['categories'], fn($c) => $c['name'] === 'Bitcoin'))[0];
+        $this->assertTrue($data['haspaths']);
+        $found = array_values(array_filter($data['paths'], fn($c) => $c['name'] === 'Bitcoin'))[0];
         $this->assertStringContainsString('categoryid=' . $visible->id, $found['url']);
     }
 
@@ -60,8 +60,8 @@ final class frontpage_test extends \advanced_testcase {
         $this->setGuestUser();
         \core_course_category::get_default()->hide();
         $data = $this->export();
-        $this->assertSame([], $data['categories']);
-        $this->assertFalse($data['hascategories']);
+        $this->assertSame([], $data['paths']);
+        $this->assertFalse($data['haspaths']);
     }
 
     public function test_signup_button_only_when_logged_out_and_signup_enabled(): void {
@@ -87,16 +87,18 @@ final class frontpage_test extends \advanced_testcase {
         $this->resetAfterTest();
         $hero = $this->export()['hero'];
         $this->assertStringEndsWith('/course/index.php', $hero['ctaurl']);
-        foreach (['label', 'title', 'lead', 'cta', 'signup'] as $key) {
+        foreach (['label', 'title', 'titleem', 'lead', 'cta', 'signup'] as $key) {
             $this->assertNotSame('', $hero[$key]);
         }
     }
 
     public function test_testimonials_from_setting(): void {
         $this->resetAfterTest();
-        set_config('testimonials', "A | Ana\nB | Joni", 'theme_ismos');
+        set_config('testimonials', "A | Ana\nB | Joni\nC | Eva\nD | Luz", 'theme_ismos');
         $data = $this->export();
-        $this->assertCount(2, $data['testimonials']);
+        // The landing shows the first three.
+        $this->assertCount(3, $data['testimonials']);
+        $this->assertSame('Eva', $data['testimonials'][2]['name']);
         $this->assertTrue($data['hastestimonials']);
         set_config('testimonials', '', 'theme_ismos');
         $data = $this->export();

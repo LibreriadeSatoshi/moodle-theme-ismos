@@ -17,7 +17,7 @@
 namespace theme_ismos\output;
 
 /**
- * Data for the ISMOS front page: hero, category browse row and testimonials.
+ * Data for the ISMOS landing page: hero with the next cohort, facts, paths, calendar, steps, testimonials, final band.
  *
  * @package   theme_ismos
  * @copyright 2026 ISMOS
@@ -31,40 +31,48 @@ class frontpage implements \renderable, \templatable {
      * @return array
      */
     public function export_for_template(\renderer_base $output): array {
-        $categories = self::get_categories();
-        $testimonials = self::parse_testimonials((string) get_config('theme_ismos', 'testimonials'));
+        $landing = new \theme_ismos\local\landing();
+        $testimonials = \theme_ismos\local\landing::pick_testimonials(
+            self::parse_testimonials((string) get_config('theme_ismos', 'testimonials'))
+        );
         $signupurl = self::get_signup_url();
+        [$title, $titleem] = \theme_ismos\local\landing::split_title(get_string('herotitle', 'theme_ismos'));
+        $nextcohort = $landing->get_next_cohort();
+        $paths = $landing->get_paths();
+        $calendar = $landing->get_calendar();
+        $courseindex = (new \moodle_url('/course/index.php'))->out(false);
         return [
             'hero' => [
                 'label' => get_string('herolabel', 'theme_ismos'),
-                'title' => get_string('herotitle', 'theme_ismos'),
-                'lead' => get_string('herolead', 'theme_ismos'),
+                'title' => $title,
+                'titleem' => $titleem,
+                'hastitleem' => $titleem !== '',
+                'lead' => get_string('heroleadlive', 'theme_ismos'),
                 'cta' => get_string('herocta', 'theme_ismos'),
-                'ctaurl' => (new \moodle_url('/course/index.php'))->out(false),
+                'ctaurl' => $courseindex,
                 'signup' => get_string('herosignup', 'theme_ismos'),
                 'signupurl' => $signupurl,
+                'next' => $nextcohort,
+                'hasnext' => $nextcohort !== null,
             ],
-            'categories' => $categories,
-            'hascategories' => !empty($categories),
+            'facts' => $landing->get_facts(),
+            'paths' => $paths,
+            'haspaths' => !empty($paths),
+            'calendar' => $calendar,
+            'hascalendar' => !empty($calendar),
+            'steps' => [
+                ['number' => 1, 'title' => get_string('step1title', 'theme_ismos'), 'text' => get_string('step1text', 'theme_ismos')],
+                ['number' => 2, 'title' => get_string('step2title', 'theme_ismos'), 'text' => get_string('step2text', 'theme_ismos')],
+                ['number' => 3, 'title' => get_string('step3title', 'theme_ismos'), 'text' => get_string('step3text', 'theme_ismos')],
+            ],
             'testimonials' => $testimonials,
             'hastestimonials' => !empty($testimonials),
+            'final' => [
+                'heading' => get_string('finalheading', 'theme_ismos'),
+                'cta' => $signupurl ? get_string('finalcta', 'theme_ismos') : get_string('herocta', 'theme_ismos'),
+                'url' => $signupurl ?? $courseindex,
+            ],
         ];
-    }
-
-    /**
-     * Top-level categories the viewer can see.
-     *
-     * @return array list of name and url
-     */
-    private static function get_categories(): array {
-        $categories = [];
-        foreach (\core_course_category::top()->get_children() as $category) {
-            $categories[] = [
-                'name' => $category->get_formatted_name(['escape' => false]),
-                'url' => (new \moodle_url('/course/index.php', ['categoryid' => $category->id]))->out(false),
-            ];
-        }
-        return $categories;
     }
 
     /**
