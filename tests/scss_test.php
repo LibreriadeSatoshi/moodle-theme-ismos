@@ -198,6 +198,13 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-quote\{border-inline-start:3pxsolidvar\(--ismos-bar\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-final\{background:var\(--ismos-block\)/', $flat);
         $this->assertStringNotContainsString('.ismos-browse', $flat);
+        // How it works: no box around the steps; a raised pane with a drawing; the drawings use the tokens.
+        $this->assertDoesNotMatchRegularExpression('/\.ismos-steps\{[^}]*border:/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-step__pane\{[^}]*background:var\(--ismos-surface-raised\);block-size:220px;border-radius:8px/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ill-form\{background:var\(--ismos-surface\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ill-room\{background:var\(--ismos-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ill-cert__seal\{[^}]*background:var\(--ismos-mauveine\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-step__n\{color:var\(--ismos-bar\);font-family:var\(--ismos-font-mono\)/', $flat);
     }
 
     /**

@@ -61,9 +61,9 @@ class frontpage implements \renderable, \templatable {
             'calendar' => $calendar,
             'hascalendar' => !empty($calendar),
             'steps' => [
-                ['number' => 1, 'title' => get_string('step1title', 'theme_ismos'), 'text' => get_string('step1text', 'theme_ismos')],
-                ['number' => 2, 'title' => get_string('step2title', 'theme_ismos'), 'text' => get_string('step2text', 'theme_ismos')],
-                ['number' => 3, 'title' => get_string('step3title', 'theme_ismos'), 'text' => get_string('step3text', 'theme_ismos')],
+                ['number' => '01', 'form' => true] + self::step(1),
+                ['number' => '02', 'room' => true] + self::step(2),
+                ['number' => '03', 'cert' => true] + self::step(3),
             ],
             'testimonials' => $testimonials,
             'hastestimonials' => !empty($testimonials),
@@ -72,6 +72,19 @@ class frontpage implements \renderable, \templatable {
                 'cta' => $signupurl ? get_string('finalcta', 'theme_ismos') : get_string('herocta', 'theme_ismos'),
                 'url' => $signupurl ?? $courseindex,
             ],
+        ];
+    }
+
+    /**
+     * Title and text of a "how it works" step.
+     *
+     * @param int $number 1 to 3
+     * @return array
+     */
+    private static function step(int $number): array {
+        return [
+            'title' => get_string("step{$number}title", 'theme_ismos'),
+            'text' => get_string("step{$number}text", 'theme_ismos'),
         ];
     }
 

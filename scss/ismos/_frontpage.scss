@@ -588,15 +588,13 @@ body.ismos-frontpage {
     }
 }
 
-// Steps: three numbered cells on a raised ground.
+// How it works: three columns, no box around the text. Each has a drawing of the real screen on a raised pane.
 .ismos-steps {
-    border: 1px solid var(--ismos-hairline);
-    border-radius: 8px;
     display: grid;
+    gap: 40px 28px;
     grid-template-columns: minmax(0, 1fr);
     list-style: none;
     margin: 0;
-    overflow: hidden;
     padding: 0;
 
     @media (min-width: 1001px) {
@@ -605,29 +603,15 @@ body.ismos-frontpage {
 }
 
 .ismos-step {
-    background: var(--ismos-surface-raised);
-    border-block-end: 1px solid var(--ismos-hairline);
-    padding: 28px;
-
-    &:last-child {
-        border-block-end: 0;
-    }
-
-    @media (min-width: 1001px) {
-        border-block-end: 0;
-        border-inline-end: 1px solid var(--ismos-hairline);
-
-        &:last-child {
-            border-inline-end: 0;
-        }
-    }
-
     h3 {
+        align-items: baseline;
+        display: flex;
         font-family: var(--ismos-font-sans);
-        font-size: 17px;
+        font-size: 18px;
         font-weight: 600;
-        line-height: 24px;
-        margin: 16px 0 6px;
+        gap: 10px;
+        line-height: 26px;
+        margin: 20px 0 6px;
     }
 
     p {
@@ -640,11 +624,259 @@ body.ismos-frontpage {
 
 .ismos-step__n {
     color: var(--ismos-bar);
-    display: block;
+    font-family: var(--ismos-font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1em;
+}
+
+.ismos-step__pane {
+    align-items: center;
+    background: var(--ismos-surface-raised);
+    block-size: 220px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    line-height: 1.3;
+    overflow: hidden;
+    position: relative;
+}
+
+// 01: the signup card. In the mode's own colours.
+.ismos-ill-form {
+    background: var(--ismos-surface);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(37, 29, 58, .08);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    inline-size: 62%;
+    max-inline-size: 240px;
+    padding: 14px;
+}
+
+.ismos-ill-form__title {
+    color: var(--ismos-text);
     font-family: var(--ismos-font-serif);
-    font-size: 48px;
+    font-size: 13px;
     font-weight: 500;
-    line-height: 1;
+}
+
+.ismos-ill-form__input {
+    block-size: 14px;
+    border: 1.2px solid var(--ismos-border-input);
+    border-radius: 3px;
+}
+
+.ismos-ill-form__submit {
+    background: var(--ismos-text);
+    block-size: 16px;
+    border-radius: 3px;
+}
+
+.ismos-ill-form__provider {
+    align-items: center;
+    block-size: 16px;
+    border: 1.2px solid var(--ismos-text);
+    border-radius: 3px;
+    color: var(--ismos-text);
+    display: flex;
+    font-size: 8px;
+    font-weight: 500;
+    gap: 5px;
+    justify-content: center;
+
+    i {
+        block-size: 8px;
+        border-radius: 2px;
+        box-shadow: 0 0 0 1px var(--ismos-hairline);
+        display: inline-block;
+        inline-size: 8px;
+    }
+}
+
+// 02: a meeting window: chat on the left, the slide on an Ink stage, round buttons under it.
+.ismos-ill-room {
+    background: var(--ismos-ink);
+    block-size: 72%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(37, 29, 58, .15);
+    display: grid;
+    grid-template-columns: 30% minmax(0, 1fr);
+    inline-size: 82%;
+    max-inline-size: 340px;
+    overflow: hidden;
+}
+
+.ismos-ill-room__side {
+    background: var(--ismos-logwood-50);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px;
+}
+
+.ismos-ill-room__bar {
+    background: var(--ismos-logwood-200);
+    block-size: 7px;
+    border-radius: 2px;
+}
+
+.ismos-ill-room__bubble {
+    background: var(--ismos-paper);
+    border-radius: 3px;
+    color: var(--ismos-ink);
+    font-size: 6px;
+    font-weight: 500;
+    padding: 4px;
+}
+
+.ismos-ill-room__stage {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+}
+
+.ismos-ill-room__slide {
+    border-radius: 3px;
+    display: grid;
+    flex: 1;
+    grid-template-columns: 40% minmax(0, 1fr);
+    overflow: hidden;
+}
+
+.ismos-ill-room__welcome {
+    align-items: flex-end;
+    background: var(--ismos-mauveine);
+    box-sizing: border-box;
+    color: var(--ismos-paper);
+    display: flex;
+    font-family: var(--ismos-font-serif);
+    font-size: 8px;
+    font-weight: 500;
+    line-height: 10px;
+    padding: 6px;
+}
+
+.ismos-ill-room__lines {
+    background: var(--ismos-paper);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 7px;
+
+    i {
+        background: var(--ismos-logwood-200);
+        block-size: 4px;
+        border-radius: 2px;
+        display: block;
+    }
+}
+
+.ismos-ill-room__buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+
+    i {
+        background: var(--ismos-logwood);
+        block-size: 12px;
+        border-radius: 50%;
+        inline-size: 12px;
+
+        &.on {
+            background: var(--ismos-mauveine);
+        }
+    }
+}
+
+// 03: an abstract certificate: mark and wordmark, three bars, a signature line and a seal. No name, no course.
+.ismos-ill-cert {
+    aspect-ratio: 1.414;
+    background: var(--ismos-paper);
+    border: 1px solid var(--ismos-logwood-200);
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(37, 29, 58, .1);
+    box-sizing: border-box;
+    color: var(--ismos-ink);
+    display: flex;
+    flex-direction: column;
+    inline-size: 62%;
+    justify-content: space-between;
+    max-inline-size: 260px;
+    padding: 12px 14px;
+}
+
+.ismos-ill-cert__head {
+    align-items: center;
+    display: flex;
+    font-family: var(--ismos-font-brand);
+    font-size: 8px;
+    font-weight: 500;
+    gap: 5px;
+    letter-spacing: .06em;
+}
+
+.ismos-ill-cert__mark {
+    block-size: 9px;
+    inline-size: 9px;
+}
+
+.ismos-ill-cert__lines {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    i {
+        background: var(--ismos-logwood-200);
+        block-size: 4px;
+        border-radius: 2px;
+        display: block;
+        inline-size: 40%;
+
+        &:nth-child(2) {
+            background: var(--ismos-ink);
+            block-size: 7px;
+            inline-size: 70%;
+        }
+
+        &:nth-child(3) {
+            inline-size: 55%;
+        }
+    }
+}
+
+.ismos-ill-cert__foot {
+    align-items: flex-end;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ismos-ill-cert__sign {
+    border-block-start: 1px solid var(--ismos-ink);
+    inline-size: 36%;
+}
+
+.ismos-ill-cert__seal {
+    align-items: center;
+    background: var(--ismos-mauveine);
+    block-size: 28px;
+    border-radius: 50%;
+    color: var(--ismos-paper);
+    display: inline-flex;
+    inline-size: 28px;
+    justify-content: center;
+}
+
+.ismos-ill-cert__sealmark {
+    block-size: 14px;
+    inline-size: 14px;
 }
 
 // Testimonials: three quotes with a Mauveine rule.

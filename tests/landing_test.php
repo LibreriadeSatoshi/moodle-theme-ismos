@@ -240,11 +240,44 @@ final class landing_test extends \advanced_testcase {
         $this->resetAfterTest();
         $data = (new frontpage())->export_for_template($this->get_renderer());
         $this->assertCount(3, $data['steps']);
-        $this->assertSame([1, 2, 3], array_column($data['steps'], 'number'));
+        $this->assertSame(['01', '02', '03'], array_column($data['steps'], 'number'));
+        $this->assertTrue($data['steps'][0]['form']);
+        $this->assertTrue($data['steps'][1]['room']);
+        $this->assertTrue($data['steps'][2]['cert']);
         $string = [];
         include(__DIR__ . '/../lang/es/theme_ismos.php');
         foreach (['heroleadlive', 'nextcohort', 'factlive', 'pathkicker1', 'calendarheading', 'step3text', 'finalcta'] as $key) {
             $this->assertArrayHasKey($key, $string);
+        }
+    }
+
+    public function test_how_it_works_drawings_are_decorative_and_carry_no_personal_text(): void {
+        $this->resetAfterTest();
+        $this->setGuestUser();
+        $out = $this->get_renderer();
+        $html = $out->render_from_template('theme_ismos/frontpage_main', (new frontpage())->export_for_template($out));
+        $this->assertSame(3, substr_count($html, 'class="ismos-step__pane" aria-hidden="true"'));
+        foreach (['ismos-ill-form', 'ismos-ill-room', 'ismos-ill-cert'] as $class) {
+            $this->assertSame(1, substr_count($html, 'class="' . $class . '"'), $class);
+        }
+        $this->assertStringContainsString('<span class="ismos-step__n">01</span>', $html);
+        $this->assertStringContainsString(get_string('signupheading', 'theme_ismos'), $html);
+        $this->assertStringContainsString(get_string('howchat1', 'theme_ismos'), $html);
+        $this->assertStringContainsString(get_string('howwelcome', 'theme_ismos'), $html);
+    }
+
+    public function test_user_facing_text_says_course_not_cohort(): void {
+        foreach (['en', 'es', 'pt_br'] as $lang) {
+            $string = [];
+            include(__DIR__ . '/../lang/' . $lang . '/theme_ismos.php');
+            foreach ($string as $key => $text) {
+                $this->assertDoesNotMatchRegularExpression('/cohort|turma/i', $text, "$lang $key");
+            }
+        }
+        $string = [];
+        include(__DIR__ . '/../lang/es/theme_ismos.php');
+        foreach ($string as $key => $text) {
+            $this->assertStringNotContainsString('ohorte', $text, "es $key");
         }
     }
 
