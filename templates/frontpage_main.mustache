@@ -17,72 +17,177 @@
 {{!
     @template theme_ismos/frontpage_main
 
-    ISMOS front page main content: Mauveine hero, category browse row, the front page parts (course
-    list, search and so on, already rendered by core) and testimonials. Rendered inside the main landmark.
+    ISMOS landing page, inside the main landmark: hero with the next cohort, facts, paths, calendar, how it works,
+    testimonials and the final band. Everything comes from Moodle (see theme_ismos\local\landing), copy from the theme
+    language files. Core's other front page parts (news, enrolled courses, section 1) follow when there are any.
 
     Context variables required for this template:
-    * hero - label, title, lead, cta, ctaurl, signup, signupurl (null when not offered)
-    * categories, hascategories - top-level categories (name, url)
-    * section1 - HTML of the site summary and activities (section 1), empty when there is none
-    * content - HTML of the front page parts
+    * hero - label, title, titleem, hastitleem, lead, cta, ctaurl, signup, signupurl (null when not offered), hasnext, next
+    * facts - value and label
+    * paths, haspaths - name, description, hasdescription, courses (name, url), hascourses, url, haslevel, level (on), kicker
+    * calendar, hascalendar - day, month, year, name, category, code, hascode, url
+    * steps - number, title, text
     * testimonials, hastestimonials - quote and name
+    * final - heading, cta, url
+    * hasextra, section1, content - HTML of the other front page parts, empty when there is none
 
     Example context (json):
     {
         "hero": {
             "label": "Bitcoin and Lightning school",
-            "title": "Learn to run your own money, one lesson at a time.",
-            "lead": "Live cohorts and self-paced courses.",
+            "title": "Learn to run your own money,",
+            "titleem": "one lesson at a time.",
+            "hastitleem": true,
+            "lead": "Live classes with teachers who build on Bitcoin.",
             "cta": "See the courses",
             "ctaurl": "/course/index.php",
             "signup": "Create an account",
-            "signupurl": "/login/signup.php"
+            "signupurl": "/login/signup.php",
+            "hasnext": true,
+            "next": {
+                "startslabel": "Starts 3 Nov",
+                "name": "Bitcoin Privacy Diploma",
+                "summary": "How to protect your privacy.",
+                "hassummary": true,
+                "category": "Bitcoin Dev",
+                "enrolled": "28 enrolled",
+                "code": "ES",
+                "url": "/course/view.php?id=2"
+            }
         },
-        "hascategories": true,
-        "categories": [{"name": "Bitcoin", "url": "/course/index.php?categoryid=1"}],
-        "content": "<div class='courses'></div>",
+        "facts": [{"value": "180", "label": "students in the school"}],
+        "haspaths": true,
+        "paths": [{
+            "name": "Bitcoin 4 Everyone",
+            "description": "Buy, keep and use Bitcoin.",
+            "hasdescription": true,
+            "courses": [{"name": "Get and use Bitcoin", "url": "/course/view.php?id=3"}],
+            "hascourses": true,
+            "url": "/course/index.php?categoryid=1",
+            "haslevel": true,
+            "level": [{"on": true}, {"on": false}, {"on": false}],
+            "kicker": "To start"
+        }],
+        "hascalendar": true,
+        "calendar": [{
+            "day": "03", "month": "NOV", "year": "2026", "name": "Bitcoin Privacy Diploma", "category": "Bitcoin Dev",
+            "code": "ES", "hascode": true, "url": "/course/view.php?id=2"
+        }],
+        "steps": [{"number": 1, "title": "Create your account", "text": "One minute."}],
         "hastestimonials": true,
-        "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}]
+        "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}],
+        "final": {"heading": "Your first class starts here.", "cta": "Create a free account", "url": "/login/signup.php"}
     }
 }}
 {{#hero}}
 <section class="ismos-hero" aria-labelledby="ismos-hero-title">
-    <div class="ismos-frontpage-column">
-        <span class="ismos-hero__bar"></span>
-        <p class="ismos-hero__label">{{label}}</p>
-        <h1 id="ismos-hero-title" class="ismos-hero__title">{{title}}</h1>
-        <p class="ismos-hero__lead">{{lead}}</p>
-        <div class="ismos-hero__actions">
-            <a class="ismos-hero__btn ismos-hero__btn--primary" href="{{{ctaurl}}}">{{cta}}</a>
-            {{#signupurl}}
-                <a class="ismos-hero__btn ismos-hero__btn--secondary" href="{{{signupurl}}}">{{signup}}</a>
-            {{/signupurl}}
+    <svg class="ismos-hero__mark" aria-hidden="true" focusable="false" viewBox="0 0 600 600" fill="currentColor"><polygon points="426.7 431.22 426.7 571.5 309.05 447.51 345.25 349.77 426.7 431.22"></polygon><polygon points="173.3 431.22 173.3 571.5 290.95 447.51 254.75 349.77 173.3 431.22"></polygon><polygon points="426.7 168.77 426.7 28.5 309.05 152.48 345.25 250.22 426.7 168.77"></polygon><polygon points="173.3 168.77 173.3 28.5 290.95 152.48 254.75 250.22 173.3 168.77"></polygon><polygon points="431.23 173.3 571.5 173.3 446.61 290.95 349.78 254.75 431.23 173.3"></polygon><polygon points="431.22 426.7 571.5 426.7 446.61 309.05 349.78 345.25 431.22 426.7"></polygon><polygon points="168.78 173.3 28.5 173.3 152.48 290.95 250.22 254.75 168.78 173.3"></polygon><polygon points="168.77 426.7 28.5 426.7 152.48 309.05 250.22 345.25 168.77 426.7"></polygon></svg>
+    <div class="ismos-frontpage-column ismos-hero__grid{{^hasnext}} ismos-hero__grid--single{{/hasnext}}">
+        <div class="ismos-hero__copy">
+            <p class="ismos-hero__label">{{label}}</p>
+            <h1 id="ismos-hero-title" class="ismos-hero__title">{{title}}{{#hastitleem}} <em>{{titleem}}</em>{{/hastitleem}}</h1>
+            <p class="ismos-hero__lead">{{lead}}</p>
+            <div class="ismos-hero__actions">
+                {{#signupurl}}
+                    <a class="ismos-hero__btn ismos-hero__btn--primary" href="{{{signupurl}}}">{{signup}}</a>
+                {{/signupurl}}
+                <a class="ismos-hero__btn ismos-hero__btn--ghost" href="{{{ctaurl}}}">{{cta}}</a>
+            </div>
         </div>
+        {{#hasnext}}
+            {{#next}}
+                <aside class="ismos-next" aria-labelledby="ismos-next-title">
+                    <p class="ismos-next__when"><span>{{#str}}nextcohort, theme_ismos{{/str}}</span><span>{{startslabel}}</span></p>
+                    <h2 id="ismos-next-title" class="ismos-next__title">{{name}}</h2>
+                    {{#hassummary}}<p class="ismos-next__text">{{summary}}</p>{{/hassummary}}
+                    <p class="ismos-next__meta">
+                        <span>{{category}}</span><span aria-hidden="true">·</span><span>{{enrolled}}</span>{{#code}}<span aria-hidden="true">·</span><span>{{.}}</span>{{/code}}
+                    </p>
+                    <a class="ismos-next__btn" href="{{{url}}}">{{#str}}enrolbutton, theme_ismos{{/str}}</a>
+                </aside>
+            {{/next}}
+        {{/hasnext}}
     </div>
 </section>
 {{/hero}}
-{{#hascategories}}
-<nav class="ismos-browse" aria-label="{{#str}}browseby, theme_ismos{{/str}}">
-    <ul class="ismos-frontpage-column ismos-browse__list">
-        {{#categories}}
-            <li><a href="{{{url}}}">{{name}}</a></li>
-        {{/categories}}
-    </ul>
-</nav>
-{{/hascategories}}
+<section class="ismos-facts" aria-label="{{#str}}facts, theme_ismos{{/str}}">
+    <dl class="ismos-facts__list ismos-frontpage-column">
+        {{#facts}}
+            <div class="ismos-facts__item"><dt>{{value}}</dt><dd>{{label}}</dd></div>
+        {{/facts}}
+    </dl>
+</section>
+{{#haspaths}}
+<section class="ismos-landing-sec" aria-labelledby="ismos-paths-title">
+    <div class="ismos-frontpage-column">
+        <span class="ismos-label">{{#str}}pathslabel, theme_ismos{{/str}}</span>
+        <h2 id="ismos-paths-title">{{#str}}pathsheading, theme_ismos{{/str}}</h2>
+        <ul class="ismos-paths">
+            {{#paths}}
+                <li class="ismos-path">
+                    {{#haslevel}}
+                        <span class="ismos-path__level" aria-hidden="true">{{#level}}<i{{#on}} class="on"{{/on}}></i>{{/level}}</span>
+                        <span class="ismos-label ismos-path__kicker">{{kicker}}</span>
+                    {{/haslevel}}
+                    <h3>{{name}}</h3>
+                    {{#hasdescription}}<p>{{description}}</p>{{/hasdescription}}
+                    {{#hascourses}}
+                        <ul class="ismos-path__courses">
+                            {{#courses}}<li><a href="{{{url}}}">{{name}}</a></li>{{/courses}}
+                        </ul>
+                    {{/hascourses}}
+                    <a class="ismos-path__more" href="{{{url}}}">{{#str}}pathlink, theme_ismos{{/str}}</a>
+                </li>
+            {{/paths}}
+        </ul>
+    </div>
+</section>
+{{/haspaths}}
+{{#hascalendar}}
+<section class="ismos-landing-sec ismos-landing-sec--flush" aria-labelledby="ismos-calendar-title">
+    <div class="ismos-frontpage-column">
+        <span class="ismos-label">{{#str}}calendarlabel, theme_ismos{{/str}}</span>
+        <h2 id="ismos-calendar-title">{{#str}}calendarheading, theme_ismos{{/str}}</h2>
+        <ul class="ismos-cal">
+            {{#calendar}}
+                <li class="ismos-cal__row">
+                    <span class="ismos-cal__date">{{day}} {{month}}<small>{{year}}</small></span>
+                    <a class="ismos-cal__name" href="{{{url}}}">{{name}}</a>
+                    <span class="ismos-cal__cat">{{category}}</span>
+                    <span class="ismos-cal__lang">{{#hascode}}<span class="ismos-chip">{{code}}</span>{{/hascode}}</span>
+                    <a class="ismos-cal__enrol" href="{{{url}}}">{{#str}}enrollink, theme_ismos{{/str}}</a>
+                </li>
+            {{/calendar}}
+        </ul>
+    </div>
+</section>
+{{/hascalendar}}
+<section class="ismos-landing-sec ismos-landing-sec--flush" aria-labelledby="ismos-how-title">
+    <div class="ismos-frontpage-column">
+        <span class="ismos-label">{{#str}}howlabel, theme_ismos{{/str}}</span>
+        <h2 id="ismos-how-title">{{#str}}howheading, theme_ismos{{/str}}</h2>
+        <ol class="ismos-steps">
+            {{#steps}}
+                <li class="ismos-step"><span class="ismos-step__n" aria-hidden="true">{{number}}</span><h3>{{title}}</h3><p>{{text}}</p></li>
+            {{/steps}}
+        </ol>
+    </div>
+</section>
+{{#hasextra}}
 <div class="ismos-frontpage-column ismos-frontpage-courses">
     {{{section1}}}
     {{{content}}}
 </div>
+{{/hasextra}}
 {{#hastestimonials}}
-<section class="ismos-testimonials" aria-labelledby="ismos-testimonials-title">
+<section class="ismos-landing-sec ismos-landing-sec--flush" aria-labelledby="ismos-testimonials-title">
     <div class="ismos-frontpage-column">
-        <span class="ismos-label ismos-testimonials__label">{{#str}}testimonials, theme_ismos{{/str}}</span>
+        <span class="ismos-label">{{#str}}testimonials, theme_ismos{{/str}}</span>
         <h2 id="ismos-testimonials-title">{{#str}}testimonialsheading, theme_ismos{{/str}}</h2>
-        <ul class="ismos-testimonials__list">
+        <ul class="ismos-quotes">
             {{#testimonials}}
                 <li>
-                    <figure class="ismos-testimonial">
+                    <figure class="ismos-quote">
                         <blockquote><p>{{quote}}</p></blockquote>
                         <figcaption>{{name}}</figcaption>
                     </figure>
@@ -92,3 +197,11 @@
     </div>
 </section>
 {{/hastestimonials}}
+{{#final}}
+<section class="ismos-final" aria-labelledby="ismos-final-title">
+    <div class="ismos-frontpage-column ismos-final__inner">
+        <h2 id="ismos-final-title">{{heading}}</h2>
+        <a class="ismos-final__btn" href="{{{url}}}">{{cta}}</a>
+    </div>
+</section>
+{{/final}}

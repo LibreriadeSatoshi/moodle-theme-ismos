@@ -1,4 +1,5 @@
-// Front page: full-bleed Mauveine hero, browse row, course list on the content column, testimonials.
+// Front page (landing): Ink hero with the next cohort, facts strip, paths, calendar, steps, quotes and a Mauveine
+// band, on the content column. Tokens only; the hero and the next cohort card stay Ink and Paper in both modes.
 
 body.ismos-frontpage {
     // The content column: 1200 px max, 32 px margin (16 px on mobile). Not Boost's limited width.
@@ -139,73 +140,107 @@ body.ismos-frontpage {
     text-align: end;
 }
 
+// Hero: Ink ground, white type, the big mark in Mauveine at 55% bleeding off the bottom right corner.
 .ismos-hero {
-    background: var(--ismos-block);
-    color: var(--ismos-on-block);
+    background: var(--ismos-ink);
+    color: var(--ismos-paper);
+    overflow: hidden;
     padding-block: 48px;
+    position: relative;
 
-    @media (min-width: 768px) {
-        padding-block: 64px 48px;
+    @media (min-width: 1001px) {
+        padding-block: 72px 64px;
     }
 
     a:focus-visible {
-        outline-color: var(--ismos-on-block);
+        outline-color: var(--ismos-paper);
     }
 }
 
-.ismos-hero__bar {
-    background: var(--ismos-on-block);
-    block-size: 6px;
-    display: block;
-    inline-size: 32px;
-    margin-block-end: 24px;
+.ismos-hero__mark {
+    block-size: 360px;
+    color: var(--ismos-mauveine);
+    inline-size: 360px;
+    inset-block-end: -110px;
+    inset-inline-end: -80px;
+    opacity: .55;
+    pointer-events: none;
+    position: absolute;
+
+    @media (min-width: 1001px) {
+        block-size: 520px;
+        inline-size: 520px;
+        inset-block-end: -160px;
+        inset-inline-end: -120px;
+    }
+}
+
+.ismos-hero__grid {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+    position: relative;
+
+    @media (min-width: 1001px) {
+        gap: 48px;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+}
+
+.ismos-hero__grid--single {
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .ismos-hero__label {
     @include ismos-label;
 
-    color: var(--ismos-on-block);
-    font-weight: 600;
+    color: var(--ismos-mauveine-200);
     margin: 0 0 16px;
 }
 
 .ismos-hero__title {
-    color: var(--ismos-on-block);
+    color: var(--ismos-paper);
     font-family: var(--ismos-font-serif);
-    font-size: 32px;
+    font-size: 36px;
     font-weight: 500;
-    line-height: 36px;
-    margin: 0 0 16px;
-    max-inline-size: 20ch;
+    line-height: 42px;
+    margin: 0 0 20px;
+    max-inline-size: 14ch;
 
-    @media (min-width: 768px) {
-        font-size: 48px;
-        line-height: 52px;
+    @media (min-width: 1001px) {
+        font-size: 64px;
+        line-height: 68px;
+    }
+
+    em {
+        color: var(--ismos-mauveine-200);
+        font-style: italic;
     }
 }
 
 .ismos-hero__lead {
-    color: var(--ismos-on-block);
+    color: var(--ismos-logwood-200);
     font-size: 19px;
     line-height: 30px;
-    margin: 0 0 32px;
-    max-inline-size: 36em;
+    margin: 0 0 28px;
+    max-inline-size: 44ch;
 }
 
 .ismos-hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
 }
 
 .ismos-hero__btn {
-    border: 1.5px solid var(--ismos-on-block);
+    align-items: center;
+    border: 1.5px solid transparent;
     border-radius: 4px;
-    display: inline-block;
+    display: inline-flex;
     font-size: 15px;
     font-weight: 500;
-    line-height: 24px;
-    padding: 8px 16px;
+    min-block-size: 48px;
+    padding-inline: 22px;
     text-decoration: none;
 
     &:hover {
@@ -214,87 +249,430 @@ body.ismos-frontpage {
 }
 
 .ismos-hero__btn--primary {
-    background: var(--ismos-paper);
-    color: var(--ismos-ink);
+    background: var(--ismos-mauveine);
+    border-color: var(--ismos-mauveine);
+    color: var(--ismos-paper);
 
     &:hover,
     &:focus {
-        color: var(--ismos-ink);
+        color: var(--ismos-paper);
     }
 }
 
-.ismos-hero__btn--secondary {
+.ismos-hero__btn--ghost {
     background: transparent;
-    color: var(--ismos-on-block);
+    border-color: var(--ismos-logwood-700);
+    color: var(--ismos-paper);
 
     &:hover,
     &:focus {
-        color: var(--ismos-on-block);
+        color: var(--ismos-paper);
     }
 }
 
-.ismos-browse {
-    border-block-end: 1px solid var(--ismos-hairline);
-    padding-block: 16px;
+// The next cohort: a white card with a 6 px Madder edge, Ink type, in both modes.
+.ismos-next {
+    align-self: end;
+    background: var(--ismos-paper);
+    border-block-start: 6px solid var(--ismos-madder);
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--ismos-ink);
+    padding: 24px;
 }
 
-.ismos-browse__list {
+.ismos-next__when {
+    @include ismos-label;
+
+    color: var(--ismos-logwood-800);
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 24px;
-    list-style: none;
+    gap: 4px 16px;
+    justify-content: space-between;
+    margin: 0;
+}
+
+// Two classes: Hacker mode colours every heading white, and this card is white in both modes.
+.ismos-next .ismos-next__title {
+    color: var(--ismos-ink);
+    font-family: var(--ismos-font-serif);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 30px;
+    margin: 12px 0 8px;
+}
+
+.ismos-next__text {
+    color: var(--ismos-logwood-800);
+    font-size: 14px;
+    line-height: 22px;
+    margin: 0 0 16px;
+}
+
+.ismos-next__meta {
+    border-block-start: 1px solid var(--ismos-logwood-200);
+    color: var(--ismos-logwood-800);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 13px;
+    gap: 4px 12px;
+    margin: 0 0 16px;
+    padding-block-start: 12px;
+}
+
+.ismos-next__btn,
+.ismos-next__btn:hover,
+.ismos-next__btn:focus {
+    align-items: center;
+    background: var(--ismos-ink);
+    border-radius: 4px;
+    color: var(--ismos-paper);
+    display: inline-flex;
+    font-size: 15px;
+    font-weight: 500;
+    min-block-size: 44px;
+    padding-inline: 22px;
+    text-decoration: none;
+}
+
+.ismos-next__btn:hover {
+    text-decoration: underline;
+}
+
+.ismos-next a:focus-visible {
+    outline-color: var(--ismos-mauveine);
+}
+
+// Facts: four cells between hairlines.
+.ismos-facts {
+    border-block-end: 1px solid var(--ismos-hairline);
+}
+
+.ismos-facts__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-block: 0;
 
-    a {
-        @include ismos-label;
+    @media (min-width: 1001px) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
 
+.ismos-facts__item {
+    border-inline-end: 1px solid var(--ismos-hairline);
+    padding: 24px 16px;
+
+    &:nth-child(2n) {
+        border-inline-end: 0;
+    }
+
+    &:nth-child(n+3) {
+        border-block-start: 1px solid var(--ismos-hairline);
+    }
+
+    @media (min-width: 1001px) {
+        padding: 24px 32px;
+
+        &:nth-child(2n) {
+            border-inline-end: 1px solid var(--ismos-hairline);
+        }
+
+        &:nth-child(n+3) {
+            border-block-start: 0;
+        }
+
+        &:first-child {
+            padding-inline-start: 0;
+        }
+
+        &:last-child {
+            border-inline-end: 0;
+        }
+    }
+
+    dt {
+        color: var(--ismos-text-heading);
+        font-family: var(--ismos-font-serif);
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1;
+        margin-block-end: 8px;
+
+        @media (min-width: 1001px) {
+            font-size: 40px;
+        }
+    }
+
+    dd {
+        color: var(--ismos-text-muted);
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
+// Sections.
+.ismos-landing-sec {
+    padding-block: 64px 0;
+
+    h2 {
+        font-family: var(--ismos-font-serif);
+        font-size: 28px;
+        font-weight: 400;
+        line-height: 36px;
+        margin: 8px 0 28px;
+
+        @media (min-width: 1001px) {
+            font-size: 36px;
+            line-height: 44px;
+        }
+    }
+
+    .ismos-label {
+        color: var(--ismos-text-muted);
+    }
+}
+
+// Paths: three cards, an optional three segment level bar.
+.ismos-paths {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @media (min-width: 1001px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.ismos-path {
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+
+    h3 {
+        font-family: var(--ismos-font-serif);
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 30px;
+        margin: 4px 0 0;
+    }
+
+    p {
+        color: var(--ismos-text-muted);
+        font-size: 15px;
+        line-height: 24px;
+        margin: 0;
+    }
+}
+
+.ismos-path__level {
+    display: flex;
+    gap: 4px;
+
+    i {
+        background: var(--ismos-track);
+        block-size: 6px;
+        inline-size: 18px;
+
+        &.on {
+            background: var(--ismos-bar);
+        }
+    }
+}
+
+.ismos-path__courses {
+    border-block-start: 1px solid var(--ismos-hairline);
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+
+    li {
+        border-block-end: 1px solid var(--ismos-hairline);
+        font-size: 14px;
+        padding-block: 9px;
+    }
+
+    a {
         color: var(--ismos-text);
         text-decoration: none;
 
-        &:hover,
-        &:focus {
-            color: var(--ismos-text);
+        &:hover {
             text-decoration: underline;
         }
     }
 }
 
-.ismos-testimonials {
-    border-block-start: 1px solid var(--ismos-hairline);
-    margin-block-start: 48px;
-    padding-block: 48px 16px;
+.ismos-path__more {
+    font-size: 14px;
+    font-weight: 500;
+    margin-block-start: auto;
+    padding-block-start: 8px;
+}
 
-    h2 {
-        margin-block: 8px 24px;
+// Calendar: one row per upcoming course under a 2 px rule.
+.ismos-cal {
+    border-block-start: 2px solid var(--ismos-rule-strong);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ismos-cal__row {
+    align-items: center;
+    border-block-end: 1px solid var(--ismos-hairline);
+    display: grid;
+    gap: 6px 16px;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 16px;
+
+    @media (min-width: 1001px) {
+        grid-template-columns: 120px minmax(0, 1fr) 160px 90px 130px;
     }
 }
 
-.ismos-testimonials__list {
+.ismos-cal__date {
+    font-family: var(--ismos-font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    line-height: 1.3;
+
+    small {
+        color: var(--ismos-text-muted);
+        display: block;
+        font-size: inherit;
+        font-weight: 500;
+    }
+}
+
+.ismos-cal__name {
+    color: var(--ismos-text);
+    font-family: var(--ismos-font-serif);
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 26px;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.ismos-cal__cat {
+    color: var(--ismos-text-muted);
+    font-size: 13px;
+}
+
+.ismos-chip {
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 4px;
+    display: inline-block;
+    font-family: var(--ismos-font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    padding: 4px 8px;
+}
+
+.ismos-cal__enrol {
+    font-size: 14px;
+    font-weight: 500;
+
+    @media (min-width: 1001px) {
+        justify-self: end;
+    }
+}
+
+// Steps: three numbered cells on a raised ground.
+.ismos-steps {
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+
+    @media (min-width: 1001px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.ismos-step {
+    background: var(--ismos-surface-raised);
+    border-block-end: 1px solid var(--ismos-hairline);
+    padding: 28px;
+
+    &:last-child {
+        border-block-end: 0;
+    }
+
+    @media (min-width: 1001px) {
+        border-block-end: 0;
+        border-inline-end: 1px solid var(--ismos-hairline);
+
+        &:last-child {
+            border-inline-end: 0;
+        }
+    }
+
+    h3 {
+        font-family: var(--ismos-font-sans);
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 24px;
+        margin: 16px 0 6px;
+    }
+
+    p {
+        color: var(--ismos-text-muted);
+        font-size: 15px;
+        line-height: 24px;
+        margin: 0;
+    }
+}
+
+.ismos-step__n {
+    color: var(--ismos-bar);
+    display: block;
+    font-family: var(--ismos-font-serif);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+// Testimonials: three quotes with a Mauveine rule.
+.ismos-quotes {
+    display: grid;
+    gap: 24px 20px;
+    grid-template-columns: minmax(0, 1fr);
     list-style: none;
     margin: 0;
     padding: 0;
 
-    > li {
-        border-block-start: 1px solid var(--ismos-hairline);
-        padding-block: 24px;
-
-        &:first-child {
-            border-block-start: 0;
-            padding-block-start: 0;
-        }
+    @media (min-width: 1001px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-.ismos-testimonial {
+.ismos-quote {
+    border-inline-start: 3px solid var(--ismos-bar);
     margin: 0;
-    max-inline-size: 48em;
+    padding: 4px 0 4px 20px;
 
     blockquote {
         border: 0;
         color: var(--ismos-text);
         font-family: var(--ismos-font-serif);
-        font-size: 21px;
-        line-height: 28px;
+        font-size: 19px;
+        font-style: italic;
+        line-height: 30px;
         margin: 0 0 12px;
         padding: 0;
 
@@ -305,8 +683,64 @@ body.ismos-frontpage {
 
     figcaption {
         color: var(--ismos-text-muted);
-        font-size: 15px;
-        font-weight: 500;
-        line-height: 24px;
+        font-size: 13px;
     }
+}
+
+// Final band: Mauveine, white type, a white button.
+.ismos-final {
+    background: var(--ismos-block);
+    color: var(--ismos-on-block);
+    margin-block-start: 64px;
+    padding-block: 48px;
+
+    @media (min-width: 1001px) {
+        padding-block: 64px;
+    }
+
+    a:focus-visible {
+        outline-color: var(--ismos-on-block);
+    }
+}
+
+.ismos-final__inner {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: space-between;
+
+    h2 {
+        color: var(--ismos-on-block);
+        font-family: var(--ismos-font-serif);
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 40px;
+        margin: 0;
+        max-inline-size: 18ch;
+
+        @media (min-width: 1001px) {
+            font-size: 40px;
+            line-height: 48px;
+        }
+    }
+}
+
+.ismos-final__btn,
+.ismos-final__btn:hover,
+.ismos-final__btn:focus {
+    align-items: center;
+    background: var(--ismos-paper);
+    border-radius: 4px;
+    color: var(--ismos-ink);
+    display: inline-flex;
+    font-size: 15px;
+    font-weight: 500;
+    min-block-size: 48px;
+    padding-inline: 24px;
+    text-decoration: none;
+}
+
+.ismos-final__btn:hover {
+    text-decoration: underline;
 }

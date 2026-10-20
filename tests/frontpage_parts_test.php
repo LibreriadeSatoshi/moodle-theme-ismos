@@ -56,32 +56,38 @@ final class frontpage_parts_test extends \advanced_testcase {
         return $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL)->frontpage();
     }
 
-    public function test_every_part_has_a_label_and_one_h2_and_keeps_the_skip_link(): void {
+    public function test_course_list_and_category_tree_are_replaced_by_the_landing(): void {
         $this->setGuestUser();
-        // The testimonials section has its own h2; leave it out so only the parts are counted.
         set_config('testimonials', '', 'theme_ismos');
         $html = $this->render('6,4,7');
-        foreach (['skipavailablecourses', 'skipcourses'] as $skip) {
-            $this->assertStringContainsString('href="#' . $skip . '"', $html);
-            $this->assertStringContainsString('id="' . $skip . '"', $html);
-        }
-        // Available courses, the category tree and the search box: three parts, three labels, three h2.
-        $this->assertSame(3, substr_count($html, 'ismos-frontpage-part'));
-        $this->assertSame(3, preg_match_all('/<h2[ >]/', $html));
-        $this->assertSame(3, substr_count($html, 'ismos-label d-block'));
-        $this->assertStringContainsString(get_string('coursesheading', 'theme_ismos'), $html);
+        // The landing shows paths and a calendar instead of the course list and the category tree.
+        $this->assertStringNotContainsString('frontpage-available-course-list', $html);
+        $this->assertStringNotContainsString('frontpage-category-combo', $html);
+        // The search box stays, as a part with a label and an h2.
+        $this->assertSame(1, substr_count($html, 'ismos-frontpage-part'));
+        $this->assertSame(1, substr_count($html, 'ismos-label d-block'));
+        $this->assertStringContainsString('>' . get_string('searchcourses') . '</h2>', $html);
     }
 
-    public function test_front_page_main_content_holds_hero_and_testimonials(): void {
+    public function test_front_page_main_content_holds_the_landing_sections(): void {
         $this->setGuestUser();
-        set_config('testimonials', 'Great | Ana', 'theme_ismos');
+        set_config('testimonials', "Great | Ana\nFine | Joni", 'theme_ismos');
         $html = $this->render('6');
-        // The hero, with the page's only h1, and the testimonials are part of the main content, around the parts.
+        // One h1 in the hero, then facts, paths, steps, testimonials and the final band, in that order.
         $this->assertSame(1, preg_match_all('/<h1[ >]/', $html));
-        $this->assertSame(1, preg_match_all('/<section class="ismos-hero"/', $html));
-        $this->assertLessThan(strpos($html, 'ismos-frontpage-courses'), strpos($html, 'ismos-hero'));
-        $this->assertLessThan(strpos($html, 'ismos-testimonials'), strpos($html, 'frontpage-available-course-list'));
-        $this->assertStringContainsString(get_string('herotitle', 'theme_ismos'), $html);
+        $order = ['ismos-hero', 'ismos-facts', 'ismos-paths', 'ismos-steps', 'ismos-quotes', 'ismos-final'];
+        $last = -1;
+        foreach ($order as $class) {
+            $pos = strpos($html, 'class="' . $class);
+            $this->assertNotFalse($pos, $class);
+            $this->assertGreaterThan($last, $pos, $class);
+            $last = $pos;
+        }
+        $this->assertStringContainsString('Learn to run your own money,', $html);
+        $this->assertStringContainsString('<em>one lesson at a time.</em>', $html);
+        // Nothing is left of the old hero buttons or the old testimonials list.
+        $this->assertStringNotContainsString('ismos-browse', $html);
+        $this->assertStringNotContainsString('ismos-testimonials__list', $html);
     }
 
     public function test_front_page_layout_template_leaves_the_main_content_to_the_renderer(): void {
@@ -103,7 +109,7 @@ final class frontpage_parts_test extends \advanced_testcase {
         rebuild_course_cache($SITE->id, true);
     }
 
-    public function test_section1_is_inside_the_content_column_between_browse_row_and_courses(): void {
+    public function test_section1_is_inside_the_content_column_after_the_steps(): void {
         global $CFG, $PAGE;
         require_once($CFG->dirroot . '/course/lib.php');
         $this->setGuestUser();
@@ -111,15 +117,12 @@ final class frontpage_parts_test extends \advanced_testcase {
         $html = $this->render('6');
         $this->assertSame(1, substr_count($html, 'Site summary marker'));
         $hero = strpos($html, '<h1');
-        $browse = strpos($html, 'ismos-browse');
         $section1 = strpos($html, 'Site summary marker');
-        $courses = strpos($html, 'frontpage-available-course-list');
         $this->assertNotFalse($hero);
-        $this->assertLessThan($browse, $hero);
-        $this->assertLessThan($section1, $browse);
-        $this->assertLessThan($courses, $section1);
+        $this->assertLessThan($section1, $hero);
         // Inside the content column, not before it.
         $this->assertLessThan($section1, strpos($html, 'ismos-frontpage-column ismos-frontpage-courses'));
+        $this->assertLessThan($section1, strpos($html, 'ismos-steps'));
         // Core's own call from index.php adds nothing on the site index.
         $renderer = $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL);
         $this->assertSame('', $renderer->frontpage_section1());
@@ -149,13 +152,10 @@ final class frontpage_parts_test extends \advanced_testcase {
         $this->assertStringNotContainsString('ismos-hero', $html);
     }
 
-    public function test_combo_list_is_headed_with_categories(): void {
+    public function test_empty_extra_parts_leave_no_empty_column(): void {
         $this->setGuestUser();
-        set_config('testimonials', '', 'theme_ismos');
-        $html = $this->render('4');
-        $this->assertStringContainsString('id="frontpage-category-combo"', $html);
-        $this->assertStringContainsString('>' . get_string('categories') . '</h2>', $html);
-        $this->assertSame(1, preg_match_all('/<h2[ >]/', $html));
+        $html = $this->render('6');
+        $this->assertStringNotContainsString('ismos-frontpage-courses', $html);
     }
 
     public function test_search_form_is_plain_outside_the_front_page(): void {
@@ -169,7 +169,7 @@ final class frontpage_parts_test extends \advanced_testcase {
         $this->setGuestUser();
         $this->getDataGenerator()->create_category(['name' => 'Bitcoin & LN']);
         $data = (new \theme_ismos\output\frontpage())->export_for_template($this->get_renderer());
-        $names = array_column($data['categories'], 'name');
+        $names = array_column($data['paths'], 'name');
         $this->assertContains('Bitcoin & LN', $names);
     }
 

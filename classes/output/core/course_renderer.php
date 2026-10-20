@@ -24,6 +24,13 @@ namespace theme_ismos\output\core;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_renderer extends \core_course_renderer {
+    /** @var string[] Front page parts the landing page replaces (available courses, category tree). */
+    private const LANDING_PARTS = [
+        'frontpage-available-course-list',
+        'frontpage-category-combo',
+        'frontpage-category-names',
+    ];
+
     /** @var bool Whether this request already gave a card cover the eager, high priority load. */
     protected bool $coverprioritised = false;
 
@@ -111,9 +118,10 @@ class course_renderer extends \core_course_renderer {
     }
 
     /**
-     * Front page main content: the hero, the category browse row, the parts core renders, then the
-     * testimonials. Everything is inside the main landmark, after the skip link target, so the single
-     * h1 (the hero title) and its buttons are not skipped. Other pages keep core's output.
+     * Front page main content: the landing page (hero with the next cohort, facts, paths, calendar, steps,
+     * testimonials, final band) with the parts core renders that the landing does not replace. Everything is
+     * inside the main landmark, after the skip link target, so the single h1 (the hero title) and its buttons
+     * are not skipped. Other pages keep core's output.
      *
      * @return string
      */
@@ -125,6 +133,8 @@ class course_renderer extends \core_course_renderer {
         $data = (new \theme_ismos\output\frontpage())->export_for_template($this->output);
         $data['section1'] = $this->site_section1();
         $data['content'] = $parts;
+        // Core may print empty wrappers when every part is replaced: only real content gets a column.
+        $data['hasextra'] = trim(strip_tags($data['section1'] . $parts, '<img><form><input><iframe><video>')) !== '';
         return $this->output->render_from_template('theme_ismos/frontpage_main', $data);
     }
 
@@ -175,6 +185,10 @@ class course_renderer extends \core_course_renderer {
      */
     protected function frontpage_part($skipdivid, $contentsdivid, $header, $contents) {
         if (strval($contents) === '') {
+            return '';
+        }
+        // The landing page replaces the course list and the category tree: its paths and calendar show them.
+        if ($this->page->pagetype === 'site-index' && in_array($contentsdivid, self::LANDING_PARTS, true)) {
             return '';
         }
         $label = get_string('courses', 'theme_ismos');
