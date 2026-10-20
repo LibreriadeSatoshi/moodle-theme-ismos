@@ -38,6 +38,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * Returns the URL of the Ink (black) ISMOS mark, for light grounds.
+     *
+     * @return moodle_url
+     */
+    public function get_ismos_mark_url_ink(): moodle_url {
+        return $this->get_ismos_mark_url('ink');
+    }
+
+    /**
      * Returns the favicon: the theme's own SVG, not the shared core favicon setting.
      *
      * @return moodle_url
@@ -108,7 +117,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if (empty($menu) || empty($menu['items'])) {
             return '';
         }
-        return $this->render_from_template('theme_boost/language_menu', $menu);
+        $menu['code'] = strtoupper(explode('_', current_language())[0]);
+        return $this->render_from_template('theme_ismos/language_menu', $menu);
     }
 
     /**

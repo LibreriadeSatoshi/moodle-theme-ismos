@@ -8,33 +8,37 @@
     min-block-size: 100vh;
 }
 
-// Small screens: the block is a plain header, as tall as its content.
+// The block is the grid cell and carries the Mauveine ground, so it is as tall as the taller column.
 .ismos-login__block {
     background: var(--ismos-block);
     box-sizing: border-box;
     color: var(--ismos-on-block);
+}
+
+// Small screens: the block is a plain header, as tall as its content.
+.ismos-login__block-inner {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow: visible;
     padding: 24px 16px;
 }
 
-// Desktop split: the block is a sticky full-height column that scrolls only on very short viewports.
+// Desktop split: the content is a sticky viewport-high column inside the stretched cell, scrolling only on
+// very short viewports.
 @media (min-width: 768px) {
     .ismos-login {
+        align-items: stretch;
         grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
         grid-template-rows: auto;
     }
 
-    .ismos-login__block {
+    .ismos-login__block-inner {
+        block-size: 100vh;
+        block-size: 100dvh; // stylelint-disable-line declaration-block-no-duplicate-properties
         gap: 24px;
         inset-block-start: 0;
         justify-content: space-between;
-        max-block-size: 100vh;
-        max-block-size: 100dvh; // stylelint-disable-line declaration-block-no-duplicate-properties
-        min-block-size: 100vh;
-        min-block-size: 100dvh; // stylelint-disable-line declaration-block-no-duplicate-properties
         overflow-y: auto;
         padding: 48px;
         position: sticky;
@@ -293,31 +297,131 @@
         margin: 0 0 8px;
     }
 
-    .login-signup {
-        border-block-start: 1px solid var(--ismos-hairline);
+    .login-form-forgotpassword a,
+    .login-instructions {
+        font-size: 15px;
+    }
+}
+
+// Signup only: "Already have an account? Log in" under the form replaces Cancel. The button stays in the form
+// (hidden), so the form keeps working. Other login-layout forms (set password and so on) keep their Cancel.
+#page-login-signup .ismos-login__form .mform [data-groupname="buttonar"] #id_cancel {
+    display: none;
+}
+
+// Signup: the "required fields" legend is dropped, every required field already carries a REQUIRED label.
+#page-login-signup .ismos-login__form .mform .fdescription.required {
+    display: none;
+}
+
+// "New here? Create an account" and "Already have an account? Log in": one quiet line with a text link.
+.ismos-login__form .ismos-login-alt {
+    color: var(--ismos-text-muted);
+    font-size: 15px;
+    line-height: 24px;
+    margin-block: 16px 0;
+    text-align: center;
+
+    a {
+        color: var(--ismos-link);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover {
+            color: var(--ismos-link-hover);
+        }
+    }
+}
+
+// auth_nostr adds its own button (and an "or") right after the form. Order the login form's children so the
+// button sits under our single OR divider, styled like the other providers. Theme CSS only.
+.ismos-login__form .loginform {
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        order: 4;
+    }
+
+    > h1,
+    > .alert,
+    > .login-form,
+    > form#login {
+        order: 0;
+    }
+
+    > .login-divider-or {
+        order: 1;
+    }
+
+    > .auth-nostr-wrapper {
+        order: 2;
+    }
+
+    > .login-identityproviders {
+        order: 3;
+    }
+
+    .auth-nostr-wrapper {
         margin-block-start: 16px;
-        padding-block-start: 16px;
 
-        a.btn.btn {
-            background: none;
-            border: 0;
-            color: var(--ismos-link);
-            font-size: 15px;
-            font-weight: 400;
-            padding: 0;
-            text-decoration: underline;
-            text-underline-offset: 2px;
+        // The plugin's own "or" is dropped when our OR divider is present; otherwise it is restyled as one.
+        .auth-nostr-sep {
+            @include ismos-label;
 
-            &:hover {
-                color: var(--ismos-link-hover);
-                text-decoration: underline;
+            align-items: center;
+            display: flex;
+            gap: 12px;
+            margin-block-end: 16px !important; // stylelint-disable-line declaration-no-important
+
+            &::before,
+            &::after {
+                border-block-start: 1px solid var(--ismos-hairline);
+                content: "";
+                flex: 1;
             }
         }
     }
 
-    .login-form-forgotpassword a,
-    .login-instructions {
-        font-size: 15px;
+    // Nothing to say yet: no gap between the button and the next provider (16 px, as between providers).
+    .auth-nostr-status:empty {
+        display: none;
+    }
+
+    &:has(.login-divider-or) .auth-nostr-sep {
+        display: none;
+    }
+
+    // With the divider after the form, the wrapper follows it; its top margin is not needed.
+    &:has(.login-divider-or) .auth-nostr-wrapper {
+        margin-block-start: 0;
+    }
+
+    .login-divider-or + .auth-nostr-wrapper {
+        margin-block-start: 0;
+    }
+}
+
+.ismos-login__form #auth-nostr-btn.btn {
+    align-items: center;
+    background: transparent;
+    border: 1.5px solid var(--ismos-text);
+    border-radius: 4px;
+    color: var(--ismos-text);
+    display: flex;
+    font-size: 15px;
+    gap: 8px;
+    inline-size: 100%;
+    justify-content: center;
+    min-block-size: 44px;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background: var(--ismos-surface-raised);
+        border-color: var(--ismos-text);
+        color: var(--ismos-text);
     }
 }
 

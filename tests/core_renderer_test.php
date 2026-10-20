@@ -167,6 +167,12 @@ final class core_renderer_test extends \advanced_testcase {
         $html = $out->ismos_darkmode_toggle();
         $this->assertStringContainsString('aria-checked="false"', $html);
         $this->assertStringContainsString('data-persist="0"', $html);
+        $this->assertStringContainsString('role="switch"', $html);
+        $this->assertStringContainsString('aria-label="Dark mode"', $html);
+        $this->assertStringContainsString('title="Dark mode"', $html);
+        $this->assertMatchesRegularExpression('/<svg class="ismos-darkmode-icon ismos-darkmode-icon-moon" aria-hidden="true"/', $html);
+        $this->assertMatchesRegularExpression('/<svg class="ismos-darkmode-icon ismos-darkmode-icon-sun" aria-hidden="true"/', $html);
+        $this->assertDoesNotMatchRegularExpression('/<\/svg>\s*Dark mode\s*<\/button>/', $html);
 
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
@@ -203,7 +209,112 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertStringContainsString('ismos-wordmark-text">ISMOS<', $html);
         $this->assertStringContainsString('alt="" aria-hidden="true"', $html);
         $this->assertStringContainsString('ismos-mark-paper.svg', $html);
+        $this->assertStringContainsString('ismos-mark-ink.svg', $html);
+        // No stray template text (a broken Mustache comment leaks its example context into the bar).
+        $this->assertStringNotContainsString('}}', $html);
+        $this->assertStringNotContainsString('] }', $html);
+        $this->assertDoesNotMatchRegularExpression('/\]\s*\}/', $html);
         $this->assertStringContainsString('data-action="theme_ismos/toggle-darkmode"', $html);
+    }
+
+    /**
+     * The login form has no first-time instructions; one "New here?" line links to the signup page.
+     */
+    public function test_loginform_signup_line(): void {
+        $out = $this->ismos_renderer();
+        $context = [
+            'cansignup' => true,
+            'signupurl' => 'https://example.com/login/signup.php',
+            'hasinstructions' => true,
+            'instructions' => 'FIRSTTIME-INSTRUCTIONS',
+            'hasidentityproviders' => false,
+            'loginurl' => 'https://example.com/login/index.php',
+        ];
+        $html = $out->render_from_template('core/loginform', $context);
+        $this->assertStringContainsString('New here?', $html);
+        $this->assertStringContainsString('href="https://example.com/login/signup.php">Create an account</a>', $html);
+        $this->assertStringNotContainsString('FIRSTTIME-INSTRUCTIONS', $html);
+        $this->assertStringNotContainsString('login-instructions', $html);
+
+        $context['cansignup'] = false;
+        $html = $out->render_from_template('core/loginform', $context);
+        $this->assertStringNotContainsString('New here?', $html);
+    }
+
+    /**
+     * The signup page has an "Already have an account? Log in" link.
+     */
+    public function test_signup_layout_login_link(): void {
+        global $CFG;
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('core/signup_form_layout', ['formhtml' => '<form></form>']);
+        $this->assertStringContainsString('Already have an account?', $html);
+        $this->assertStringContainsString($CFG->wwwroot . '/login/index.php">Log in</a>', $html);
+    }
+
+    /**
+     * The maintenance layout shows the mark through direct static URLs and the message area.
+     */
+    public function test_maintenance_template(): void {
+        global $CFG;
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('theme_ismos/maintenance', [
+            'output' => $out,
+            'markink' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-ink.svg',
+            'markpaper' => $CFG->wwwroot . '/theme/ismos/pix/ismos-mark-paper.svg',
+            'homeurl' => $CFG->wwwroot . '/',
+            'wordmark' => 'ISMOS',
+        ]);
+        $this->assertStringContainsString('ismos-maintenance__bar', $html);
+        $this->assertStringContainsString($CFG->wwwroot . '/theme/ismos/pix/ismos-mark-ink.svg', $html);
+        $this->assertStringContainsString('ismos-wordmark-text">ISMOS<', $html);
+        $this->assertStringNotContainsString('image.php', $html);
+    }
+
+    /**
+     * The overview course card keeps the regions and data attributes the block's JS needs and has no pattern.
+     */
+    public function test_course_card_and_progress_templates(): void {
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('core_course/coursecard', [
+            'id' => 7,
+            'uniqid' => 'u1',
+            'viewurl' => 'https://example.com/course/view.php?id=7',
+            'courseimage' => 'https://example.com/pluginfile.php/1/course/overviewfiles/a.jpg',
+            'fullname' => 'Bitcoin 101',
+            'visible' => true,
+            'isfavourite' => false,
+        ]);
+        $this->assertStringContainsString('data-region="course-content"', $html);
+        $this->assertStringContainsString('data-course-id="7"', $html);
+        $this->assertStringContainsString('data-region="is-favourite"', $html);
+        $this->assertStringContainsString('ismos-course-card__bar', $html);
+        $this->assertStringNotContainsString('data:image', $html);
+        $this->assertStringNotContainsString('}}', $html);
+
+        $html = $out->render_from_template('block_myoverview/progress-bar', ['progress' => 40]);
+        $this->assertStringContainsString('class="progress ismos-progress" aria-hidden="true"', $html);
+        $this->assertStringContainsString('style="width: 40%"', $html);
+    }
+
+    /**
+     * The bell and messages toggles use inline line icons and keep their regions and names.
+     */
+    public function test_bar_icons_are_inline_svg(): void {
+        $this->setAdminUser();
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('core_message/message_popover', ['uniqid' => 'x1', 'unreadcount' => 2]);
+        $this->assertStringContainsString('<svg class="ismos-bar-icon" aria-hidden="true"', $html);
+        $this->assertStringContainsString('data-region="count-container"', $html);
+        $this->assertStringContainsString('aria-label=', $html);
+        $this->assertStringNotContainsString('fa-message', $html);
+        $this->assertStringNotContainsString('}}', $html);
+
+        $html = $out->render_from_template('message_popup/notification_popover', ['userid' => 2, 'unreadcount' => 1]);
+        $this->assertStringContainsString('<svg class="ismos-bar-icon" aria-hidden="true"', $html);
+        $this->assertStringContainsString('data-region="count-container"', $html);
+        $this->assertStringNotContainsString('fa-bell', $html);
+        $this->assertStringNotContainsString('}}', $html);
     }
 
     /**
@@ -260,6 +371,9 @@ final class core_renderer_test extends \advanced_testcase {
             $html = $out->ismos_lang_menu();
             $this->assertStringContainsString('class="langmenu"', $html);
             $this->assertStringContainsString('Español', $html);
+            $this->assertStringContainsString('<span class="langbutton">EN</span>', $html);
+            $this->assertStringContainsString('aria-label="Language: EN, English', $html);
+            $this->assertStringNotContainsString('}}', $html);
 
             $navbar = $out->render_from_template('theme_boost/navbar', [
                 'output' => $out,
@@ -267,6 +381,8 @@ final class core_renderer_test extends \advanced_testcase {
                 'sitename' => 'ISMOS',
             ]);
             $this->assertStringContainsString('class="langmenu"', $navbar);
+            $this->assertStringNotContainsString('}}', $navbar);
+            $this->assertDoesNotMatchRegularExpression('/\]\s*\}/', $navbar);
         } finally {
             remove_dir($dir);
             purge_all_caches();

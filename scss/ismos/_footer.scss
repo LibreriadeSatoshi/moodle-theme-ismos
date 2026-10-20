@@ -1,7 +1,11 @@
-// Footer: Ink ground, Paper type, mark and address in Plex Mono, language menu.
+// Footer: a full-bleed Ink band, Paper type, mark and address in Plex Mono, language menu.
+// #page is padded and offset by the drawers, so the band is painted past the box with a huge spread shadow and
+// clipped to the box vertically. Shadows add no scrollable overflow, so there is no horizontal scroll. The
+// second shadow is the 1 px Logwood 700 hairline above the band. Content stays on the column below.
 #page-footer.ismos-footer {
     background-color: var(--ismos-ink);
-    border-block-start: 1px solid var(--ismos-logwood-700);
+    box-shadow: 0 0 0 100vmax var(--ismos-ink), 0 -1px 0 100vmax var(--ismos-logwood-700);
+    clip-path: inset(-1px -100vmax 0);
     color: var(--ismos-paper);
     margin-block-start: 48px;
     padding-block: 32px;

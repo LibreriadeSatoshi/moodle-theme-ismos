@@ -1,0 +1,184 @@
+// Components that Boost paints with fixed light greys: tabs, tables, completion badges, light utilities, help and
+// action icons. Everything reads the tokens, so one rule serves light and Hacker mode.
+
+// Secondary and tertiary navigation tabs: like the top bar links. No background box; hover is the text colour and
+// a 2 px underline in the hairline colour; the current tab is stronger with a 2 px underline; focus is a ring.
+:is(.secondary-navigation, .tertiary-navigation) {
+    .moremenu .nav-link,
+    .nav-tabs .nav-link {
+        background-color: transparent !important; // stylelint-disable-line declaration-no-important
+        border: 0;
+        border-radius: 0;
+        color: var(--ismos-text-muted);
+        font-weight: 500;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            background-color: transparent !important; // stylelint-disable-line declaration-no-important
+            color: var(--ismos-text);
+            text-decoration: underline 2px;
+            text-decoration-color: var(--ismos-hairline);
+            text-underline-offset: 8px;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--ismos-focus);
+            outline-offset: -2px;
+        }
+
+        &.active,
+        &.show,
+        &[aria-current="true"] {
+            background-color: transparent !important; // stylelint-disable-line declaration-no-important
+            border: 0;
+            color: var(--ismos-text);
+            font-weight: 600;
+            text-decoration: underline 2px;
+            text-decoration-color: currentcolor;
+            text-underline-offset: 8px;
+        }
+    }
+
+    .show > .nav-link,
+    .active > .nav-link {
+        background-color: transparent !important; // stylelint-disable-line declaration-no-important
+        color: var(--ismos-text);
+    }
+
+    .moremenu .dropdown-toggle::after {
+        color: inherit;
+    }
+}
+
+// Tables: Bootstrap 5 reads these variables for rows, stripes, hover and borders.
+.table,
+.generaltable {
+    --bs-table-bg: var(--ismos-surface);
+    --bs-table-color: var(--ismos-text);
+    --bs-table-border-color: var(--ismos-hairline);
+    --bs-table-striped-bg: var(--ismos-surface-raised);
+    --bs-table-striped-color: var(--ismos-text);
+    --bs-table-active-bg: var(--ismos-surface-raised);
+    --bs-table-active-color: var(--ismos-text);
+    --bs-table-hover-bg: var(--ismos-surface-raised);
+    --bs-table-hover-color: var(--ismos-text);
+
+    border-color: var(--ismos-hairline);
+    color: var(--ismos-text);
+
+    th,
+    td {
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    .text-muted,
+    .text-body-secondary {
+        color: var(--ismos-text-muted) !important; // stylelint-disable-line declaration-no-important
+    }
+
+    &.table-hover > tbody > tr:hover > * {
+        box-shadow: inset 0 0 0 9999px var(--bs-table-hover-bg);
+        color: var(--ismos-text);
+    }
+}
+
+.table-light,
+.thead-light th,
+thead.table-light th,
+.table > thead.table-light > tr > *,
+.generaltable thead th {
+    --bs-table-bg: var(--ismos-surface-raised);
+    --bs-table-color: var(--ismos-text);
+    --bs-table-border-color: var(--ismos-hairline);
+
+    background-color: var(--ismos-surface-raised);
+    color: var(--ismos-text);
+}
+
+// Activity completion conditions: no panel, square hairline badges in the text colour. The wording and the icon
+// carry the state (done, failed), never the colour.
+.activity-information {
+    background: transparent;
+
+    .badge,
+    .automatic-completion-conditions .badge,
+    [data-region="completionrequirements"] .badge {
+        background-color: transparent !important; // stylelint-disable-line declaration-no-important
+        border: 1px solid var(--ismos-hairline);
+        border-radius: 4px !important; // stylelint-disable-line declaration-no-important
+        color: var(--ismos-text) !important; // stylelint-disable-line declaration-no-important
+        font-family: var(--ismos-font-sans);
+        font-size: 13px;
+        font-weight: 500;
+        mix-blend-mode: normal;
+    }
+
+    .icon {
+        color: var(--ismos-text);
+    }
+}
+
+// Light utilities and outline buttons that Boost paints light.
+.alert-light {
+    background-color: var(--ismos-surface-raised);
+    border-color: var(--ismos-hairline);
+    color: var(--ismos-text);
+}
+
+.btn-light {
+    --bs-btn-bg: var(--ismos-surface-raised);
+    --bs-btn-border-color: var(--ismos-hairline);
+    --bs-btn-color: var(--ismos-text);
+    --bs-btn-hover-bg: var(--ismos-surface);
+    --bs-btn-hover-border-color: var(--ismos-border-input);
+    --bs-btn-hover-color: var(--ismos-text);
+    --bs-btn-active-bg: var(--ismos-surface);
+    --bs-btn-active-color: var(--ismos-text);
+}
+
+.btn-outline-secondary {
+    border-color: var(--ismos-border-input);
+}
+
+.card-header,
+.card-footer {
+    background-color: var(--ismos-surface-raised);
+    border-color: var(--ismos-hairline);
+    color: var(--ismos-text);
+}
+
+// The help icon: the text colour, one ink, and a 44 px target.
+.btn-link:has(.icon.text-info),
+a[data-bs-toggle="popover"].btn-link {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    min-block-size: 44px;
+    min-inline-size: 44px;
+}
+
+.icon.text-info,
+.text-info .icon,
+a[data-bs-toggle="popover"] .icon {
+    color: var(--ismos-text) !important; // stylelint-disable-line declaration-no-important
+}
+
+// Plain Font Awesome action icons in tables, forms and the main region follow the ink, not the plugin's colours.
+// Not touched: image icons (QR codes, logos), anything inside a button, and state icons (success, danger,
+// warning, info colours; check and cross marks), which carry meaning.
+$ismos-state-icons: ".text-success, .text-danger, .text-warning, .text-info, .fa-check, .fa-circle-check, .fa-xmark, .fa-circle-xmark";
+
+#region-main :is(table, .mform, .generaltable) :is(td, th, .action-icon, a:not(.btn)) .icon.fa:not(#{$ismos-state-icons}) {
+    color: var(--ismos-text-muted);
+}
+
+#region-main :is(table, .mform, .generaltable) a:not(.btn):hover .icon.fa:not(#{$ismos-state-icons}) {
+    color: var(--ismos-text);
+}
+
+// Icons inside buttons keep the button's own colour.
+#region-main :is(table, .mform, .generaltable) .btn .icon.fa {
+    color: inherit !important; // stylelint-disable-line declaration-no-important
+}

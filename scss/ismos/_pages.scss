@@ -1,0 +1,102 @@
+// Single pages: the maintenance message and the course category page.
+
+// Maintenance: the mark and wordmark on the bar ground, the message in the info status style. No white box.
+// The layout runs without the database: only direct static URLs and tokens are used here.
+.ismos-maintenance {
+    background-color: var(--ismos-surface);
+    color: var(--ismos-text);
+    min-block-size: 100vh;
+
+    .ismos-maintenance__bar {
+        background-color: var(--ismos-nav-bg);
+        border-block-end: 1px solid var(--ismos-hairline);
+        border-block-start: 6px solid var(--ismos-bar);
+        padding: 12px 16px;
+
+        @media (min-width: 640px) {
+            padding-inline: 32px;
+        }
+    }
+
+    .ismos-maintenance__brand {
+        color: var(--ismos-text);
+        gap: 8px;
+        text-decoration: none;
+
+        .ismos-mark {
+            block-size: 20px;
+            display: block;
+            inline-size: 20px;
+        }
+
+        .ismos-mark-paper {
+            display: none;
+        }
+    }
+
+    .ismos-maintenance__page {
+        @include ismos-column;
+
+        padding-block: 48px 0;
+    }
+
+    #region-main h1,
+    #region-main .h1 {
+        margin-block-end: 24px;
+    }
+
+    // The message: info tokens, 4 px corners, on the page ground.
+    .maintenance_message,
+    .box.generalbox {
+        background-color: var(--ismos-info-bg);
+        border: 1px solid var(--ismos-info-border);
+        border-radius: 4px;
+        color: var(--ismos-info-text);
+        margin: 0;
+        max-inline-size: 680px;
+        padding: 16px 20px;
+    }
+}
+
+.ismos-mode-dark .ismos-maintenance__brand {
+    .ismos-mark-paper {
+        display: block;
+    }
+
+    .ismos-mark-ink {
+        display: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto .ismos-maintenance__brand {
+        .ismos-mark-paper {
+            display: block;
+        }
+
+        .ismos-mark-ink {
+            display: none;
+        }
+    }
+}
+
+// Course category page: the category select and the search start at the heading's left edge, and the
+// description is plain body text on the page ground, 680 px at most.
+:is(#page-course-index, #page-course-index-category) {
+    #action_bar.tertiary-navigation {
+        padding-inline: 0;
+
+        .navitem:first-child {
+            margin-inline-start: 0;
+        }
+    }
+
+    #region-main .box.generalbox.info {
+        background: none;
+        border: 0;
+        border-radius: 0;
+        color: var(--ismos-text);
+        max-inline-size: 680px;
+        padding: 0;
+    }
+}

@@ -229,7 +229,7 @@ final class login_layout_test extends \advanced_testcase {
     }
 
     /**
-     * The block's sticky height and overflow rules exist only in the desktop media block, so the small
+     * The block content's sticky height and overflow rules exist only in the desktop media block, so the small
      * screen header is never clipped.
      */
     public function test_block_height_rules_are_desktop_only(): void {
@@ -237,16 +237,16 @@ final class login_layout_test extends \advanced_testcase {
         theme_reset_all_caches();
         $flat = preg_replace('/\s+/', '', \theme_config::load('ismos')->get_css_content());
 
-        // Outside any media block: no height or overflow limits on the block.
-        $this->assertMatchesRegularExpression('/\.ismos-login__block\{[^}]*overflow:visible/', $flat);
+        // Outside any media block: the cell has no height or overflow limits, and the inner part is not sticky.
         $outside = preg_replace('/@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/', '', $flat);
-        $base = preg_match_all('/(?<![\w-])\.ismos-login__block\{[^}]*\}/', $outside, $m) ? implode('', $m[0]) : '';
+        $base = preg_match_all('/(?<![\w-])\.ismos-login__block(?:-inner)?\{[^}]*\}/', $outside, $m) ? implode('', $m[0]) : '';
         $this->assertStringNotContainsString('max-block-size', $base);
         $this->assertStringNotContainsString('overflow-y', $base);
         $this->assertStringNotContainsString('position:sticky', $base);
+        $this->assertStringNotContainsString('block-size:100', $base);
 
         $this->assertMatchesRegularExpression(
-            '/@media\(min-width:768px\)\{[^@]*\.ismos-login__block\{[^}]*max-block-size:100dvh[^}]*overflow-y:auto[^}]*position:sticky/',
+            '/@media\(min-width:768px\)\{[^@]*\.ismos-login__block-inner\{[^}]*block-size:100dvh[^}]*overflow-y:auto[^}]*position:sticky/',
             $flat
         );
     }

@@ -17,7 +17,8 @@
 {{!
     @template theme_ismos/darkmode_toggle
 
-    Switch between light and Hacker mode. The JS keeps aria-checked in sync.
+    Icon switch between light and Hacker mode: a moon while the page is light, a sun while it is dark (chosen
+    by CSS from the body mode class). The JS keeps aria-checked in sync.
 
     Context variables required for this template:
     * checked - bool, true when Hacker mode is on for the person
@@ -30,9 +31,11 @@
         "persist": true
     }
 }}
-<button type="button" class="btn btn-secondary" role="switch" aria-checked="{{#checked}}true{{/checked}}{{^checked}}false{{/checked}}"
+<button type="button" class="btn ismos-darkmode-toggle" role="switch" aria-checked="{{#checked}}true{{/checked}}{{^checked}}false{{/checked}}"
+        title="{{#str}}darkmode, theme_ismos{{/str}}" aria-label="{{#str}}darkmode, theme_ismos{{/str}}"
         data-action="theme_ismos/toggle-darkmode" data-persist="{{#persist}}1{{/persist}}{{^persist}}0{{/persist}}">
-    {{#str}}darkmode, theme_ismos{{/str}}
+    <svg class="ismos-darkmode-icon ismos-darkmode-icon-moon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="ismos-darkmode-icon ismos-darkmode-icon-sun" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
 </button>
 {{#js}}
 require(['theme_ismos/darkmode'], function(darkmode) {
