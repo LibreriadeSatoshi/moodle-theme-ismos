@@ -182,3 +182,38 @@ $ismos-state-icons: ".text-success, .text-danger, .text-warning, .text-info, .fa
 #region-main :is(table, .mform, .generaltable) .btn .icon.fa {
     color: inherit !important; // stylelint-disable-line declaration-no-important
 }
+
+// The More menu caret: Boost's Font Awesome chevron stays (as in the user menu and the course filters). It is taken
+// out of the flow, because a link's underline is propagated to its in-flow children and would draw a second bar under
+// the caret. The underline then runs under the label only.
+:is(.primary-navigation, .secondary-navigation, .tertiary-navigation) .moremenu .nav-link.dropdown-toggle {
+    padding-inline-end: 28px;
+    position: relative;
+
+    &::after {
+        inset-block-start: 50%;
+        inset-inline-end: 10px;
+        margin: 0;
+        position: absolute;
+        text-decoration: none;
+        transform: translateY(-50%);
+    }
+}
+
+// No ring after a mouse click on a tab: the ring is :focus-visible only.
+:is(.primary-navigation, .secondary-navigation, .tertiary-navigation) .nav-link:focus:not(:focus-visible) {
+    box-shadow: none;
+    outline: 0;
+}
+
+// Tables written by people in content (labels, pages, descriptions): padded cells with hairline borders. Moodle's
+// own tables (generaltable, table, grader, calendar) have their own styles.
+:is(.no-overflow, .text_to_html, .activity-description, .box.generalbox, .course-content .label, .path-mod-page .box) table:not(.generaltable, .table, [class*="grade"]) {
+    border-collapse: collapse;
+
+    :is(th, td) {
+        border: 1px solid var(--ismos-hairline);
+        padding: 8px 12px;
+        vertical-align: top;
+    }
+}

@@ -44,8 +44,6 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\{[^}]*--ismos-nav-bg:var\(--ismos-ink\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.navigation\.nav-link\.active[^{]*\{[^}]*' .
             'border:0;[^}]*font-weight:600;text-decoration:underline2px;text-decoration-color:currentcolor;text-underline-offset:8px/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-navbar\.primary-navigation\.dropdown-toggle::after\{[^}]*' .
-            'border-block-end:1\.5pxsolidcurrentcolor/', $flat);
         $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar\.ismos-mark-paper\{display:none/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.navbar\.fixed-top\.ismos-navbar\.ismos-mark-paper\{display:block/', $flat);
         // The Ink-bar overrides are gone: no Paper text forced on bar controls.
@@ -137,6 +135,42 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.btn\.icon\.fa\{color:inherit!important/', $flat);
         // Signup legend.
         $this->assertMatchesRegularExpression('/#page-login-signup\.ismos-login__form\.mform\.fdescription\.required\{display:none/', $flat);
+    }
+
+    /**
+     * Hacker mode tables, dark text utilities, the More caret, the click ring and padded content tables.
+     */
+    public function test_hacker_tables_carets_and_content_tables(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $css = \theme_config::load('ismos')->get_css_content();
+        $flat = strtolower(preg_replace('/\s+/', '', $css));
+
+        // Table cells in the main region go to the tokens in Hacker mode; headers are raised.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#region-maintabletr:not\(\.selectedrow\)>:is\(th,td\):not\(' .
+            '[^)]*overridden[^)]*\)\{background-color:var\(--ismos-surface\);border-color:var\(--ismos-hairline\);color:var\(--ismos-text\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#region-maintabletr:not\(\.selectedrow\)>th:not\([^{]*\{' .
+            'background-color:var\(--ismos-surface-raised\)/', $flat);
+        // State cells and the selected row take Ink text.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#region-maintable\[class\*="overridden"\],[^{]*\{color:var\(--ismos-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#region-maintable\.selectedrow>td[^{]*\{color:var\(--ismos-ink\)/', $flat);
+        // Dark text utilities, the autocomplete arrow, alert links and the activity header.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.text-dark:not\([^{]*\{color:var\(--ismos-text\)!important/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.form-autocomplete-downarrow\{color:var\(--ismos-text\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.alert-warninga:not\(\.btn\)\{color:var\(--ismos-warning-text\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark#page\.activity-header\{background-color:var\(--ismos-surface-raised\)/', $flat);
+        // The More caret is Boost's glyph, out of the flow, so the underline is under the label only; no rotated box.
+        $this->assertMatchesRegularExpression('/\.moremenu\.nav-link\.dropdown-toggle::after\{inset-block-start:50%;inset-inline-end:10px;margin:0;' .
+            'position:absolute;text-decoration:none;transform:translatey\(-50%\)/', $flat);
+        $this->assertDoesNotMatchRegularExpression('/\.primary-navigation\.dropdown-toggle::after\{[^}]*rotate\(45deg\)/', $flat);
+        // No ring after a mouse click on the bar and tab links.
+        $this->assertMatchesRegularExpression('/\.secondary-navigation,\.tertiary-navigation\)\.nav-link:focus:not\(:focus-visible\)\{box-shadow:none;outline:0/', $flat);
+        // Content tables: padded cells, hairline borders, top aligned; Moodle's own tables are left alone.
+        $this->assertMatchesRegularExpression('/\.no-overflow[^{]*\{border:1pxsolidvar\(--ismos-hairline\);padding:8px12px;vertical-align:top/', $flat);
+        // Boost's light grey wrapper and icon buttons take the raised surface.
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.gradetree-wrapper\{background-color:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.btn-icon\.icons-collapse-expand,\.ismos-mode-dark\.message-app\.btn-submit\{' .
+            'background-color:var\(--ismos-surface-raised\)/', $flat);
     }
 
     /**

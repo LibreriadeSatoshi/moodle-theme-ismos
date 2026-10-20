@@ -154,18 +154,6 @@
             text-underline-offset: 8px;
         }
     }
-
-    // A thin chevron instead of Bootstrap's filled caret.
-    .dropdown-toggle::after {
-        block-size: 6px;
-        border: 0;
-        border-block-end: 1.5px solid currentcolor;
-        border-inline-end: 1.5px solid currentcolor;
-        inline-size: 6px;
-        margin-inline-start: 8px;
-        transform: translateY(-2px) rotate(45deg);
-        vertical-align: middle;
-    }
 }
 
 // Right side: a hairline divider, the language code, then line icons in one ink. Targets are 44 px.
