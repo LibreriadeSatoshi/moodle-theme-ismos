@@ -1,0 +1,443 @@
+// Login and signup: a sticky Mauveine block (mark, line, address) and the form column.
+// Tokens only; the block is Mauveine in both modes, the form side follows the surface.
+
+.ismos-login {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-block-size: 100vh;
+}
+
+.ismos-login__block {
+    background: var(--ismos-block);
+    block-size: 100vh;
+    box-sizing: border-box;
+    color: var(--ismos-on-block);
+    display: flex;
+    flex-direction: column;
+    inset-block-start: 0;
+    justify-content: space-between;
+    padding: 48px;
+    position: sticky;
+}
+
+.ismos-login__brand,
+.ismos-login__brand:hover {
+    align-items: center;
+    color: var(--ismos-on-block);
+    display: flex;
+    font-family: var(--ismos-font-brand);
+    font-size: 24px;
+    font-weight: 500;
+    gap: 12px;
+    letter-spacing: .04em;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.ismos-login__line {
+    font-family: var(--ismos-font-serif);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 52px;
+    margin: 0;
+    max-inline-size: 13ch;
+    text-wrap: balance;
+}
+
+.ismos-login__lead {
+    font-size: 19px;
+    line-height: 30px;
+    margin: 16px 0 0;
+    max-inline-size: 28ch;
+}
+
+.ismos-login__address {
+    font-family: var(--ismos-font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    line-height: 16px;
+    margin: 0;
+}
+
+.ismos-login__side {
+    background: var(--ismos-surface);
+    box-sizing: border-box;
+    display: flex;
+    inline-size: 100%;
+    justify-content: center;
+    margin: 0;
+    padding: 48px 32px;
+}
+
+.ismos-login__form {
+    box-sizing: border-box;
+    inline-size: 100%;
+    margin-block: auto; // Centred when short, scrolls from the top when long.
+    max-inline-size: 400px;
+
+    #region-main-box,
+    #region-main {
+        padding: 0;
+    }
+
+    .login-wrapper {
+        display: block;
+        height: auto;
+    }
+
+    // Boost draws the form on a white shadowed card; ISMOS has none.
+    .login-container {
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+        inline-size: 100% !important; // stylelint-disable-line declaration-no-important
+        margin: 0;
+        max-inline-size: none;
+        padding: 0;
+    }
+
+    h1,
+    .login-heading.h1 {
+        font-size: 27px;
+        line-height: 32px;
+        margin: 0 0 16px;
+
+        @media (min-width: 768px) {
+            font-size: 36px;
+            line-height: 42px;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .ismos-login {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto 1fr;
+    }
+
+    .ismos-login__block {
+        block-size: auto;
+        gap: 12px;
+        padding: 24px 16px;
+        position: static;
+    }
+
+    .ismos-login__line {
+        font-size: 27px;
+        line-height: 34px;
+        max-inline-size: none;
+    }
+
+    .ismos-login__lead {
+        font-size: 17px;
+        line-height: 28px;
+        margin-block-start: 8px;
+    }
+
+    .ismos-login__address {
+        display: none;
+    }
+
+    .ismos-login__side {
+        padding: 24px 16px;
+    }
+
+    .ismos-login__form {
+        margin-block: 0;
+    }
+}
+
+// Form controls on the login side.
+.ismos-login__form {
+    label,
+    .col-form-label {
+        color: var(--ismos-text);
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 24px;
+        margin-block-end: 6px;
+        padding-block: 0;
+    }
+
+    // The core login form hides its labels and relies on placeholders; ISMOS shows the labels.
+    // Bootstrap's utility is !important, so the reset is too.
+    label.visually-hidden {
+        block-size: auto !important; // stylelint-disable-line declaration-no-important
+        clip: auto !important; // stylelint-disable-line declaration-no-important
+        clip-path: none !important; // stylelint-disable-line declaration-no-important
+        inline-size: auto !important; // stylelint-disable-line declaration-no-important
+        margin: 0 0 6px !important; // stylelint-disable-line declaration-no-important
+        overflow: visible !important; // stylelint-disable-line declaration-no-important
+        position: static !important; // stylelint-disable-line declaration-no-important
+        white-space: normal !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .form-control::placeholder {
+        color: transparent;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 17px;
+        min-block-size: 48px;
+        padding-block: 8px;
+        padding-inline: 12px;
+    }
+
+    .form-text,
+    .form-control-feedback + .form-text,
+    .text-muted {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 20px;
+    }
+
+    .btn-primary,
+    .btn-lg {
+        font-size: 15px;
+        min-block-size: 44px;
+    }
+
+    #loginbtn,
+    #id_submitbutton,
+    #loginguestbtn,
+    .login-form-submit .btn,
+    .login-identityprovider-btn {
+        inline-size: 100%;
+    }
+
+    // Identity providers and guest login are full width secondary buttons.
+    .login-identityprovider-btn,
+    #loginguestbtn {
+        align-items: center;
+        background: transparent;
+        border: 1.5px solid var(--ismos-text);
+        color: var(--ismos-text);
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        min-block-size: 44px;
+
+        &:hover {
+            background: var(--ismos-surface-raised);
+            color: var(--ismos-text);
+        }
+    }
+
+    .login-identityprovider-btn img {
+        block-size: 20px;
+        inline-size: 20px;
+    }
+
+    // Plex Mono hint for required fields.
+
+    .login-divider {
+        border-block-start: 1px solid var(--ismos-hairline);
+        margin-block: 16px;
+    }
+
+    // Divider before the identity providers: OR with hairlines on both sides.
+    .login-divider-or {
+        @include ismos-label;
+
+        align-items: center;
+        border: 0;
+        display: flex;
+        gap: 12px;
+
+        &::before,
+        &::after {
+            border-block-start: 1px solid var(--ismos-hairline);
+            content: "";
+            flex: 1;
+        }
+    }
+
+    h2.login-heading {
+        font-family: var(--ismos-font-sans);
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 24px;
+        margin: 0 0 8px;
+    }
+
+    .login-signup {
+        border-block-start: 1px solid var(--ismos-hairline);
+        margin-block-start: 16px;
+        padding-block-start: 16px;
+
+        a.btn.btn {
+            background: none;
+            border: 0;
+            color: var(--ismos-link);
+            font-size: 15px;
+            font-weight: 400;
+            padding: 0;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+
+            &:hover {
+                color: var(--ismos-link-hover);
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .login-form-forgotpassword a,
+    .login-instructions {
+        font-size: 15px;
+    }
+}
+
+// Moodle forms (signup, forgot password): one column, label above the field.
+.ismos-login__form .mform {
+    padding-inline: 0;
+
+    .fitem {
+        margin-inline: 0;
+
+        > [class*="col-"] {
+            flex: 0 0 100%;
+            margin-inline-start: 0;
+            max-inline-size: 100%;
+            padding-inline: 0;
+            width: 100%;
+        }
+
+        // Rows with an empty label column (hints, buttons) start flush at the inline start.
+        &.femptylabel > .col-form-label {
+            display: none;
+        }
+    }
+
+    .fitem .col-form-label {
+        align-items: baseline;
+        padding-block: 0;
+    }
+
+    // Required marker: Moodle's icon is replaced by its own translated title, as a Plex Mono label.
+    .form-label-addon .text-danger {
+        @include ismos-label;
+
+        color: var(--ismos-text-muted) !important; // stylelint-disable-line declaration-no-important
+
+        margin-inline-start: 8px;
+
+        &::after {
+            content: attr(title);
+        }
+
+        .icon {
+            display: none;
+        }
+    }
+
+    .felement {
+        gap: 0;
+    }
+
+    .form-control,
+    .form-select {
+        inline-size: 100%;
+    }
+
+    // Hints (password policy and similar static text): 13/20 muted under the field.
+    .femptylabel .form-control-static {
+        color: var(--ismos-text-muted);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 20px;
+    }
+
+    .invalid-feedback {
+        inline-size: 100%;
+        margin-block-start: 6px;
+    }
+
+    // Action rows: full width buttons, one per line.
+    [data-groupname="buttonar"] {
+        .fitem,
+        .d-flex {
+            inline-size: 100%;
+        }
+
+        .d-flex {
+            flex-direction: column;
+        }
+
+        .fitem {
+            margin-block-end: 12px !important; // stylelint-disable-line declaration-no-important
+        }
+
+        .btn {
+            inline-size: 100%;
+            min-block-size: 44px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1.5px solid var(--ismos-text);
+            color: var(--ismos-text);
+        }
+    }
+
+    // local_libreria's optional fields: a 44 px row between hairlines, a chevron that turns when open.
+    details {
+        border-block: 1px solid var(--ismos-hairline);
+        padding-block: 0;
+
+        &[open] {
+            padding-block-end: 16px;
+        }
+
+        > summary {
+            align-items: center;
+            cursor: pointer;
+            display: flex;
+            font-size: 15px;
+            font-weight: 600;
+            justify-content: space-between;
+            line-height: 24px;
+            list-style: none;
+            margin: 0 !important; // stylelint-disable-line declaration-no-important
+            min-block-size: 44px;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::after {
+                @include ismos-icon("chevron");
+
+                block-size: 20px;
+                inline-size: 20px;
+                transition: transform .15s;
+            }
+        }
+
+        &[open] > summary {
+            margin-block-end: 8px !important; // stylelint-disable-line declaration-no-important
+
+            &::after {
+                transform: rotate(180deg);
+            }
+        }
+
+        // The note: a Logwood panel.
+        .femptylabel .form-control-static {
+            background: var(--ismos-surface-raised);
+            color: var(--ismos-text);
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 24px;
+            padding: 12px 16px;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ismos-login__form .mform details > summary::after {
+        transition: none;
+    }
+}

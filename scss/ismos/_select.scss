@@ -1,0 +1,68 @@
+// Site-wide select styling: no native arrow, an Iconoir-style chevron drawn 12 px from the inline end.
+// Multi-selects and list boxes keep the native look. Moodle's RTL stylesheet pass does not mirror a
+// three-value background-position, so the `.dir-rtl` rule (kept as is by core_rtlcss) moves the
+// chevron to the left for Arabic and Hebrew: it stays on the inline end.
+
+// One data URI per mode: Logwood 800 on light grounds, Logwood 200 on dark ones.
+$ismos-chevron-light: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23544281' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E";
+$ismos-chevron-dark: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23DFD8FB' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E";
+
+select:not([multiple]):not([size]),
+select[size="1"]:not([multiple]) {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("#{$ismos-chevron-light}");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    cursor: pointer;
+    padding-inline-end: 44px;
+    text-overflow: ellipsis;
+
+    // Nothing chosen yet: the placeholder option reads as muted text.
+    &:invalid,
+    &:has(option[value=""]:checked) {
+        color: var(--ismos-text-muted);
+    }
+
+    option {
+        background: var(--ismos-input-bg);
+        color: var(--ismos-text);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+
+.dir-rtl select:not([multiple]):not([size]),
+.dir-rtl select[size="1"]:not([multiple]) {
+    background-position: left 12px center;
+}
+
+.ismos-mode-dark select:not([multiple]):not([size]),
+.ismos-mode-dark select[size="1"]:not([multiple]) {
+    background-image: url("#{$ismos-chevron-dark}");
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto select:not([multiple]):not([size]),
+    .ismos-mode-auto select[size="1"]:not([multiple]) {
+        background-image: url("#{$ismos-chevron-dark}");
+    }
+}
+
+// Same specificity as Bootstrap's invalid state, which sets its own icon.
+select.is-invalid:not([multiple]):not([size]) {
+    background-image: url("#{$ismos-chevron-light}");
+}
+
+.ismos-mode-dark select.is-invalid:not([multiple]):not([size]) {
+    background-image: url("#{$ismos-chevron-dark}");
+}
+
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto select.is-invalid:not([multiple]):not([size]) {
+        background-image: url("#{$ismos-chevron-dark}");
+    }
+}
