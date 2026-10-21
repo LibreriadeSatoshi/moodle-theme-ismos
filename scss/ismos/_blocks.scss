@@ -164,7 +164,7 @@
         grid-template-columns: minmax(0, 1fr) auto;
         margin-block-end: 0;
         margin-block-start: auto;
-        padding-block: 8px 0;
+        padding-block: 8px 20px;
 
         .card-footer {
             background: transparent !important; // stylelint-disable-line declaration-no-important
@@ -189,13 +189,14 @@
         line-height: 20px;
     }
 
-    // A 4 px track in Logwood 200, filled in Mauveine, across the card's full width.
+    // A 4 px track in Logwood 200, filled in Mauveine, under the text and inside the card's padding.
     .progress {
         background: var(--ismos-track);
         block-size: 4px;
+        border-radius: 2px;
         grid-column: 1 / -1;
         grid-row: 2;
-        margin-inline: -22px;
+        margin-block-start: 8px;
     }
 
     .progress-bar {

@@ -242,7 +242,7 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-mc__tools>\.flex-grow-1\{flex:00auto!important/', $flat);
         // The progress row: text and menu on one line, the 4 px track under it across the card.
         $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.ismos-ccard__foot\{[^}]*display:grid;gap:012px;grid-template-columns:minmax\(0,1fr\)auto/', $flat);
-        $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.progress\{background:var\(--ismos-track\);block-size:4px;grid-column:1\/-1;grid-row:2;margin-inline:-22px/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.progress\{background:var\(--ismos-track\);block-size:4px;border-radius:2px;grid-column:1\/-1;grid-row:2;margin-block-start:8px/', $flat);
     }
 
     /**
