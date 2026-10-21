@@ -288,6 +288,9 @@ final class login_layout_test extends \advanced_testcase {
     public function test_password_toggle_keeps_typed_value(): void {
         $layout = file_get_contents(__DIR__ . '/../templates/login.mustache');
         $this->assertStringContainsString("wrapper.appendChild(input)", $layout);
+        // A word, not an icon: "Show" / "Hide".
+        $this->assertStringContainsString('showshort, theme_ismos', $layout);
+        $this->assertStringContainsString('button.textContent = reveal ? hideShort : showShort', $layout);
         $this->assertStringNotContainsString('outerHTML', $layout);
         $this->assertStringContainsString('showpassword, theme_ismos', $layout);
         $this->assertStringNotContainsString('core/togglesensitive', file_get_contents(__DIR__ . '/../templates/core/loginform.mustache'));

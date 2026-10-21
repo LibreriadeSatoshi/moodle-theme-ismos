@@ -261,15 +261,19 @@ final class core_renderer_test extends \advanced_testcase {
                 ['name' => 'GitHub', 'url' => 'https://example.com/github'],
                 ['name' => 'Google', 'url' => 'https://example.com/google'],
             ]),
-            'nostr' => ['url' => $CFG->wwwroot . '/login/index.php', 'iconurl' => 'https://example.com/nostr.svg', 'label' => 'Nostr'],
+            'nostr' => ['url' => $CFG->wwwroot . '/login/index.php', 'iconurl' => 'https://example.com/nostr.svg',
+                'label' => 'Continue with Nostr'],
         ]);
         $this->assertStringContainsString('Create your account', $html);
         $this->assertStringContainsString('Already have an account?', $html);
         $this->assertStringContainsString($CFG->wwwroot . '/login/index.php">Log in</a>', $html);
         $this->assertStringContainsString('Continue with Google', $html);
-        // Google, then GitHub, then Nostr.
-        $this->assertLessThan(strpos($html, 'GitHub'), strpos($html, 'Continue with Google'));
-        $this->assertLessThan(strpos($html, 'Nostr'), strpos($html, 'GitHub'));
+        // Google (shown), then GitHub and Nostr as icons whose label is read out.
+        $this->assertLessThan(strpos($html, 'Continue with GitHub'), strpos($html, 'Continue with Google'));
+        $this->assertLessThan(strpos($html, 'Continue with Nostr'), strpos($html, 'Continue with GitHub'));
+        $this->assertStringContainsString('<span class="visually-hidden">Continue with GitHub</span>', $html);
+        $this->assertStringContainsString('<span class="visually-hidden">Continue with Nostr</span>', $html);
+        $this->assertStringNotContainsString('<span class="visually-hidden">Continue with Google</span>', $html);
         $this->assertStringContainsString('or with your email', $html);
         $this->assertLessThan(strpos($html, 'or with your email'), strpos($html, 'Already have an account?'));
 
@@ -292,7 +296,8 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertSame(['Google', 'Github Libreria', 'Moodle.net'], array_column($ordered, 'name'));
         $this->assertSame([true, false, false], array_column($ordered, 'primary'));
         $this->assertSame('Continue with Google', $ordered[0]['label']);
-        $this->assertSame('Github Libreria', $ordered[1]['label']);
+        // The other buttons show only their icon; the same label is read out.
+        $this->assertSame('Continue with Github Libreria', $ordered[1]['label']);
         $this->assertSame([], \theme_ismos\local\identity_providers::ordered([]));
     }
 

@@ -55,13 +55,16 @@ final class scss_test extends \advanced_testcase {
 
         // Login: the block cell stretches, its content is the sticky full-height part; Nostr like the other providers.
         $this->assertMatchesRegularExpression('/\.ismos-login__block-inner\{[^}]*block-size:100dvh[^}]*position:sticky/', $flat);
-        // Nostr has the markup of a provider button, so one rule styles all: 1.5 px text edge, no special case.
+        // Nostr has the markup of a provider button, so one rule styles all: 2 px text edge, no special case.
         $this->assertDoesNotMatchRegularExpression('/#auth-nostr-btn\.btn\{/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-login__form\.login-container\.login-identityprovider-btn,[^{]*\.login-identityproviders\.login-identityprovider-btn\{' .
-            '[^}]*border:1\.5pxsolidvar\(--ismos-text\)[^}]*font-size:15px/', $flat);
-        // Sign-in buttons: Google wide, the rest (Nostr moved into the row) two per row, Nostr's own "or" hidden.
-        $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\{[^}]*display:grid[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\.ismos-idp-primary\{grid-column:1\/-1/', $flat);
+            '[^}]*border:2pxsolidvar\(--ismos-text\)[^}]*font-size:15px/', $flat);
+        // Sign-in buttons: one row, Google wide, the rest (Nostr moved into the row) 48 px squares; Nostr's "or" hidden.
+        $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\{[^}]*display:flex[^}]*flex-wrap:wrap/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\.login-identityprovider-btn\{[^}]*flex:0048px/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\.ismos-idp-primary\{flex:110/', $flat);
+        // Fields: the design system's 2 px edge.
+        $this->assertMatchesRegularExpression('/\.ismos-login__form\.form-control:not\(\.is-invalid\),[^{]*\{border:2pxsolidvar\(--ismos-text\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\.auth-nostr-sep,[^{]*\{display:none/', $flat);
         $this->assertMatchesRegularExpression('/#page-login-signup\.ismos-login__form\.mform\[data-groupname="buttonar"\]#id_cancel\{display:none/', $flat);
 

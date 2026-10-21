@@ -249,7 +249,7 @@
     .login-container .login-identityproviders .login-identityprovider-btn {
         align-items: center;
         background: transparent;
-        border: 1.5px solid var(--ismos-text);
+        border: 2px solid var(--ismos-text);
         color: var(--ismos-text);
         display: flex;
         font-size: 15px;
@@ -342,20 +342,33 @@
     text-align: start;
 }
 
-// Sign-in buttons (login and signup): the first provider (Google) is wide, the rest share rows of two. On the login
-// page auth_nostr's button is moved into the slot by the login template, so it sits in the row too.
+// Sign-in buttons (login and signup): one row, "Continue with Google" wide, then the other providers as 48 px
+// square icon buttons (their label is read out, not shown). On the login page auth_nostr's button is moved into the
+// slot by the login template; the slot and its wrapper step aside so the button joins the row and its status line
+// wraps under it.
 .ismos-login__form .ismos-idps {
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     margin-block-end: 20px;
 
     .login-identityprovider-btn {
+        block-size: 48px;
+        flex: 0 0 48px;
+        inline-size: 48px;
         margin: 0 !important; // stylelint-disable-line declaration-no-important
+        padding: 0;
+
+        img {
+            block-size: 20px;
+            inline-size: 20px;
+        }
     }
 
     .ismos-idp-primary {
-        grid-column: 1 / -1;
+        flex: 1 1 0;
+        inline-size: auto;
+        padding-inline: 12px;
     }
 
     // Nothing to show (no providers, Nostr off): the row and the divider after it go.
@@ -367,13 +380,15 @@
         }
     }
 
-    .ismos-idp-slot:empty {
-        display: none;
+    .ismos-idp-slot,
+    .auth-nostr-wrapper {
+        display: contents;
     }
 
-    // auth_nostr's own "or" and spacing are not needed inside the row; its status line follows the button.
-    .auth-nostr-wrapper {
-        margin: 0 !important; // stylelint-disable-line declaration-no-important
+    // auth_nostr's button has the provider markup with its name as text: the icon shows, the name is read out.
+    #auth-nostr-btn {
+        font-size: 0;
+        gap: 0;
     }
 
     .auth-nostr-sep,
@@ -382,7 +397,8 @@
     }
 
     .auth-nostr-status {
-        margin-block-start: 6px;
+        flex-basis: 100%;
+        order: 1;
         text-align: start;
     }
 }
@@ -437,41 +453,47 @@
     text-align: start;
 }
 
-// Show/hide password (core's toggle, login and signup): the button joins the field on its right, in the field's
-// edge colour, instead of wrapping under it in the signup form's column.
+// Show/hide password (login and signup): an underlined "Show" inside the field, at its end. The field keeps its
+// full width and border; Bootstrap's invalid icon would sit under the word, so it is dropped (the error message
+// below the field carries the alert icon).
 .ismos-login__form .toggle-sensitive-wrapper {
-    flex-wrap: nowrap;
+    display: block;
     inline-size: 100%;
+    position: relative;
 
     .form-control {
-        flex: 1 1 auto;
-        min-inline-size: 0;
+        padding-inline-end: 96px;
     }
 
     .toggle-sensitive-btn.btn {
-        align-items: center;
-        background: var(--ismos-surface);
-        border: 1px solid var(--ismos-border-input);
-        border-inline-start: 0;
+        background: transparent;
+        block-size: 36px;
+        border: 0;
         color: var(--ismos-link);
-        display: flex;
-        justify-content: center;
-        min-inline-size: 48px;
+        font-size: 14px;
+        font-weight: 600;
+        inset-block-start: 6px;
+        inset-inline-end: 6px;
+        min-block-size: 0;
+        padding: 0 10px;
+        position: absolute;
+        text-decoration: underline;
+        text-underline-offset: 2px;
 
         &:hover {
-            background: var(--ismos-surface-raised);
             color: var(--ismos-link-hover);
         }
-
-        .icon {
-            margin: 0;
-        }
     }
+}
 
-    .form-control.is-invalid + .toggle-sensitive-btn {
-        border: 2px solid var(--ismos-alert);
-        border-inline-start: 0;
-    }
+.ismos-login__form .form-control.is-invalid {
+    background-image: none;
+}
+
+// Text fields on these pages: the design system's 2 px Ink edge (Paper in Hacker mode); errors keep the alert edge.
+.ismos-login__form .form-control:not(.is-invalid),
+.ismos-login__form .form-select:not(.is-invalid) {
+    border: 2px solid var(--ismos-text);
 }
 
 // Signup: once the password shows its own error, the policy hint under it would repeat it.
