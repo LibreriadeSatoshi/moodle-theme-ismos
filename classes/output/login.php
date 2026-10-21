@@ -25,7 +25,8 @@ namespace theme_ismos\output;
  */
 class login implements \renderable, \templatable {
     /**
-     * Export the block data. The signup page gets its own line and a lead.
+     * Export the block data. The signup page gets its own line and a lead, and the head of its form column: the
+     * sign-in buttons (as on the login page) and the link to log in instead.
      *
      * @param \renderer_base $output
      * @return array
@@ -33,7 +34,7 @@ class login implements \renderable, \templatable {
     public function export_for_template(\renderer_base $output): array {
         global $PAGE;
         $issignup = $PAGE->pagetype === 'login-signup';
-        return [
+        $data = [
             'line' => get_string($issignup ? 'signupline' : 'loginline', 'theme_ismos'),
             'haslead' => $issignup,
             'lead' => $issignup ? get_string('signuplead', 'theme_ismos') : '',
@@ -41,5 +42,18 @@ class login implements \renderable, \templatable {
             'wordmark' => get_string('wordmark', 'theme_ismos'),
             'issignup' => $issignup,
         ];
+        if ($issignup) {
+            $loginurl = (new \moodle_url('/login/index.php'))->out(false);
+            $data['loginurl'] = $loginurl;
+            $data['identityproviders'] = \theme_ismos\local\identity_providers::for_page($output);
+            // auth_nostr signs in (and creates the account) from the login page only, so here it links there.
+            $data['nostr'] = is_enabled_auth('nostr') ? [
+                'url' => $loginurl,
+                'iconurl' => $output->image_url('nostr', 'auth_nostr')->out(false),
+                'label' => get_string('provider_name', 'auth_nostr'),
+            ] : false;
+            $data['hasidentityproviders'] = !empty($data['identityproviders']) || !empty($data['nostr']);
+        }
+        return $data;
     }
 }

@@ -236,7 +236,7 @@ final class core_renderer_test extends \advanced_testcase {
         // The line sits directly under the heading, before any field.
         $this->assertLessThan(strpos($html, 'New here?'), strpos($html, '</h1>'));
         $this->assertLessThan(strpos($html, 'id="loginbtn"'), strpos($html, 'New here?'));
-        $this->assertStringContainsString('href="https://example.com/login/signup.php">Create an account</a>', $html);
+        $this->assertStringContainsString('href="https://example.com/login/signup.php">Create a free account</a>', $html);
         $this->assertStringNotContainsString('FIRSTTIME-INSTRUCTIONS', $html);
         $this->assertStringNotContainsString('login-instructions', $html);
 
@@ -246,14 +246,54 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
-     * The signup page has an "Already have an account? Log in" link.
+     * The signup page's head, drawn by the login layout above the form: heading, "Already have an account? Log
+     * in", the sign-in buttons with Google first, and the "or with your email" divider.
      */
-    public function test_signup_layout_login_link(): void {
-        global $CFG;
+    public function test_signup_layout_head(): void {
+        global $CFG, $PAGE;
         $out = $this->ismos_renderer();
-        $html = $out->render_from_template('core/signup_form_layout', ['formhtml' => '<form></form>']);
+        $html = $out->render_from_template('theme_ismos/login', [
+            'output' => $out,
+            'issignup' => true,
+            'loginurl' => $CFG->wwwroot . '/login/index.php',
+            'hasidentityproviders' => true,
+            'identityproviders' => \theme_ismos\local\identity_providers::ordered([
+                ['name' => 'GitHub', 'url' => 'https://example.com/github'],
+                ['name' => 'Google', 'url' => 'https://example.com/google'],
+            ]),
+            'nostr' => ['url' => $CFG->wwwroot . '/login/index.php', 'iconurl' => 'https://example.com/nostr.svg', 'label' => 'Nostr'],
+        ]);
+        $this->assertStringContainsString('Create your account', $html);
         $this->assertStringContainsString('Already have an account?', $html);
         $this->assertStringContainsString($CFG->wwwroot . '/login/index.php">Log in</a>', $html);
+        $this->assertStringContainsString('Continue with Google', $html);
+        // Google, then GitHub, then Nostr.
+        $this->assertLessThan(strpos($html, 'GitHub'), strpos($html, 'Continue with Google'));
+        $this->assertLessThan(strpos($html, 'Nostr'), strpos($html, 'GitHub'));
+        $this->assertStringContainsString('or with your email', $html);
+        $this->assertLessThan(strpos($html, 'or with your email'), strpos($html, 'Already have an account?'));
+
+        // The signup form template itself is only the form now.
+        $form = $out->render_from_template('core/signup_form_layout', ['formhtml' => '<form></form>']);
+        $this->assertStringNotContainsString('<h1', $form);
+        $this->assertStringContainsString('<form></form>', $form);
+    }
+
+    /**
+     * Sign-in buttons are ordered by use: Google first (wide, "Continue with Google"), then GitHub, then the rest.
+     */
+    public function test_identity_providers_are_ordered_by_use(): void {
+        $this->ismos_renderer();
+        $ordered = \theme_ismos\local\identity_providers::ordered([
+            ['name' => 'Moodle.net', 'url' => '#m'],
+            ['name' => 'Github Libreria', 'url' => '#gh'],
+            ['name' => 'Google', 'url' => '#g'],
+        ]);
+        $this->assertSame(['Google', 'Github Libreria', 'Moodle.net'], array_column($ordered, 'name'));
+        $this->assertSame([true, false, false], array_column($ordered, 'primary'));
+        $this->assertSame('Continue with Google', $ordered[0]['label']);
+        $this->assertSame('Github Libreria', $ordered[1]['label']);
+        $this->assertSame([], \theme_ismos\local\identity_providers::ordered([]));
     }
 
     /**

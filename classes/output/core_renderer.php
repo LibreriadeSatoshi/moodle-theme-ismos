@@ -64,6 +64,23 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * The login form, with the sign-in buttons in the order students use them (see identity_providers).
+     *
+     * @param \core_auth\output\login $form
+     * @return string
+     */
+    public function render_login(\core_auth\output\login $form) {
+        global $SITE;
+
+        $context = $form->export_for_template($this);
+        $context->errorformatted = $this->error_text($context->error);
+        $context->sitename = format_string($SITE->fullname, true,
+            ['context' => \context_course::instance(SITEID), 'escape' => false]);
+        $context->identityproviders = \theme_ismos\local\identity_providers::ordered($context->identityproviders);
+        return $this->render_from_template('core/loginform', $context);
+    }
+
+    /**
      * Returns the favicon: the theme's own SVG, not the shared core favicon setting.
      *
      * @return moodle_url

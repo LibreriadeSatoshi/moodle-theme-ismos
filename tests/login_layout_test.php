@@ -90,7 +90,7 @@ final class login_layout_test extends \advanced_testcase {
     public function test_spanish_strings_exist(): void {
         $string = [];
         require(__DIR__ . '/../lang/es/theme_ismos.php');
-        foreach (['loginline', 'signupline', 'signuplead', 'signupheading', 'loginor'] as $key) {
+        foreach (['loginline', 'signupline', 'signuplead', 'signupheading', 'loginwithemail', 'logintitle', 'continuewith'] as $key) {
             $this->assertNotEmpty($string[$key] ?? '', $key);
         }
     }
@@ -160,12 +160,11 @@ final class login_layout_test extends \advanced_testcase {
     }
 
     /**
-     * The signup heading is the theme's, not core's "New account".
+     * The signup form keeps no core heading ("New account"): the layout draws "Create your account" above it.
      */
     public function test_signup_heading_override(): void {
         $this->resetAfterTest();
         $html = $this->render('core/signup_form_layout', ['formhtml' => '<p>form</p>']);
-        $this->assertStringContainsString('Create your account', $html);
         $this->assertStringNotContainsString(get_string('newaccount'), $html);
         $this->assertStringContainsString('<p>form</p>', $html);
     }
@@ -221,10 +220,15 @@ final class login_layout_test extends \advanced_testcase {
         $this->resetAfterTest();
         $html = $this->render('core/loginform', [
             'sitename' => 'ISMOS',
+            'showloginform' => true,
             'hasidentityproviders' => true,
-            'identityproviders' => [['url' => '#', 'name' => 'Provider']],
+            'identityproviders' => [['url' => '#', 'name' => 'Provider', 'label' => 'Continue with Provider', 'primary' => true]],
         ]);
         $this->assertStringContainsString('login-divider-or', $html);
+        $this->assertStringContainsString('or with your email', $html);
+        // Buttons first, then the divider, then the email form.
+        $this->assertLessThan(strpos($html, 'login-divider-or'), strpos($html, 'Continue with Provider'));
+        $this->assertLessThan(strpos($html, 'id="login"'), strpos($html, 'login-divider-or'));
         $this->assertStringNotContainsString('role="separator"', $html);
     }
 
@@ -274,6 +278,18 @@ final class login_layout_test extends \advanced_testcase {
         $this->assertStringNotContainsString($logourl, $html);
         $this->assertStringNotContainsString('old-brand', $html);
         $this->assertStringNotContainsString('id="logoimage"', $html);
-        $this->assertSame(1, substr_count($html, '<h1 class="login-heading mb-4">'));
+        $this->assertSame(1, substr_count($html, '<h1 class="login-heading">'));
+    }
+
+    /**
+     * Show/hide password: the layout's script wraps every password field by moving it (so what was typed or
+     * autofilled survives), and the login form no longer asks core/togglesensitive, which re-renders the field.
+     */
+    public function test_password_toggle_keeps_typed_value(): void {
+        $layout = file_get_contents(__DIR__ . '/../templates/login.mustache');
+        $this->assertStringContainsString("wrapper.appendChild(input)", $layout);
+        $this->assertStringNotContainsString('outerHTML', $layout);
+        $this->assertStringContainsString('showpassword, theme_ismos', $layout);
+        $this->assertStringNotContainsString('core/togglesensitive', file_get_contents(__DIR__ . '/../templates/core/loginform.mustache'));
     }
 }

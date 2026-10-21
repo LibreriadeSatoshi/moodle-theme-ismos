@@ -19,9 +19,11 @@
 
     Moodle template for the login page.
 
-    ISMOS override of core/loginform: the divider before the identity providers is an OR label with hairlines,
-    the providers heading is kept for screen readers only, and the first-time instructions are replaced by one
-    "New here? Create an account" line. Everything else is as in core.
+    ISMOS override of core/loginform: the heading and one "New here? Create a free account" line, then the
+    sign-in buttons (Google first and wide, the rest side by side, the Nostr button moved into their row), an
+    "or with your email" divider, the email and password form with "Forgot it?" next to the password label (the
+    show/hide button is the login layout's), and guest access as a quiet text link. The site logo and the cookies notice are not
+    shown: the ISMOS layout carries the mark.
 
     Context variables required for this template:
     * autofocusform: Auto focus on form ?,
@@ -35,7 +37,7 @@
     * forgotpasswordurl - Forgot password url,
     * hasidentityproviders - Flag, set to true to hide identity providers,
     * hasinstructions - Flag, set to true to show instructions,
-    * identityproviders - List of identiy providers,
+    * identityproviders - List of identity providers, ordered, each with label and primary (theme renderer),
     * instructions - Instructions,
     * instructionsformat - Format of instructions,
     * loginurl - Login url,
@@ -105,11 +107,11 @@
 
 <div class="loginform">
     {{! The core site logo is deliberately not shown: the ISMOS login layout carries the mark and wordmark. }}
-    <h1 class="login-heading mb-4">{{#str}} loginto, core, {{sitename}} {{/str}}</h1>
+    <h1 class="login-heading">{{#str}} logintitle, theme_ismos {{/str}}</h1>
     {{#cansignup}}
         <p class="ismos-login-alt">
             {{#str}} newhere, theme_ismos {{/str}}
-            <a href="{{signupurl}}">{{#str}} createaccountlink, theme_ismos {{/str}}</a>
+            <a href="{{signupurl}}">{{#str}} createaccountfree, theme_ismos {{/str}}</a>
         </p>
     {{/cansignup}}
     {{#maintenance}}
@@ -123,32 +125,41 @@
     {{#info}}
         <div class="alert alert-info" id="logininfomessage" role="status">{{info}}</div>
     {{/info}}
+    <div class="ismos-idps" data-region="ismos-idps">
+        <h2 class="visually-hidden">{{#str}} potentialidps, auth {{/str}}</h2>
+        {{#identityproviders}}
+            <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}">
+                {{#iconurl}}
+                    <img src="{{iconurl}}" alt="" width="20" height="20">
+                {{/iconurl}}
+                {{label}}
+            </a>
+        {{/identityproviders}}
+        {{! auth_nostr injects its button after the login form; the script below moves it here, into the row. }}
+        <div class="ismos-idp-slot" data-region="ismos-nostr-slot"></div>
+    </div>
     {{#showloginform}}
+        <div class="login-divider-or ismos-login-or">{{#str}} loginwithemail, theme_ismos {{/str}}</div>
         <form class="login-form" action="{{loginurl}}" method="post" id="login">
             <input id="anchor" type="hidden" name="anchor" value="">
             <script>document.getElementById('anchor').value = location.hash;</script>
             <input type="hidden" name="logintoken" value="{{logintoken}}">
             <div class="login-form-username mb-3">
-                <label for="username" class="visually-hidden">
-                    {{^canloginbyemail}}
-                        {{#str}} username {{/str}}
-                    {{/canloginbyemail}}
-                    {{#canloginbyemail}}
-                        {{#str}} usernameemail {{/str}}
-                    {{/canloginbyemail}}
-                </label>
+                <label for="username">{{#str}} emaillabel, theme_ismos {{/str}}</label>
+                {{! Text, not email: older accounts still sign in with a username. }}
                 <input type="text" name="username" id="username" {{!
-                    !}}class="form-control form-control-lg" {{!
+                    !}}class="form-control" {{!
                     !}}value="{{username}}" {{!
-                    !}}placeholder="{{^canloginbyemail}}{{#cleanstr}}username{{/cleanstr}}{{/canloginbyemail}}{{!
-                    !}}{{#canloginbyemail}}{{#cleanstr}}usernameemail{{/cleanstr}}{{/canloginbyemail}}" {{!
+                    !}}inputmode="email" autocapitalize="none" spellcheck="false" {{!
                     !}}autocomplete="username">
             </div>
             <div class="login-form-password mb-3">
-                <label for="password" class="visually-hidden">{{#str}} password {{/str}}</label>
+                <div class="ismos-login-labelrow">
+                    <label for="password">{{#str}} password {{/str}}</label>
+                    <a href="{{forgotpasswordurl}}">{{#str}} forgotshort, theme_ismos {{/str}}</a>
+                </div>
                 <input type="password" name="password" id="password" value="" {{!
-                    !}}class="form-control form-control-lg" {{!
-                    !}}placeholder="{{#cleanstr}}password{{/cleanstr}}" {{!
+                    !}}class="form-control" {{!
                     !}}autocomplete="current-password">
             </div>
             {{#recaptcha}}
@@ -156,52 +167,25 @@
                     {{{recaptcha}}}
                 </div>
             {{/recaptcha}}
-            <div class="login-form-submit mb-3">
-                <button class="btn btn-primary btn-lg" type="submit" id="loginbtn">{{#str}}login{{/str}}</button>
-            </div>
-            <div class="login-form-forgotpassword mb-3">
-                <a href="{{forgotpasswordurl}}">{{#str}}forgotaccount{{/str}}</a>
+            <div class="login-form-submit">
+                <button class="btn btn-primary" type="submit" id="loginbtn">{{#str}} loginbutton, theme_ismos {{/str}}</button>
             </div>
         </form>
     {{/showloginform}}
-    {{#hasidentityproviders}}
-        <div class="login-divider login-divider-or">{{#str}} loginor, theme_ismos {{/str}}</div>
-        <div class="login-identityproviders">
-            <h2 class="login-heading visually-hidden">{{#str}} potentialidps, auth {{/str}}</h2>
-            {{#identityproviders}}
-                <a class="btn login-identityprovider-btn w-100 mt-3" href="{{url}}">
-                    {{#iconurl}}
-                        <img src="{{iconurl}}" alt="" width="24" height="24"/>
-                    {{/iconurl}}
-                    {{name}}
-                </a>
-            {{/identityproviders}}
-        </div>
-    {{/hasidentityproviders}}
     {{#canloginasguest}}
-        <div class="login-divider"></div>
-        <h2 class="login-heading">{{#str}}someallowguest{{/str}}</h2>
-        <form action="{{loginurl}}" method="post" id="guestlogin">
+        <form action="{{loginurl}}" method="post" id="guestlogin" class="ismos-login-guest">
             <input type="hidden" name="logintoken" value="{{logintoken}}">
-            <input type="hidden" name="username" value="guest" />
-            <input type="hidden" name="password" value="guest" />
-            <button class="btn btn-secondary" type="submit" id="loginguestbtn">{{#str}}loginguest{{/str}}</button>
+            <input type="hidden" name="username" value="guest">
+            <input type="hidden" name="password" value="guest">
+            {{#str}} guestprompt, theme_ismos {{/str}}
+            <button class="btn btn-link" type="submit" id="loginguestbtn">{{#str}} guestlink, theme_ismos {{/str}}</button>
         </form>
     {{/canloginasguest}}
-    <div class="login-divider"></div>
-    <div class="d-flex">
-        {{#languagemenu}}
-            <div class="login-languagemenu">
-                {{>core/action_menu}}
-            </div>
-            <div class="divider border-start align-self-center mx-3"></div>
-        {{/languagemenu}}
-        <button type="button" class="btn btn-secondary" {{!
-        }} data-modal="alert"{{!
-        }} data-modal-title-str='["cookiesenabled", "core"]' {{!
-        }} data-modal-content-str='["cookiesenabled_help_html", "core"]'{{!
-        }}>{{#str}}cookiesnotice{{/str}}</button>
-    </div>
+    {{#languagemenu}}
+        <div class="login-languagemenu">
+            {{>core/action_menu}}
+        </div>
+    {{/languagemenu}}
 </div>
 
 {{#js}}
@@ -246,11 +230,22 @@
             }, 500);
         }
     });
-    {{#togglepassword}}
-        require(['core/togglesensitive'], function(ToggleSensitive) {
-            ToggleSensitive.init("password", {{smallscreensonly}});
-        });
-    {{/togglepassword}}
+    {{! Move auth_nostr's button, injected after the login form, into the sign-in row so the reading order matches. }}
+    (function() {
+        const slot = document.querySelector('[data-region="ismos-nostr-slot"]');
+        const form = document.querySelector('.loginform');
+        if (!slot || !form) {
+            return;
+        }
+        const move = function() {
+            const nostr = form.querySelector(':scope > .auth-nostr-wrapper');
+            if (nostr) {
+                slot.appendChild(nostr);
+            }
+        };
+        move();
+        new MutationObserver(move).observe(form, {childList: true});
+    })();
     require(['core_form/submit'], function(Submit) {
         Submit.init("loginbtn");
         {{#canloginasguest}}

@@ -1,7 +1,8 @@
 {{!
     @template core/signup_form_layout
 
-    ISMOS override: the heading reads "Create your account" (theme string) instead of core's "New account".
+    ISMOS override: only the form. The heading ("Create your account"), the log-in link and the sign-in buttons
+    are drawn by the theme's login layout above it, so core's "New account" heading and logo are not shown.
 
     Example context (json):
     {
@@ -11,10 +12,6 @@
     }
 }}
 <div class="signupform">
-    <h1 class="login-heading">{{#str}} signupheading, theme_ismos {{/str}}</h1>
+    {{! The heading, the log-in link and the sign-in buttons are in the theme's login layout, above the form. }}
     {{{formhtml}}}
-    <p class="ismos-login-alt">
-        {{#str}} alreadyhaveaccount, theme_ismos {{/str}}
-        <a href="{{{config.wwwroot}}}/login/index.php">{{#str}} loginlink, theme_ismos {{/str}}</a>
-    </p>
 </div>
