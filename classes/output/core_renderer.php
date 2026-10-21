@@ -56,6 +56,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if (in_array($this->page->pagetype, ['course-index', 'course-index-category'], true)) {
             return '';
         }
+        if ($this->page->pagelayout === 'mycourses') {
+            // My courses has the catalogue's heading, and not core's title and its management buttons.
+            return $this->render_from_template('theme_ismos/mycourses_head', \theme_ismos\local\mycourses::export_header());
+        }
         return parent::full_header();
     }
 

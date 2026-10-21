@@ -54,14 +54,7 @@
     }
 }}
 <div class="ismos-catalogue">
-    <header class="ismos-catalogue__head">
-        <div class="ismos-catalogue__top">
-            <span class="ismos-label">{{label}}</span>
-            {{#canmanage}}<a class="ismos-catalogue__manage" href="{{{manageurl}}}">{{#str}}catalogmanage, theme_ismos{{/str}}</a>{{/canmanage}}
-        </div>
-        <h1>{{title}}</h1>
-        {{#haslead}}<p class="ismos-catalogue__lead">{{lead}}</p>{{/haslead}}
-    </header>
+    {{> theme_ismos/page_head}}
     <div class="ismos-catalogue__tools">
         {{#hastabs}}
             <nav class="ismos-catalogue__tabs" aria-label="{{#str}}catalogtabs, theme_ismos{{/str}}">

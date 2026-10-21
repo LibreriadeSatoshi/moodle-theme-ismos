@@ -226,6 +226,26 @@ final class scss_test extends \advanced_testcase {
     }
 
     /**
+     * My courses: the block without a frame, tabs from the block's links, quiet dropdowns, the progress row.
+     */
+    public function test_my_courses_rules(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $css = \theme_config::load('ismos')->get_css_content();
+        $flat = strtolower(preg_replace('/\s+/', '', $css));
+        $this->assertMatchesRegularExpression('/\.page-mycourses#page\.block_myoverview\.card\{background:(?:transparent|#fff0);border:0/', $flat);
+        $this->assertMatchesRegularExpression('/\.card-body>\.d-flex:first-child\{display:none!important/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mc__tabsa\.dropdown-item\{[^}]*border-block-end:2pxsolid(?:transparent|#fff0)[^}]*min-block-size:44px/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mc__tabsa\.dropdown-item\[aria-current="true"\],[^{]*\{[^}]*font-weight:600/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mc__tabs\{[^}]*overflow-x:auto/', $flat);
+        $this->assertMatchesRegularExpression('/\.btn\.ismos-mc__drop\{background:(?:transparent|#fff0);border:0/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mc__tools>\.flex-grow-1\{flex:00auto!important/', $flat);
+        // The progress row: text and menu on one line, the 4 px track under it across the card.
+        $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.ismos-ccard__foot\{[^}]*display:grid;gap:012px;grid-template-columns:minmax\(0,1fr\)auto/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.progress\{background:var\(--ismos-track\);block-size:4px;border-radius:2px;grid-column:1\/-1;grid-row:2;margin-block-start:8px/', $flat);
+    }
+
+    /**
      * The compiled CSS carries the tokens and self-hosted fonts, and none of the forbidden things.
      */
     public function test_compiled_css_contains_tokens_and_fonts(): void {

@@ -96,6 +96,10 @@ function theme_ismos_page_init(moodle_page $page): void {
         }
     }
     $page->add_body_class('ismos-mode-' . $mode);
+    // My courses is as wide as the catalogue.
+    if ($page->pagelayout === 'mycourses') {
+        $page->add_body_class('ismos-catalog');
+    }
 }
 
 /**

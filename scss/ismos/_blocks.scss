@@ -154,26 +154,29 @@
         color: var(--ismos-text-muted);
     }
 
-    // Progress and the actions menu on one row.
+    // Progress: "{n}% complete" and the actions menu on one line, the 4 px track under it across the card. The
+    // progress wrapper is dissolved so its text and track are cells of this grid.
     .ismos-ccard__foot {
         align-items: center;
-        gap: 12px;
+        border-block-start: 0;
+        display: grid;
+        gap: 0 12px;
+        grid-template-columns: minmax(0, 1fr) auto;
         margin-block-end: 0;
-        padding-block: 14px;
+        margin-block-start: auto;
+        padding-block: 8px 20px;
 
         .card-footer {
             background: transparent !important; // stylelint-disable-line declaration-no-important
             border: 0;
+            display: contents;
             padding: 0;
         }
 
-        .card-footer.w-100 {
-            flex: 1;
-            min-inline-size: 0;
-        }
-
         .card-footer.menu {
-            flex: none;
+            display: block;
+            grid-column: 2;
+            grid-row: 1;
             margin-inline-start: auto;
         }
     }
@@ -181,14 +184,19 @@
     .progress-text {
         color: var(--ismos-text-muted);
         font-size: 13px;
+        grid-column: 1;
+        grid-row: 1;
         line-height: 20px;
     }
 
-    // A 4 px track in Logwood 200, filled in Mauveine, full width.
+    // A 4 px track in Logwood 200, filled in Mauveine, under the text and inside the card's padding.
     .progress {
         background: var(--ismos-track);
         block-size: 4px;
-        margin-block-start: 6px;
+        border-radius: 2px;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin-block-start: 8px;
     }
 
     .progress-bar {

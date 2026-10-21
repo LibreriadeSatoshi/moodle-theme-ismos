@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_myoverview/nav-grouping-selector
+
+    ISMOS override: the grouping as underline tabs instead of a dropdown. The links keep core's data-filter, data-value
+    and data-pref, so the block's JavaScript filters the courses and saves the preference as before; the container has
+    data-show-active-item, so the page script keeps aria-current on the chosen tab. The groupings the admin enabled
+    are the ones shown; "Removed from view" comes last and quieter.
+
+    Example context (json):
+    {
+        "all": true,
+        "displaygroupingall": true,
+        "displaygroupinginprogress": true,
+        "displaygroupingfuture": true,
+        "displaygroupingpast": true,
+        "displaygroupingfavourites": true,
+        "displaygroupinghidden": true,
+        "displaygroupingselector": true
+    }
+}}
+{{#displaygroupingselector}}
+<nav class="ismos-catalogue__tabs ismos-mc__tabs" aria-label="{{#str}} aria:groupingdropdown, block_myoverview {{/str}}" data-show-active-item data-skip-active-class="true">
+{{#displaygroupingallincludinghidden}}
+    <a class="dropdown-item" href="#" data-filter="grouping" data-value="allincludinghidden" data-pref="allincludinghidden" aria-label="{{#str}} aria:allcoursesincludinghidden, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#allincludinghidden}}aria-current="true"{{/allincludinghidden}}>{{#str}} allincludinghidden, block_myoverview {{/str}}</a>
+{{/displaygroupingallincludinghidden}}
+{{#displaygroupingall}}
+    <a class="dropdown-item" href="#" data-filter="grouping" data-value="all" data-pref="all" aria-label="{{#str}} aria:allcourses, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#all}}aria-current="true"{{/all}}>{{#str}} all, block_myoverview {{/str}}</a>
+{{/displaygroupingall}}
+{{#displaygroupinginprogress}}
+    <a class="dropdown-item" href="#" data-filter="grouping" data-value="inprogress" data-pref="inprogress" aria-label="{{#str}} aria:inprogress, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#inprogress}}aria-current="true"{{/inprogress}}>{{#str}} inprogress, block_myoverview {{/str}}</a>
+{{/displaygroupinginprogress}}
+{{#displaygroupingfuture}}
+    <a class="dropdown-item" href="#" data-filter="grouping" data-value="future" data-pref="future" aria-label="{{#str}} aria:future, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#future}}aria-current="true"{{/future}}>{{#str}} future, block_myoverview {{/str}}</a>
+{{/displaygroupingfuture}}
+{{#displaygroupingpast}}
+    <a class="dropdown-item" href="#" data-filter="grouping" data-value="past" data-pref="past" aria-label="{{#str}} aria:past, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#past}}aria-current="true"{{/past}}>{{#str}} past, block_myoverview {{/str}}</a>
+{{/displaygroupingpast}}
+        {{#displaygroupingcustomfield}}
+            {{#customfieldvalues}}
+                
+                    <a class="dropdown-item" href="#" data-filter="grouping"
+                       data-value="customfield" data-pref="customfield" data-customfieldvalue="{{value}}"
+                       aria-label="{{#str}}aria:customfield, block_myoverview, {{name}}{{/str}}"
+                       aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#active}}aria-current="true"{{/active}}>
+                        {{name}}
+                    </a>
+                
+            {{/customfieldvalues}}
+        {{/displaygroupingcustomfield}}
+{{#displaygroupingfavourites}}
+    <a class="dropdown-item" href="#" data-filter="grouping" data-value="favourites" data-pref="favourites" aria-label="{{#str}} aria:favourites, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#favourites}}aria-current="true"{{/favourites}}>{{#str}} favourites, block_myoverview {{/str}}</a>
+{{/displaygroupingfavourites}}
+{{#displaygroupinghidden}}
+    <a class="dropdown-item ismos-mc__quiet" href="#" data-filter="grouping" data-value="hidden" data-pref="hidden" aria-label="{{#str}} aria:hiddencourses, block_myoverview {{/str}}" aria-controls="courses-view-{{uniqid}}" {{#hidden}}aria-current="true"{{/hidden}}>{{#str}} hiddencourses, block_myoverview {{/str}}</a>
+{{/displaygroupinghidden}}
+</nav>
+{{/displaygroupingselector}}
+{{^displaygroupingselector}}
+<div class="ismos-mc__tabs"></div>
+{{/displaygroupingselector}}
