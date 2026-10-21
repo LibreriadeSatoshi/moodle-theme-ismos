@@ -360,8 +360,10 @@
     }
 }
 
-// Dark mode toggle in the bar: icon only, 44 px target, no border. Moon while light, sun while dark.
-.navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+// Dark mode toggle in the bar (and on the login and signup pages): icon only, 44 px target, no border. Moon while
+// light, sun while dark.
+.navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"],
+.ismos-login__tools button.btn[data-action="theme_ismos/toggle-darkmode"] {
     align-items: center;
     background-color: transparent;
     border: 0;
@@ -402,7 +404,8 @@
 }
 
 // The icon shows the action: sun while dark (explicit, or auto with a dark device), moon otherwise.
-.ismos-mode-dark .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+.ismos-mode-dark .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"],
+.ismos-mode-dark .ismos-login__tools button.btn[data-action="theme_ismos/toggle-darkmode"] {
     .ismos-darkmode-icon-moon {
         display: none;
     }
@@ -413,7 +416,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .ismos-mode-auto .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"] {
+    .ismos-mode-auto .navbar.fixed-top.ismos-navbar button.btn[data-action="theme_ismos/toggle-darkmode"],
+    .ismos-mode-auto .ismos-login__tools button.btn[data-action="theme_ismos/toggle-darkmode"] {
         .ismos-darkmode-icon-moon {
             display: none;
         }

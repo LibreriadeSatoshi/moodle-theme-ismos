@@ -100,6 +100,18 @@
     padding: 48px 32px;
 }
 
+// The light/dark switch, top right of the form column.
+.ismos-login__tools {
+    display: flex;
+    inline-size: 100%;
+    justify-content: flex-end;
+    margin-block: -32px 0;
+
+    @media (max-width: 767px) {
+        margin-block: -12px 0;
+    }
+}
+
 // Footer output (site policies, support contact, doc link): a quiet muted strip under the form.
 .ismos-login__footer {
     color: var(--ismos-text-muted);
@@ -342,33 +354,20 @@
     text-align: start;
 }
 
-// Sign-in buttons (login and signup): one row, "Continue with Google" wide, then the other providers as 48 px
-// square icon buttons (their label is read out, not shown). On the login page auth_nostr's button is moved into the
-// slot by the login template; the slot and its wrapper step aside so the button joins the row and its status line
-// wraps under it.
+// Sign-in buttons (login and signup): the first provider (Google) is wide, the rest share rows of two. On the login
+// page auth_nostr's button is moved into the slot by the login template, so it sits in the row too.
 .ismos-login__form .ismos-idps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-block-end: 20px;
 
     .login-identityprovider-btn {
-        block-size: 48px;
-        flex: 0 0 48px;
-        inline-size: 48px;
         margin: 0 !important; // stylelint-disable-line declaration-no-important
-        padding: 0;
-
-        img {
-            block-size: 20px;
-            inline-size: 20px;
-        }
     }
 
     .ismos-idp-primary {
-        flex: 1 1 0;
-        inline-size: auto;
-        padding-inline: 12px;
+        grid-column: 1 / -1;
     }
 
     // Nothing to show (no providers, Nostr off): the row and the divider after it go.
@@ -380,15 +379,13 @@
         }
     }
 
-    .ismos-idp-slot,
-    .auth-nostr-wrapper {
-        display: contents;
+    .ismos-idp-slot:empty {
+        display: none;
     }
 
-    // auth_nostr's button has the provider markup with its name as text: the icon shows, the name is read out.
-    #auth-nostr-btn {
-        font-size: 0;
-        gap: 0;
+    // auth_nostr's own "or" and spacing are not needed inside the row; its status line follows the button.
+    .auth-nostr-wrapper {
+        margin: 0 !important; // stylelint-disable-line declaration-no-important
     }
 
     .auth-nostr-sep,
@@ -397,8 +394,7 @@
     }
 
     .auth-nostr-status {
-        flex-basis: 100%;
-        order: 1;
+        margin-block-start: 6px;
         text-align: start;
     }
 }
