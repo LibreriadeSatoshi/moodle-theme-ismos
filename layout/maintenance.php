@@ -38,6 +38,18 @@ $templatecontext = [
 
 // The maintenance message page gets its own calm layout; other pages on this layout (installation, upgrade
 // progress) keep the core content. Nothing here may touch the database.
+if ($PAGE->pagetype === 'maintenance-message' && !empty($PAGE->theme->settings->neutralmaintenance)) {
+    // While the brand must stay hidden, the message page is a plain notice that names no one.
+    echo $OUTPUT->render_from_template('theme_ismos/maintenance_neutral', [
+        'output' => $OUTPUT,
+        'title' => get_string('maintenanceneutraltitle', 'theme_ismos'),
+        'label' => get_string('maintenancelabel', 'theme_ismos'),
+        'heading' => get_string('maintenanceheading', 'theme_ismos'),
+        'message' => get_string('maintenanceneutralmessage', 'theme_ismos'),
+    ]);
+    return;
+}
+
 if ($PAGE->pagetype === 'maintenance-message') {
     $templatecontext['ismaintenance'] = true;
     $templatecontext['label'] = get_string('maintenancelabel', 'theme_ismos');

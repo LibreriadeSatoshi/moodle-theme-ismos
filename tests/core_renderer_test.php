@@ -271,6 +271,25 @@ final class core_renderer_test extends \advanced_testcase {
     }
 
     /**
+     * The neutral maintenance page names no brand and loads nothing from the site, but keeps core's content token.
+     */
+    public function test_neutral_maintenance_page_names_no_brand(): void {
+        $out = $this->ismos_renderer();
+        $html = $out->render_from_template('theme_ismos/maintenance_neutral', [
+            'output' => $out,
+            'title' => get_string('maintenanceneutraltitle', 'theme_ismos'),
+            'label' => get_string('maintenancelabel', 'theme_ismos'),
+            'heading' => get_string('maintenanceheading', 'theme_ismos'),
+            'message' => get_string('maintenanceneutralmessage', 'theme_ismos'),
+        ]);
+        $this->assertStringContainsString('<title>Site under maintenance</title>', $html);
+        $this->assertStringContainsString('We are making improvements to the site.', $html);
+        $this->assertStringContainsString('<meta name="robots" content="noindex, nofollow">', $html);
+        $this->assertStringNotContainsStringIgnoringCase('ismos', $html);
+        $this->assertDoesNotMatchRegularExpression('/<(img|svg|script|link)\b/i', $html);
+    }
+
+    /**
      * The maintenance page has the label, the heading, the message and the questions line.
      */
     public function test_maintenance_message_page(): void {

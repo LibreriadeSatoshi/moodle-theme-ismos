@@ -41,4 +41,14 @@ if ($ADMIN->fulltree) {
     );
     $page->add($setting);
     $settings->add($page);
+
+    $page = new admin_settingpage('theme_ismos_maintenance', get_string('maintenancesettings', 'theme_ismos'));
+    $setting = new admin_setting_configcheckbox(
+        'theme_ismos/neutralmaintenance',
+        get_string('maintenanceneutral', 'theme_ismos'),
+        get_string('maintenanceneutral_desc', 'theme_ismos'),
+        0
+    );
+    $page->add($setting);
+    $settings->add($page);
 }
