@@ -85,15 +85,16 @@
                                             <div class="ismos-idps">
                                                 <h2 class="visually-hidden">{{#str}} potentialidps, auth {{/str}}</h2>
                                                 {{#identityproviders}}
-                                                    <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}">
+                                                    <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}"{{^primary}} title="{{label}}"{{/primary}}>
                                                         {{#iconurl}}<img src="{{iconurl}}" alt="" width="20" height="20">{{/iconurl}}
-                                                        {{label}}
+                                                        {{#primary}}{{label}}{{/primary}}
+                                                        {{^primary}}<span class="visually-hidden">{{label}}</span>{{/primary}}
                                                     </a>
                                                 {{/identityproviders}}
                                                 {{#nostr}}
-                                                    <a class="btn login-identityprovider-btn" href="{{url}}">
+                                                    <a class="btn login-identityprovider-btn" href="{{url}}" title="{{label}}">
                                                         <img src="{{iconurl}}" alt="" width="20" height="20">
-                                                        {{label}}
+                                                        <span class="visually-hidden">{{label}}</span>
                                                     </a>
                                                 {{/nostr}}
                                             </div>
@@ -132,18 +133,14 @@
 (function() {
     var show = {{#quote}}{{#str}} showpassword, theme_ismos {{/str}}{{/quote}};
     var hide = {{#quote}}{{#str}} hidepassword, theme_ismos {{/str}}{{/quote}};
-    var eye = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
-        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7' +
-        '-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
-    var eyeOff = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
-        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7' +
-        '-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18"/></svg>';
+    var showShort = {{#quote}}{{#str}} showshort, theme_ismos {{/str}}{{/quote}};
+    var hideShort = {{#quote}}{{#str}} hideshort, theme_ismos {{/str}}{{/quote}};
     document.querySelectorAll('.ismos-login__form input[type="password"]').forEach(function(input) {
         if (!input.id || input.closest('.toggle-sensitive-wrapper')) {
             return;
         }
         var wrapper = document.createElement('div');
-        wrapper.className = 'toggle-sensitive-wrapper input-group';
+        wrapper.className = 'toggle-sensitive-wrapper';
         input.parentNode.insertBefore(wrapper, input);
         wrapper.appendChild(input);
         var button = document.createElement('button');
@@ -151,12 +148,12 @@
         button.className = 'toggle-sensitive-btn btn';
         button.setAttribute('aria-controls', input.id);
         button.setAttribute('aria-label', show);
-        button.innerHTML = eye;
+        button.textContent = showShort;
         button.addEventListener('click', function() {
             var reveal = input.type === 'password';
             input.type = reveal ? 'text' : 'password';
             button.setAttribute('aria-label', reveal ? hide : show);
-            button.innerHTML = reveal ? eyeOff : eye;
+            button.textContent = reveal ? hideShort : showShort;
         });
         wrapper.appendChild(button);
     });

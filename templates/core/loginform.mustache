@@ -19,8 +19,8 @@
 
     Moodle template for the login page.
 
-    ISMOS override of core/loginform: the heading and one "New here? Create a free account" line, then the
-    sign-in buttons (Google first and wide, the rest side by side, the Nostr button moved into their row), an
+    ISMOS override of core/loginform: the heading and one "New here? Create a free account" line, then one row
+    of sign-in buttons ("Continue with Google", then GitHub and the moved Nostr button as square icons), an
     "or with your email" divider, the email and password form with "Forgot it?" next to the password label (the
     show/hide button is the login layout's), and guest access as a quiet text link. The site logo and the cookies notice are not
     shown: the ISMOS layout carries the mark.
@@ -128,11 +128,12 @@
     <div class="ismos-idps" data-region="ismos-idps">
         <h2 class="visually-hidden">{{#str}} potentialidps, auth {{/str}}</h2>
         {{#identityproviders}}
-            <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}">
+            <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}"{{^primary}} title="{{label}}"{{/primary}}>
                 {{#iconurl}}
                     <img src="{{iconurl}}" alt="" width="20" height="20">
                 {{/iconurl}}
-                {{label}}
+                {{#primary}}{{label}}{{/primary}}
+                {{^primary}}<span class="visually-hidden">{{label}}</span>{{/primary}}
             </a>
         {{/identityproviders}}
         {{! auth_nostr injects its button after the login form; the script below moves it here, into the row. }}
