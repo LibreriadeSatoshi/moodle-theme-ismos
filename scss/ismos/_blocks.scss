@@ -239,20 +239,27 @@
     }
 }
 
-// List and summary views: the generated pattern is not a cover. Hidden, and its column goes with it.
+// List and summary views: the generated pattern is not a cover. Like the cards, a course without an image shows the
+// raised ground with the ISMOS mark, so every row keeps the same image column.
 .block_myoverview {
     .list-image[style*="data:image"],
     .summary-image[style*="data:image"] {
-        display: none;
+        background: var(--ismos-surface-raised) url([[pix:theme_ismos|ismos-mark-ink]]) center / 28px no-repeat !important; // stylelint-disable-line declaration-no-important
     }
+}
 
-    .col-md-2:has(> a > :is(.list-image, .summary-image)[style*="data:image"]) {
-        display: none;
+.ismos-mode-dark .block_myoverview {
+    .list-image[style*="data:image"],
+    .summary-image[style*="data:image"] {
+        background-image: url([[pix:theme_ismos|ismos-mark-paper]]) !important; // stylelint-disable-line declaration-no-important
     }
+}
 
-    .col-md-2:has(> a > :is(.list-image, .summary-image)[style*="data:image"]) + .col-md-10 {
-        flex: 0 0 100%;
-        max-inline-size: 100%;
-        inline-size: 100%;
+@media (prefers-color-scheme: dark) {
+    .ismos-mode-auto .block_myoverview {
+        .list-image[style*="data:image"],
+        .summary-image[style*="data:image"] {
+            background-image: url([[pix:theme_ismos|ismos-mark-paper]]) !important; // stylelint-disable-line declaration-no-important
+        }
     }
 }

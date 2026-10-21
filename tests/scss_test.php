@@ -126,9 +126,11 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar:focus:not\(:focus-visible\)\{box-shadow:none;outline:0/', $flat);
         $this->assertMatchesRegularExpression('/#page\.block\.card>\.card-body\{padding:24px!important/', $flat);
         $this->assertMatchesRegularExpression('/#page\.block_myoverview\.block-cards\{border-block-start:0/', $flat);
-        // List and summary views hide the generated pattern and its column; light card footers follow the mode.
-        $this->assertMatchesRegularExpression('/\.block_myoverview\.list-image\[style\*="data:image"\],\.block_myoverview\.summary-image\[style\*="data:image"\]\{display:none/', $flat);
-        $this->assertMatchesRegularExpression('/\.col-md-2:has\(>a>:is\(\.list-image,\.summary-image\)\[style\*="data:image"\]\)\{display:none/', $flat);
+        // List and summary views replace the generated pattern with the mark on the raised ground, like the cards.
+        $this->assertMatchesRegularExpression('/\.block_myoverview\.list-image\[style\*="data:image"\],\.block_myoverview\.summary-image\[style\*="data:image"\]\{' .
+            'background:var\(--ismos-surface-raised\)url\([^)]*ismos-mark-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.block_myoverview\.list-image\[style\*="data:image"\][^{]*\{background-image:url\([^)]*ismos-mark-paper\)/', $flat);
+        // Light card footers follow the mode.
         $this->assertMatchesRegularExpression('/\.card-footer\.bg-white\{background-color:var\(--ismos-surface-raised\)!important/', $flat);
         // An empty card foot takes no space; the placeholder has the cover ratio.
         $this->assertMatchesRegularExpression('/\.block\.card-img-top\.bg-pulse-grey\{aspect-ratio:(?:16\/9|1\.7777777778);block-size:auto!important/', $flat);
