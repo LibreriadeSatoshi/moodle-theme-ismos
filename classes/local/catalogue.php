@@ -122,6 +122,26 @@ final class catalogue {
     }
 
     /**
+     * The cover image of each course: the first image in its overview files, as core finds it. Core keeps the answer in
+     * its course_image cache, so one call reads all of them.
+     *
+     * @param int[] $courseids
+     * @return string[] image URL by course id; courses without an image are left out
+     */
+    private function get_images(array $courseids): array {
+        if (!$courseids) {
+            return [];
+        }
+        $images = [];
+        foreach (\cache::make('core', 'course_image')->get_many($courseids) as $id => $path) {
+            if (is_string($path) && $path !== '') {
+                $images[(int) $id] = (new \moodle_url($path))->out(false);
+            }
+        }
+        return $images;
+    }
+
+    /**
      * A plain text excerpt of formatted text.
      *
      * @param string $text
@@ -165,6 +185,7 @@ final class catalogue {
         $courses = $this->get_courses();
         $counts = $this->get_enrolled_counts();
         $teachers = $this->get_teachers();
+        $images = $this->get_images(array_keys($courses));
 
         // Levels: visible top-level categories with at least one visible course.
         $bylevel = [];
@@ -210,7 +231,7 @@ final class catalogue {
             }
             $cards = [];
             foreach ($this->order($pool) as $course) {
-                $cards[] = $this->card($course, $counts, $teachers);
+                $cards[] = $this->card($course, $counts, $teachers, $images);
             }
             // On the level's own page the description is the lead under the title; it is not repeated.
             $description = ($selected && (int) $selected->id === (int) $cat->id) ? '' :
@@ -275,9 +296,10 @@ final class catalogue {
      * @param \stdClass $course
      * @param int[] $counts enrolments by course id
      * @param \stdClass[] $teachers first contact by course id
+     * @param string[] $images cover image URL by course id
      * @return array
      */
-    private function card(\stdClass $course, array $counts, array $teachers): array {
+    private function card(\stdClass $course, array $counts, array $teachers, array $images): array {
         global $PAGE;
         $context = \context_course::instance($course->id);
         $upcoming = (int) $course->startdate >= $this->today;
@@ -298,9 +320,12 @@ final class catalogue {
             $teacher = ['name' => $name, 'initials' => self::initials($name), 'picture' => $picture, 'haspicture' => $picture !== null];
         }
         $enrolled = $counts[(int) $course->id] ?? 0;
+        $image = $images[(int) $course->id] ?? '';
         $code = landing::language_code((string) $course->lang);
         return [
             'url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
+            'image' => $image,
+            'hasimage' => $image !== '',
             'name' => format_string($course->fullname, true, ['context' => $context, 'escape' => false]),
             'summary' => $this->excerpt((string) $course->summary, (int) $course->summaryformat, $context, self::EXCERPT),
             'when' => $when,

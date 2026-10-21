@@ -1,0 +1,157 @@
+// The ISMOS course card, shared by the catalogue (.ismos-ccard on a link) and the My courses block (.course-card.ismos-ccard
+// from the core_course/coursecard override): a 16:9 picture, then the body. One partial, so the two cannot drift.
+
+.ismos-ccard {
+    background: var(--ismos-card-bg);
+    border: 1px solid var(--ismos-hairline);
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--ismos-text);
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+    overflow: hidden; // The picture is clipped to the top corners.
+    padding: 0;
+    text-decoration: none;
+    transition: border-color .15s;
+
+    &:hover,
+    &:focus-within {
+        border-color: var(--ismos-text);
+        color: var(--ismos-text);
+        text-decoration: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
+// Past courses: a raised ground and no edge. The picture is shown as it is.
+.ismos-ccard--past {
+    background: var(--ismos-surface-raised);
+    border-color: transparent;
+}
+
+// The picture: one 16:9 frame, cropped to cover, no tint. Without one the frame stays, raised, with the mark.
+.ismos-ccard__image {
+    align-items: center;
+    aspect-ratio: 16 / 9;
+    background: var(--ismos-surface-raised);
+    color: var(--ismos-text-muted);
+    display: flex;
+    flex: none;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.ismos-ccard__mark {
+    block-size: 32px;
+    inline-size: 32px;
+}
+
+// An img (catalogue) or a div with a background image (My courses): both cover the frame. Moodle's generated
+// pattern is a data URI: it is not a picture, so it is hidden and the mark shows.
+.ismos-ccard__photo {
+    background-position: center;
+    background-size: cover;
+    block-size: 100%;
+    display: block;
+    inline-size: 100%;
+    inset: 0;
+    object-fit: cover;
+    position: absolute;
+
+    &[style*="data:image"] {
+        display: none;
+    }
+}
+
+.ismos-ccard__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+}
+
+.ismos-ccard__top {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.ismos-ccard__when {
+    @include ismos-label;
+
+    align-items: center;
+    color: var(--ismos-text-muted);
+    display: flex;
+    gap: 8px;
+}
+
+.ismos-ccard__when--open {
+    color: var(--ismos-text);
+
+    &::before {
+        background: var(--ismos-madder);
+        block-size: 8px;
+        border-radius: 50%;
+        content: "";
+        inline-size: 8px;
+    }
+}
+
+.ismos-ccard__title {
+    color: var(--ismos-text-heading);
+    font-family: var(--ismos-font-serif);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 28px;
+    margin-block-start: 4px;
+    overflow-wrap: anywhere;
+}
+
+.ismos-ccard__text {
+    -webkit-box-orient: vertical;
+    color: var(--ismos-text-muted);
+    display: -webkit-box;
+    font-size: 14px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    line-height: 22px;
+    overflow: hidden;
+}
+
+.ismos-ccard__foot {
+    align-items: center;
+    border-block-start: 1px solid var(--ismos-hairline);
+    color: var(--ismos-text-muted);
+    display: flex;
+    font-size: 13px;
+    gap: 10px;
+    margin-block-start: auto;
+    padding-block-start: 14px;
+}
+
+.ismos-ccard__avatar {
+    align-items: center;
+    background: var(--ismos-track);
+    block-size: 28px;
+    border-radius: 50%;
+    color: var(--ismos-text);
+    display: inline-flex;
+    flex: none;
+    font-size: 11px;
+    font-weight: 600;
+    inline-size: 28px;
+    justify-content: center;
+    object-fit: cover;
+}
+
+.ismos-ccard__enrolled {
+    margin-inline-start: auto;
+}

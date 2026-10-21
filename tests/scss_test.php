@@ -94,11 +94,8 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.block\.card>\.card-body>\.d-flex:has\(>\.card-title\)\{border-block-end:1pxsolidvar\(--ismos-hairline\)/', $flat);
         $this->assertMatchesRegularExpression('/\.block\.card>\.card-body>\.d-flex>\.card-title\{[^}]*font-family:var\(--ismos-font-serif\)/', $flat);
         $this->assertMatchesRegularExpression('/\[data-region="filter"\]\.btn,[^{]*\{[^}]*border:1pxsolidvar\(--ismos-border-input\)/', $flat);
-        // Course cards: edge, radius, no generated pattern, a bar, no box on the actions button.
-        $this->assertMatchesRegularExpression('/\.course-card\.card\{[^}]*border:1pxsolidvar\(--ismos-hairline\);border-radius:4px;box-shadow:none/', $flat);
-        $this->assertMatchesRegularExpression('/\.course-card\.card\.card-img-top\[style\*="data:image"\]\{display:none/', $flat);
-        $this->assertMatchesRegularExpression('/\.course-card\.card\.ismos-course-card__bar\{[^}]*height:6px;width:32px/', $flat);
-        $this->assertMatchesRegularExpression('/\.course-card\.card\.coursemenubtn\{[^}]*background:#fff0;border:0[^}]*min-block-size:44px;min-inline-size:44px/', $flat);
+        // The actions button of a course card: no box, the icon in the text colour, a 44 px target.
+        $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.coursemenubtn\{[^}]*background:#fff0;border:0[^}]*min-block-size:44px;min-inline-size:44px/', $flat);
         // Secondary and tertiary tabs: no box, a hairline underline on hover, a current underline.
         $this->assertMatchesRegularExpression('/:is\(\.secondary-navigation,\.tertiary-navigation\)\.moremenu\.nav-link:hover,[^{]*\{' .
             'background-color:(?:transparent|#fff0)!important;color:var\(--ismos-text\);text-decoration:underline2px;' .
@@ -129,13 +126,14 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.navbar\.fixed-top\.ismos-navbar:focus:not\(:focus-visible\)\{box-shadow:none;outline:0/', $flat);
         $this->assertMatchesRegularExpression('/#page\.block\.card>\.card-body\{padding:24px!important/', $flat);
         $this->assertMatchesRegularExpression('/#page\.block_myoverview\.block-cards\{border-block-start:0/', $flat);
-        // List and summary views hide the generated pattern and its column; light card footers follow the mode.
-        $this->assertMatchesRegularExpression('/\.block_myoverview\.list-image\[style\*="data:image"\],\.block_myoverview\.summary-image\[style\*="data:image"\]\{display:none/', $flat);
-        $this->assertMatchesRegularExpression('/\.col-md-2:has\(>a>:is\(\.list-image,\.summary-image\)\[style\*="data:image"\]\)\{display:none/', $flat);
+        // List and summary views replace the generated pattern with the mark on the raised ground, like the cards.
+        $this->assertMatchesRegularExpression('/\.block_myoverview\.list-image\[style\*="data:image"\],\.block_myoverview\.summary-image\[style\*="data:image"\]\{' .
+            'background:var\(--ismos-surface-raised\)url\([^)]*ismos-mark-ink\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-mode-dark\.block_myoverview\.list-image\[style\*="data:image"\][^{]*\{background-image:url\([^)]*ismos-mark-paper\)/', $flat);
+        // Light card footers follow the mode.
         $this->assertMatchesRegularExpression('/\.card-footer\.bg-white\{background-color:var\(--ismos-surface-raised\)!important/', $flat);
         // An empty card foot takes no space; the placeholder has the cover ratio.
-        $this->assertMatchesRegularExpression('/\.ismos-course-card__foot>\*\{padding:0[^}]*16px\}/', $flat);
-        $this->assertMatchesRegularExpression('/\.card-img-top\.bg-pulse-grey\{aspect-ratio:(?:16\/9|1\.7777777778);block-size:auto!important/', $flat);
+        $this->assertMatchesRegularExpression('/\.block\.card-img-top\.bg-pulse-grey\{aspect-ratio:(?:16\/9|1\.7777777778);block-size:auto!important/', $flat);
         // Action icons: not inside buttons, state icons exempt.
         $this->assertMatchesRegularExpression('/\.icon\.fa:not\(\.text-success,\.text-danger,\.text-warning,\.text-info,\.fa-check,\.fa-circle-check,\.fa-xmark,\.fa-circle-xmark\)\{color:var\(--ismos-text-muted\)/', $flat);
         $this->assertMatchesRegularExpression('/\.btn\.icon\.fa\{color:inherit!important/', $flat);
@@ -205,6 +203,26 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-ill-room\{background:var\(--ismos-ink\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-ill-cert__seal\{[^}]*background:var\(--ismos-mauveine\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-step__n\{color:var\(--ismos-bar\);font-family:var\(--ismos-font-mono\)/', $flat);
+    }
+
+    /**
+     * The shared course card: a 16:9 picture frame, the placeholder, one body, and the My courses grid.
+     */
+    public function test_shared_course_card_rules(): void {
+        $this->resetAfterTest();
+        theme_reset_all_caches();
+        $css = \theme_config::load('ismos')->get_css_content();
+        $flat = strtolower(preg_replace('/\s+/', '', $css));
+        $this->assertMatchesRegularExpression('/\.ismos-ccard\{[^}]*border-radius:8px[^}]*overflow:hidden;padding:0/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ccard__image\{[^}]*aspect-ratio:(?:16\/9|1\.7777777778);background:var\(--ismos-surface-raised\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ccard__mark\{block-size:32px;inline-size:32px/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ccard__photo\{[^}]*object-fit:cover[^}]*position:absolute/', $flat);
+        $this->assertStringContainsString('.ismos-ccard__photo[style*="data:image"]{display:none', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-ccard__title\{[^}]*font-family:var\(--ismos-font-serif\);font-size:21px[^}]*line-height:28px/', $flat);
+        // The cards of the overview block: 20 px apart, up to three columns, one height per row.
+        $this->assertMatchesRegularExpression('/\.block\[data-region="card-deck"\]\{display:grid!important;gap:20px/', $flat);
+        $this->assertMatchesRegularExpression('/\.course-card\.ismos-ccard\.progress\{background:var\(--ismos-track\);block-size:4px/', $flat);
+        $this->assertDoesNotMatchRegularExpression('/ismos-course-card__bar/', $flat);
     }
 
     /**

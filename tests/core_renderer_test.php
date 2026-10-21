@@ -353,8 +353,20 @@ final class core_renderer_test extends \advanced_testcase {
         $this->assertStringContainsString('data-region="course-content"', $html);
         $this->assertStringContainsString('data-course-id="7"', $html);
         $this->assertStringContainsString('data-region="is-favourite"', $html);
-        $this->assertStringContainsString('ismos-course-card__bar', $html);
-        $this->assertStringNotContainsString('data:image', $html);
+        // The same card as the catalogue: a 16:9 frame with the mark behind the picture, then the body. No short bar.
+        $this->assertStringContainsString('class="card course-card ismos-ccard"', $html);
+        $this->assertStringContainsString('class="ismos-ccard__image" aria-hidden="true"', $html);
+        $this->assertStringContainsString('class="ismos-ccard__mark"', $html);
+        $this->assertStringContainsString('class="ismos-ccard__photo" style=\'background-image: url("https://example.com/pluginfile.php/1/course/overviewfiles/a.jpg");\'', $html);
+        $this->assertStringNotContainsString('ismos-course-card__bar', $html);
+        $this->assertStringNotContainsString('card-img-top', $html);
+        // A visible course has no "hidden from students" label; a hidden one gets the hairline chip, not the teal badge.
+        $this->assertStringNotContainsString('ismos-ccard__hidden', $html);
+        $hidden = $out->render_from_template('core_course/coursecard', [
+            'id' => 8, 'uniqid' => 'u2', 'viewurl' => '#', 'courseimage' => 'x', 'fullname' => 'Hidden one', 'visible' => false,
+        ]);
+        $this->assertStringContainsString('class="ismos-chip ismos-ccard__hidden"', $hidden);
+        $this->assertStringNotContainsString('bg-info', $hidden);
         $this->assertStringNotContainsString('}}', $html);
 
         $html = $out->render_from_template('block_myoverview/progress-bar', ['progress' => 40]);

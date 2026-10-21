@@ -215,7 +215,7 @@ body.ismos-catalog {
     overflow: hidden;
 }
 
-// Course cards: the whole card is the link.
+// Course cards in a grid: the card itself is in _course_card.scss.
 .ismos-cards {
     display: grid;
     gap: 20px;
@@ -231,117 +231,6 @@ body.ismos-catalog {
     > li {
         display: flex;
     }
-}
-
-.ismos-ccard {
-    background: var(--ismos-card-bg);
-    border: 1px solid var(--ismos-hairline);
-    border-radius: 8px;
-    box-sizing: border-box;
-    color: var(--ismos-text);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    inline-size: 100%;
-    padding: 22px;
-    text-decoration: none;
-    transition: border-color .15s;
-
-    &:hover,
-    &:focus {
-        border-color: var(--ismos-text);
-        color: var(--ismos-text);
-        text-decoration: none;
-    }
-
-    &:focus-visible {
-        outline: 2px solid var(--ismos-focus);
-        outline-offset: 2px;
-    }
-}
-
-// Past courses: a raised ground and no edge.
-.ismos-ccard--past {
-    background: var(--ismos-surface-raised);
-    border-color: transparent;
-}
-
-.ismos-ccard__top {
-    align-items: center;
-    display: flex;
-    gap: 8px;
-    justify-content: space-between;
-}
-
-.ismos-ccard__when {
-    @include ismos-label;
-
-    align-items: center;
-    color: var(--ismos-text-muted);
-    display: flex;
-    gap: 8px;
-}
-
-.ismos-ccard__when--open {
-    color: var(--ismos-text);
-
-    &::before {
-        background: var(--ismos-madder);
-        block-size: 8px;
-        border-radius: 50%;
-        content: "";
-        inline-size: 8px;
-    }
-}
-
-.ismos-ccard__title {
-    font-family: var(--ismos-font-serif);
-    font-size: 21px;
-    font-weight: 500;
-    line-height: 28px;
-    margin-block-start: 4px;
-    overflow-wrap: anywhere;
-}
-
-.ismos-ccard__text {
-    -webkit-box-orient: vertical;
-    color: var(--ismos-text-muted);
-    display: -webkit-box;
-    font-size: 14px;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    line-height: 22px;
-    overflow: hidden;
-}
-
-.ismos-ccard__foot {
-    align-items: center;
-    border-block-start: 1px solid var(--ismos-hairline);
-    color: var(--ismos-text-muted);
-    display: flex;
-    font-size: 13px;
-    gap: 10px;
-    margin-block-start: auto;
-    padding-block-start: 14px;
-}
-
-.ismos-ccard__avatar {
-    align-items: center;
-    background: var(--ismos-track);
-    block-size: 28px;
-    border-radius: 50%;
-    color: var(--ismos-text);
-    display: inline-flex;
-    flex: none;
-    font-size: 11px;
-    font-weight: 600;
-    inline-size: 28px;
-    justify-content: center;
-    object-fit: cover;
-}
-
-.ismos-ccard__enrolled {
-    margin-inline-start: auto;
 }
 
 .ismos-catalogue__empty {
