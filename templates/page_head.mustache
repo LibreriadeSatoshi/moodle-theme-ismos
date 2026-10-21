@@ -1,0 +1,45 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ismos/page_head
+
+    The page heading shared by the course catalogue and My courses: a mono label, the Literata h1, a lead line and, for
+    people who can manage courses, a small "Manage courses" link at the top right.
+
+    Context variables required for this template:
+    * label, title, lead, haslead
+    * canmanage, manageurl
+    * browseurl, browse - an optional link under the lead (My courses without courses)
+
+    Example context (json):
+    {
+        "label": "My courses",
+        "title": "My courses",
+        "lead": "You're enrolled in 3 courses.",
+        "haslead": true,
+        "canmanage": true,
+        "manageurl": "/course/management.php"
+    }
+}}
+<header class="ismos-catalogue__head">
+    <div class="ismos-catalogue__top">
+        <span class="ismos-label">{{label}}</span>
+        {{#canmanage}}<a class="ismos-catalogue__manage" href="{{{manageurl}}}">{{#str}}catalogmanage, theme_ismos{{/str}}</a>{{/canmanage}}
+    </div>
+    <h1>{{title}}</h1>
+    {{#haslead}}<p class="ismos-catalogue__lead">{{lead}}{{#browse}} <a href="{{{browseurl}}}">{{browse}}</a>{{/browse}}</p>{{/haslead}}
+</header>

@@ -1,0 +1,232 @@
+// My courses (/my/courses.php, block_myoverview) in the catalogue's style: the same heading, tabs and search, the
+// sort and view dropdowns as quiet text, the block without its frame. Tabs, search and heading share the catalogue's
+// classes; this file only adapts the block's own markup.
+
+// The heading is the catalogue's; no space under it, the block follows.
+.ismos-catalogue--head {
+    padding-block-end: 0;
+}
+
+// The block region is the catalogue's column; the block itself has no title, frame or padding on this page.
+.page-mycourses {
+    #block-region-content {
+        @include ismos-column;
+
+        padding-block: 0 80px;
+    }
+
+    #page .block_myoverview.card {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+
+        > .card-body {
+            padding: 0 !important; // stylelint-disable-line declaration-no-important
+
+            // "Course overview" is the page heading's job now.
+            > .d-flex:first-child {
+                display: none !important; // stylelint-disable-line declaration-no-important
+            }
+
+            > .card-text.content {
+                margin-block-start: 0 !important; // stylelint-disable-line declaration-no-important
+            }
+        }
+    }
+
+    #page .block_myoverview .block-cards {
+        border-block-start: 0;
+        padding-block-start: 0;
+    }
+
+    .block_myoverview .content {
+        min-block-size: 0;
+    }
+
+    .block_myoverview .container-fluid {
+        padding-inline: 0;
+    }
+}
+
+// Tabs and search on one line; the tabs scroll sideways on a phone instead of wrapping.
+.ismos-mc__tools {
+    flex-wrap: nowrap;
+    gap: 8px 24px;
+    margin-block-start: 36px;
+
+    @media (max-width: 900px) {
+        flex-wrap: wrap;
+    }
+}
+
+.ismos-mc__tabs {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media (max-width: 900px) {
+        flex-wrap: nowrap;
+        inline-size: 100%;
+    }
+
+    // The block's links are Bootstrap dropdown items: they are tabs here.
+    a.dropdown-item {
+        align-items: center;
+        background: transparent;
+        border: 0;
+        border-block-end: 2px solid transparent;
+        border-radius: 0;
+        color: var(--ismos-text-muted);
+        display: flex;
+        flex: none;
+        font-size: 15px;
+        inline-size: auto;
+        margin-block-end: -1px;
+        min-block-size: 44px;
+        padding: 8px 14px;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover,
+        &:focus {
+            background: transparent;
+            border-block-end-color: var(--ismos-hairline);
+            color: var(--ismos-text);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--ismos-focus);
+            outline-offset: -2px;
+        }
+
+        &[aria-current="true"],
+        &.dropdown-item-active {
+            background: transparent;
+            border-block-end-color: var(--ismos-text);
+            color: var(--ismos-text);
+            font-weight: 600;
+        }
+
+        &::before {
+            content: none;
+        }
+    }
+
+    // "Removed from view" is reachable but quieter.
+    a.ismos-mc__quiet {
+        font-size: 13px;
+        margin-inline-start: auto;
+    }
+}
+
+// The block's own search field, in the catalogue's look: 44 px, the search icon, a 280 px box.
+.ismos-mc__tools > .flex-grow-1 {
+    flex: 0 0 auto !important; // stylelint-disable-line declaration-no-important
+    inline-size: 100%;
+    margin: 0 0 10px !important; // stylelint-disable-line declaration-no-important
+
+    @media (min-width: 901px) {
+        inline-size: 280px;
+    }
+
+    .simplesearchform,
+    .search-input-form,
+    form {
+        inline-size: 100%;
+    }
+
+    .input-group {
+        flex-wrap: nowrap;
+        position: relative;
+
+        // The search icon, as in the catalogue (the block has none): drawn as a mask in the muted colour.
+        &::after {
+            @include ismos-icon("search");
+
+            block-size: 20px;
+            color: var(--ismos-text-muted);
+            inline-size: 20px;
+            inset-block-start: 12px;
+            inset-inline-end: 12px;
+            pointer-events: none;
+            position: absolute;
+        }
+    }
+
+    // The clear button sits left of the icon while there is text.
+    .btn-clear {
+        inset-block-start: 0;
+        inset-inline-end: 34px;
+        min-block-size: 44px;
+        position: absolute;
+        z-index: 3;
+    }
+
+    input[type="text"],
+    input[type="search"],
+    .form-control {
+        background: var(--ismos-input-bg);
+        block-size: 44px;
+        border: 1.5px solid var(--ismos-border-input);
+        border-radius: 4px !important; // stylelint-disable-line declaration-no-important
+        box-sizing: border-box;
+        color: var(--ismos-text);
+        font-size: 15px;
+        min-block-size: 44px;
+        padding-inline: 12px 40px;
+    }
+
+    .btn,
+    .input-group-text {
+        background: transparent;
+        border: 0;
+        color: var(--ismos-text-muted);
+    }
+
+    .icon {
+        color: var(--ismos-text-muted);
+        margin: 0;
+    }
+}
+
+// Sort and view: two quiet text dropdowns, right-aligned under the tab line.
+.ismos-mc__views {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    justify-content: flex-end;
+    margin-block: 6px 20px;
+
+    > div {
+        margin: 0 !important; // stylelint-disable-line declaration-no-important
+    }
+}
+
+.block_myoverview [data-region="filter"] .btn.ismos-mc__drop {
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    color: var(--ismos-text);
+    font-size: 14px;
+    font-weight: 600;
+    min-block-size: 44px;
+    padding-inline: 8px;
+
+    &:hover,
+    &:focus,
+    &.show {
+        background: var(--ismos-nav-hover);
+        color: var(--ismos-text);
+    }
+
+    .ismos-mc__droplabel {
+        color: var(--ismos-text-muted);
+        font-weight: 400;
+    }
+}

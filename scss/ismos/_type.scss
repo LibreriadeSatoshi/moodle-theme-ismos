@@ -38,6 +38,7 @@ $ismos-icons: (
     "square-i": "%3Crect x='3.5' y='3.5' width='17' height='17'/%3E%3Cpath d='M12 11v6M12 7.5v.1'/%3E",
     "check": "%3Cpath d='M4 12.5 9.5 18 20 6.5'/%3E",
     "chevron": "%3Cpath d='M6 9l6 6 6-6'/%3E",
+    "search": "%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E",
 );
 
 @mixin ismos-icon($name) {
