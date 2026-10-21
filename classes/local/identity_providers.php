@@ -20,7 +20,7 @@ namespace theme_ismos\local;
  * The sign-in buttons of the login and signup pages, in the order students use them.
  *
  * Google first (most students sign in with it), then GitHub, then any other provider. The first button is the
- * wide "Continue with …" one; the rest are square icon buttons beside it, their label kept for screen readers.
+ * wide "Continue with …" one; the rest share a row, each with its name.
  *
  * @package   theme_ismos
  * @copyright 2026 ISMOS
@@ -34,8 +34,7 @@ final class identity_providers {
      * Order identity providers (as prepared for output by core) and label the first one.
      *
      * @param array $providers Providers from \auth_plugin_base::prepare_identity_providers_for_output().
-     * @return array The providers, each with `label` ("Continue with …", shown on the first, read out on the rest)
-     *     and `primary` (the first one).
+     * @return array The providers, each with `label` (what the button says) and `primary` (the first one).
      */
     public static function ordered(array $providers): array {
         $rank = static function (array $provider): int {
@@ -51,7 +50,9 @@ final class identity_providers {
         usort($providers, static fn(array $a, array $b): int => $rank($a) <=> $rank($b));
         foreach ($providers as $index => &$provider) {
             $provider['primary'] = $index === 0;
-            $provider['label'] = get_string('continuewith', 'theme_ismos', $provider['name']);
+            $provider['label'] = $index === 0
+                ? get_string('continuewith', 'theme_ismos', $provider['name'])
+                : $provider['name'];
         }
         return $providers;
     }

@@ -50,7 +50,7 @@ class login implements \renderable, \templatable {
             $data['nostr'] = is_enabled_auth('nostr') ? [
                 'url' => $loginurl,
                 'iconurl' => $output->image_url('nostr', 'auth_nostr')->out(false),
-                'label' => get_string('continuewith', 'theme_ismos', get_string('provider_name', 'auth_nostr')),
+                'label' => get_string('provider_name', 'auth_nostr'),
             ] : false;
             $data['hasidentityproviders'] = !empty($data['identityproviders']) || !empty($data['nostr']);
         }

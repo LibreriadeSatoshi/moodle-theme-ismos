@@ -24,6 +24,7 @@
     * bodyattributes - attributes for the body tag
     * output.standard_footer_html - site policies link and other footer output, shown as a quiet strip under the form
     * line, haslead, lead, address, wordmark - text of the block
+    * output.ismos_darkmode_toggle - the light/dark switch, top right of the form column
     * issignup - the signup page, whose form column starts with its heading, the "Already have an account?" line,
       the sign-in buttons (identityproviders, nostr) and an "or with your email" divider (loginurl, hasidentityproviders)
 
@@ -46,6 +47,21 @@
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}}>
+{{! A logged-out visitor's light/dark choice is kept in this browser, applied before the page paints. }}
+<script>
+(function() {
+    try {
+        var saved = window.localStorage.getItem('ismos-mode');
+        var body = document.body;
+        if (body.classList.contains('ismos-mode-auto') && (saved === 'dark' || saved === 'light')) {
+            body.classList.remove('ismos-mode-auto');
+            body.classList.add('ismos-mode-' + saved);
+        }
+    } catch (e) {
+        // Storage blocked: the page follows the device.
+    }
+})();
+</script>
 {{> core/local/toast/wrapper}}
 
 <div id="page-wrapper" class="ismos-login-page">
@@ -69,6 +85,9 @@
             </div>
         </div>
         <div class="ismos-login__side">
+            <div class="ismos-login__tools">
+                {{{ output.ismos_darkmode_toggle }}}
+            </div>
             <div id="page-content" class="ismos-login__form">
                 <div id="region-main-box">
                     <div id="region-main">
@@ -85,16 +104,15 @@
                                             <div class="ismos-idps">
                                                 <h2 class="visually-hidden">{{#str}} potentialidps, auth {{/str}}</h2>
                                                 {{#identityproviders}}
-                                                    <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}"{{^primary}} title="{{label}}"{{/primary}}>
+                                                    <a class="btn login-identityprovider-btn{{#primary}} ismos-idp-primary{{/primary}}" href="{{url}}">
                                                         {{#iconurl}}<img src="{{iconurl}}" alt="" width="20" height="20">{{/iconurl}}
-                                                        {{#primary}}{{label}}{{/primary}}
-                                                        {{^primary}}<span class="visually-hidden">{{label}}</span>{{/primary}}
+                                                        {{label}}
                                                     </a>
                                                 {{/identityproviders}}
                                                 {{#nostr}}
-                                                    <a class="btn login-identityprovider-btn" href="{{url}}" title="{{label}}">
+                                                    <a class="btn login-identityprovider-btn" href="{{url}}">
                                                         <img src="{{iconurl}}" alt="" width="20" height="20">
-                                                        <span class="visually-hidden">{{label}}</span>
+                                                        {{label}}
                                                     </a>
                                                 {{/nostr}}
                                             </div>
@@ -158,6 +176,21 @@
         wrapper.appendChild(button);
     });
 })();
+// Remember a logged-out visitor's light/dark choice in this browser (the toggle saves it to the account when logged in).
+document.addEventListener('click', function(e) {
+    var toggle = e.target.closest('[data-action="theme_ismos/toggle-darkmode"]');
+    if (!toggle || toggle.dataset.persist !== '0') {
+        return;
+    }
+    // After the toggle's own handler has swapped the body class.
+    setTimeout(function() {
+        try {
+            window.localStorage.setItem('ismos-mode', document.body.classList.contains('ismos-mode-dark') ? 'dark' : 'light');
+        } catch (err) {
+            // Storage blocked: the choice lasts for this page only.
+        }
+    }, 0);
+});
 M.util.js_pending('theme_boost/loader');
 require(['theme_boost/loader'], function() {
   M.util.js_complete('theme_boost/loader');
