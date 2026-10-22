@@ -43,6 +43,28 @@ body {
     outline-offset: 2px;
 }
 
+// Boost paints every focused plain link (and .aalink) with a grey box, a dark underline and grey-900 text, even
+// right after a mouse click. ISMOS shows focus as the 2 px ring above, on :focus-visible only, so a focused link
+// just looks like a hovered one. Same selectors as Boost's rule, so this one wins by coming later.
+.aalink,
+#page-footer a:not([class]),
+.arrow_link,
+a:not([class]),
+.activityinstance > a {
+    &.focus,
+    &:focus {
+        background-color: transparent;
+        box-shadow: none;
+        color: var(--ismos-link-hover);
+    }
+
+    // Boost's rule also sets a transparent outline, which outranks the ring above; keyboard focus gets it back.
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
 // Buttons: 4 px corners, no pills, no shadows. Rings draw on :focus-visible only.
 .btn {
     border-radius: 4px;
