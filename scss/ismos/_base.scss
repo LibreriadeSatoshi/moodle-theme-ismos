@@ -65,6 +65,27 @@ a:not([class]),
     }
 }
 
+// Boost also rings button-like controls (menu toggles such as the language menu, link buttons, tabs) with a 4 px
+// dark box-shadow on every focus, including right after a click. Same treatment: nothing after a click, the 2 px
+// ring for keyboard focus.
+.aabtn,
+.btn-link,
+.nav-link,
+[role="button"],
+.list-group-item-action,
+a.dropdown-toggle,
+.form-autocomplete-selection {
+    &.focus,
+    &:focus {
+        box-shadow: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ismos-focus);
+        outline-offset: 2px;
+    }
+}
+
 // Buttons: 4 px corners, no pills, no shadows. Rings draw on :focus-visible only.
 .btn {
     border-radius: 4px;

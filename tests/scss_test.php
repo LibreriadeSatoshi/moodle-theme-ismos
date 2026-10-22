@@ -65,6 +65,8 @@ final class scss_test extends \advanced_testcase {
         // Focused links: no Boost grey box (it showed after every click); keyboard focus keeps the 2 px ring.
         $this->assertMatchesRegularExpression('/a:not\(\[class\]\)\.focus,[^{]*a:not\(\[class\]\):focus[^{]*\{background-color:(transparent|#fff0);box-shadow:none/', $flat);
         $this->assertMatchesRegularExpression('/a:not\(\[class\]\):focus-visible[^{]*\{outline:2pxsolidvar\(--ismos-focus\)/', $flat);
+        $this->assertMatchesRegularExpression('/a\.dropdown-toggle\.focus,[^{]*a\.dropdown-toggle:focus[^{]*\{box-shadow:none\}/', $flat);
+        $this->assertMatchesRegularExpression('/a\.dropdown-toggle:focus-visible[^{]*\{outline:2pxsolidvar\(--ismos-focus\)/', $flat);
         // The light/dark switch on the login pages shares the bar's style.
         $this->assertMatchesRegularExpression('/\.ismos-login__toolsbutton\.btn\[data-action="theme_ismos\/toggle-darkmode"\]\{[^}]*min-block-size:44px/', $flat);
         // Fields: the design system's 2 px edge.
