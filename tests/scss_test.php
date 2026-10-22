@@ -62,6 +62,11 @@ final class scss_test extends \advanced_testcase {
         // Sign-in buttons: Google on its own row, the rest (Nostr moved into the row) two per row, each with its name.
         $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\{[^}]*display:grid[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-login__form\.ismos-idps\.ismos-idp-primary\{grid-column:1\/-1/', $flat);
+        // Focused links: no Boost grey box (it showed after every click); keyboard focus keeps the 2 px ring.
+        $this->assertMatchesRegularExpression('/a:not\(\[class\]\)\.focus,[^{]*a:not\(\[class\]\):focus[^{]*\{background-color:(transparent|#fff0);box-shadow:none/', $flat);
+        $this->assertMatchesRegularExpression('/a:not\(\[class\]\):focus-visible[^{]*\{outline:2pxsolidvar\(--ismos-focus\)/', $flat);
+        $this->assertMatchesRegularExpression('/a\.dropdown-toggle\.focus,[^{]*a\.dropdown-toggle:focus[^{]*\{box-shadow:none\}/', $flat);
+        $this->assertMatchesRegularExpression('/a\.dropdown-toggle:focus-visible[^{]*\{outline:2pxsolidvar\(--ismos-focus\)/', $flat);
         // The light/dark switch on the login pages shares the bar's style.
         $this->assertMatchesRegularExpression('/\.ismos-login__toolsbutton\.btn\[data-action="theme_ismos\/toggle-darkmode"\]\{[^}]*min-block-size:44px/', $flat);
         // Fields: the design system's 2 px edge.
