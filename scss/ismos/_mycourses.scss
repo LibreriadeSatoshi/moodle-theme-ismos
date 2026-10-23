@@ -260,3 +260,22 @@
         }
     }
 }
+
+// Summary view: core draws the image as a 5 rem square centred in a wider column, which leaves a gap before the text
+// and floats in tall rows. Here it fills its column at the cards' 16:9 and sits at the top of the row.
+.block_myoverview .course-summaryitem {
+    > .row > .col-md-2 {
+        align-items: flex-start !important; // stylelint-disable-line declaration-no-important
+
+        // On a phone the image stacks over the text; core only spaces it from the sm breakpoint up.
+        @media (max-width: 767.98px) {
+            margin-block-end: 12px !important; // stylelint-disable-line declaration-no-important
+        }
+    }
+
+    .summary-image {
+        aspect-ratio: 16 / 9;
+        block-size: auto;
+        inline-size: 100%;
+    }
+}
