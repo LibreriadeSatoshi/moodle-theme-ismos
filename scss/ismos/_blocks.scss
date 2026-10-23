@@ -231,10 +231,13 @@
     }
 }
 
-// List and summary views of the overview block: same ground, edge and text colours.
+// List and summary views of the overview block: same ground, edge and text colours. Core paints the rows white with
+// `.block .block-cards .course-summaryitem`; the third selector outranks it, or a hovered row turns white in dark mode,
+// where the hacker palette's rest-state ground steps aside on hover.
 .block_myoverview {
     .list-group-item,
-    .course-summaryitem {
+    .course-summaryitem,
+    .block-cards .course-summaryitem {
         background-color: transparent;
         border-color: var(--ismos-hairline);
         color: var(--ismos-text);
