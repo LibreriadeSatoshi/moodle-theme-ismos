@@ -230,3 +230,33 @@
         font-weight: 400;
     }
 }
+
+// The list and summary views keep core's markup: give it the card view's colours. Core paints the category in
+// Bootstrap's dark grey, "Hidden from students" as a teal info badge, summary rows with their own border, and the
+// starred bookmark in text-primary, which is the ink colour: the category and bookmark disappear on dark.
+.block_myoverview {
+    [data-region="favourite-icon"] .icon {
+        color: var(--ismos-link);
+    }
+
+    .course-listitem,
+    .course-summaryitem {
+        // Core's rule is span.categoryname under the block, so match its specificity.
+        span.categoryname {
+            color: var(--ismos-text-muted);
+        }
+
+        // Core gives summary rows their own border colour; use the list rows' hairline.
+        &.course-summaryitem {
+            border-color: var(--ismos-hairline);
+        }
+
+        // "Hidden from students": the card view's hairline chip.
+        .badge.bg-info {
+            @extend .ismos-chip;
+
+            background: transparent !important; // stylelint-disable-line declaration-no-important
+            color: var(--ismos-text-muted) !important; // stylelint-disable-line declaration-no-important
+        }
+    }
+}
