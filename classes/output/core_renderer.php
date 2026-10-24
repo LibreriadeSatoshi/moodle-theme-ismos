@@ -47,13 +47,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-     * The page header with the title, the context and the actions. The course catalogue prints its own heading,
-     * so core's (the site name and a settings menu) is left out there.
+     * The page header with the title, the context and the actions. The course catalogue and its search print their own
+     * heading, so core's (the site name and a settings menu) is left out there.
      *
      * @return string
      */
     public function full_header() {
-        if (in_array($this->page->pagetype, ['course-index', 'course-index-category'], true)) {
+        if (in_array($this->page->pagetype, ['course-index', 'course-index-category'], true) ||
+                \theme_ismos\local\catalogue::is_search_page($this->page)) {
             return '';
         }
         if ($this->page->pagelayout === 'mycourses') {

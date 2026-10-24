@@ -158,6 +158,22 @@ class course_renderer extends \core_course_renderer {
     }
 
     /**
+     * Course search results in the catalogue's look (see catalogue::is_search_page). Searches by tag, block or activity
+     * keep core's page.
+     *
+     * @param array $searchcriteria
+     * @return string
+     */
+    public function search_courses($searchcriteria) {
+        if (!\theme_ismos\local\catalogue::is_search_page($this->page)) {
+            return parent::search_courses($searchcriteria);
+        }
+        $data = (new \theme_ismos\local\catalogue())->export_search(\theme_ismos\local\catalogue::search_words());
+        $data['label'] = get_string('courses', 'theme_ismos');
+        return $this->output->render_from_template('theme_ismos/catalogue', $data);
+    }
+
+    /**
      * Core echoes the site section 1 (summary and activities) before the front page main content, which
      * would put it above the hero and outside the content column. On the site index it is rendered by
      * frontpage() instead, so this returns nothing there.

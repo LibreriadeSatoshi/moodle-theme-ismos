@@ -17,7 +17,8 @@
 namespace theme_ismos\local;
 
 /**
- * Data for the ISMOS course catalogue (course/index.php and its category pages).
+ * Data for the ISMOS course catalogue (course/index.php and its category pages) and its course search
+ * (course/search.php).
  *
  * Levels are the visible top-level categories that hold at least one visible course. One query reads the visible
  * courses with their context, one reads the enrolment counts and one the first course contact of each course, so a
@@ -180,24 +181,11 @@ final class catalogue {
      * @return array
      */
     public function export(int $categoryid = 0): array {
-        $top = \core_course_category::top();
-        $levelcats = array_values($top->get_children());
         $courses = $this->get_courses();
         $counts = $this->get_enrolled_counts();
         $teachers = $this->get_teachers();
         $images = $this->get_images(array_keys($courses));
-
-        // Levels: visible top-level categories with at least one visible course.
-        $bylevel = [];
-        foreach ($courses as $course) {
-            $bylevel[$course->topid][] = $course;
-        }
-        $levels = [];
-        foreach ($levelcats as $cat) {
-            if (!empty($bylevel[(int) $cat->id])) {
-                $levels[] = $cat;
-            }
-        }
+        [$levels, $bylevel] = $this->levels($courses);
 
         // The selected category: its top-level level, and the filter inside it.
         $selected = null;
@@ -212,16 +200,9 @@ final class catalogue {
         $showlevels = $selected ? array_values(array_filter($levels, fn($c) => (int) $c->id === $activetop)) : $levels;
         $threelevels = count($levels) === 3;
         $kickers = ['pathkicker1', 'pathkicker2', 'pathkicker3'];
-        $tabs = [['name' => get_string('catalogall', 'theme_ismos'), 'count' => count($courses),
-            'url' => (new \moodle_url('/course/index.php'))->out(false), 'active' => !$selected]];
+        $tabs = $this->tabs($levels, $bylevel, count($courses), $selected ? $activetop : null);
         $sections = [];
         foreach ($levels as $index => $cat) {
-            $tabs[] = [
-                'name' => $cat->get_formatted_name(['escape' => false]),
-                'count' => count($bylevel[(int) $cat->id]),
-                'url' => (new \moodle_url('/course/index.php', ['categoryid' => $cat->id]))->out(false),
-                'active' => $selected && (int) $cat->id === $activetop,
-            ];
             if (!in_array($cat, $showlevels, true)) {
                 continue;
             }
@@ -238,6 +219,7 @@ final class catalogue {
                 $this->excerpt((string) $cat->description, (int) $cat->descriptionformat, $cat->get_context(), 300);
             $sections[] = [
                 'name' => $cat->get_formatted_name(['escape' => false]),
+                'plain' => false,
                 // The level's own page already has its name as the page title; a subcategory page keeps the level name.
                 'showname' => !($selected && (int) $selected->id === (int) $cat->id),
                 'description' => $description,
@@ -260,8 +242,6 @@ final class catalogue {
             $title = get_string('catalogtitle', 'theme_ismos');
             $lead = get_string('cataloglead', 'theme_ismos', ['courses' => $total, 'levels' => count($levels)]);
         }
-        $syscontext = \context_system::instance();
-        $canmanage = has_capability('moodle/category:manage', $syscontext) || has_capability('moodle/course:create', $syscontext);
         return [
             'title' => $title,
             'lead' => $lead,
@@ -270,6 +250,161 @@ final class catalogue {
             'hastabs' => count($levels) > 0,
             'sections' => $sections,
             'hassections' => !empty($sections),
+            'empty' => get_string('catalogempty', 'theme_ismos'),
+            'search' => '',
+        ] + $this->common();
+    }
+
+    /**
+     * Build the search results: the catalogue's heading, tabs (none active) and search box with the query, and one grid
+     * of the catalogue's courses that core's course search finds for it, in the catalogue's order.
+     *
+     * @param string $search the search words
+     * @return array
+     */
+    public function export_search(string $search): array {
+        $courses = $this->get_courses();
+        [$levels, $bylevel] = $this->levels($courses);
+        $found = \core_course_category::search_courses(['search' => $search], ['idonly' => true]);
+        $matches = array_intersect_key($courses, array_flip($found));
+        $cards = [];
+        if ($matches) {
+            $counts = $this->get_enrolled_counts();
+            $teachers = $this->get_teachers();
+            $images = $this->get_images(array_keys($matches));
+            foreach ($this->order($matches) as $course) {
+                $cards[] = $this->card($course, $counts, $teachers, $images);
+            }
+        }
+        $name = get_string('searchresults');
+        $sections = $cards ? [[
+            'name' => $name,
+            'plain' => true,
+            'showname' => false,
+            'description' => '',
+            'hasdescription' => false,
+            'url' => '',
+            'showonly' => false,
+            'haslevel' => false,
+            'level' => [],
+            'kicker' => '',
+            'cards' => $cards,
+            'hascards' => true,
+        ]] : [];
+        $count = count($cards);
+        $lead = $count ? get_string($count === 1 ? 'catalogsearchone' : 'catalogsearchmany', 'theme_ismos', $count)
+            : get_string('catalogsearchnone', 'theme_ismos');
+        return [
+            'title' => get_string('catalogsearchtitle', 'theme_ismos', $search),
+            'lead' => $lead,
+            'haslead' => true,
+            'browse' => get_string('catalogseeall', 'theme_ismos'),
+            'browseurl' => (new \moodle_url('/course/index.php'))->out(false),
+            'tabs' => $this->tabs($levels, $bylevel, count($courses), -1),
+            'hastabs' => count($levels) > 0,
+            'sections' => $sections,
+            'hassections' => !empty($sections),
+            'empty' => '',
+            'search' => $search,
+        ] + $this->common();
+    }
+
+    /**
+     * Whether this request is a plain course search that the catalogue shows: course/search.php with search words and
+     * no other criteria. Searches by tag, block or activity keep core's page.
+     *
+     * @param \moodle_page $page
+     * @return bool
+     */
+    public static function is_search_page(\moodle_page $page): bool {
+        if ($page->pagetype !== 'course-search') {
+            return false;
+        }
+        return self::search_words() !== '' && !self::other_criteria();
+    }
+
+    /**
+     * Whether this request is course/search.php without any criteria, which core shows as a bare search form.
+     *
+     * @param \moodle_page $page
+     * @return bool
+     */
+    public static function is_empty_search(\moodle_page $page): bool {
+        return $page->pagetype === 'course-search' && self::search_words() === '' && !self::other_criteria();
+    }
+
+    /**
+     * The search words of course/search.php, read and cleaned as it does.
+     *
+     * @return string
+     */
+    public static function search_words(): string {
+        $search = optional_param('q', '', PARAM_RAW) ?: optional_param('search', '', PARAM_RAW);
+        return trim(strip_tags($search));
+    }
+
+    /**
+     * Whether course/search.php has criteria besides the search words.
+     *
+     * @return bool
+     */
+    private static function other_criteria(): bool {
+        return (bool) (optional_param('blocklist', 0, PARAM_INT) || optional_param('modulelist', '', PARAM_PLUGIN) ||
+            optional_param('tagid', 0, PARAM_INT));
+    }
+
+    /**
+     * Levels: visible top-level categories with at least one visible course, and the courses of each.
+     *
+     * @param \stdClass[] $courses
+     * @return array [\core_course_category[] levels, \stdClass[][] courses by level id]
+     */
+    private function levels(array $courses): array {
+        $bylevel = [];
+        foreach ($courses as $course) {
+            $bylevel[$course->topid][] = $course;
+        }
+        $levels = [];
+        foreach (\core_course_category::top()->get_children() as $cat) {
+            if (!empty($bylevel[(int) $cat->id])) {
+                $levels[] = $cat;
+            }
+        }
+        return [$levels, $bylevel];
+    }
+
+    /**
+     * The tabs: "All", then one per level.
+     *
+     * @param \core_course_category[] $levels
+     * @param \stdClass[][] $bylevel
+     * @param int $total
+     * @param int|null $active the active level id; null for "All", -1 for none
+     * @return array
+     */
+    private function tabs(array $levels, array $bylevel, int $total, ?int $active): array {
+        $tabs = [['name' => get_string('catalogall', 'theme_ismos'), 'count' => $total,
+            'url' => (new \moodle_url('/course/index.php'))->out(false), 'active' => $active === null]];
+        foreach ($levels as $cat) {
+            $tabs[] = [
+                'name' => $cat->get_formatted_name(['escape' => false]),
+                'count' => count($bylevel[(int) $cat->id]),
+                'url' => (new \moodle_url('/course/index.php', ['categoryid' => $cat->id]))->out(false),
+                'active' => (int) $cat->id === $active,
+            ];
+        }
+        return $tabs;
+    }
+
+    /**
+     * What the catalogue and the search share: the search URL and the "Manage courses" link.
+     *
+     * @return array
+     */
+    private function common(): array {
+        $syscontext = \context_system::instance();
+        $canmanage = has_capability('moodle/category:manage', $syscontext) || has_capability('moodle/course:create', $syscontext);
+        return [
             'searchurl' => (new \moodle_url('/course/search.php'))->out(false),
             'canmanage' => $canmanage,
             'manageurl' => (new \moodle_url('/course/management.php'))->out(false),

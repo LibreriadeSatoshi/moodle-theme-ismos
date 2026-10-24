@@ -29,4 +29,8 @@ $callbacks = [
         'hook' => \core\hook\navigation\primary_extend::class,
         'callback' => [\theme_ismos\hook_callbacks::class, 'primary_extend'],
     ],
+    [
+        'hook' => \core\hook\output\before_http_headers::class,
+        'callback' => [\theme_ismos\hook_callbacks::class, 'before_http_headers'],
+    ],
 ];
