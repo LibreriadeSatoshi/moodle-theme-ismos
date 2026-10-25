@@ -17,6 +17,8 @@
 namespace theme_ismos;
 
 use core\hook\navigation\primary_extend;
+use core\hook\output\before_http_headers;
+use theme_ismos\local\catalogue;
 
 /**
  * Hook callbacks for theme_ismos.
@@ -55,6 +57,25 @@ class hook_callbacks {
         $primary->add_node($node, $before);
         if (preg_match('/^course-(index|search)/', (string) $PAGE->pagetype)) {
             $PAGE->set_primary_active_tab(self::COURSES_KEY);
+        }
+    }
+
+    /**
+     * Course search in the catalogue's look: a search without words goes to the catalogue, which lists every course,
+     * and the results page gets the catalogue's full-width layout (the body class must be set before the header).
+     *
+     * @param before_http_headers $hook
+     */
+    public static function before_http_headers(before_http_headers $hook): void {
+        global $PAGE;
+        if ($PAGE->theme->name !== 'ismos') {
+            return;
+        }
+        if (catalogue::is_empty_search($PAGE)) {
+            redirect(new \moodle_url('/course/index.php'));
+        }
+        if (catalogue::is_search_page($PAGE)) {
+            $PAGE->add_body_class('ismos-catalog');
         }
     }
 }

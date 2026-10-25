@@ -17,14 +17,18 @@
 {{!
     @template theme_ismos/catalogue
 
-    ISMOS course catalogue: heading, level tabs, search and one section per level with the course cards.
+    ISMOS course catalogue: heading, level tabs, search and one section per level with the course cards. The course
+    search uses it too, with the query in the search box and one section of results.
 
     Context variables required for this template:
     * label, title, lead, haslead - the mono label, the h1 and the line under it
+    * browse, browseurl - optional link after the lead
     * tabs, hastabs - name, count, url, active (the first is "All")
-    * searchurl - Moodle's course search
+    * searchurl, search - Moodle's course search and the words searched for
+    * empty - the message without sections (none on a search, its lead says it)
     * canmanage, manageurl - the "Manage courses" link, for people who can manage
-    * sections, hassections - name, description, url, showonly, haslevel, level, kicker, cards
+    * sections, hassections - name, description, url, showonly, haslevel, level, kicker, cards; plain for a section
+      with no visible heading (the search results)
       * cards - url, image, hasimage, name, summary, when, haswhen, open, past, code, hascode, teacher (name, initials, picture), hasfoot, enrolled
 
     Example context (json):
@@ -37,6 +41,8 @@
         "tabs": [{"name": "All", "count": 9, "url": "/course/index.php", "active": true},
                  {"name": "Bitcoin Dev", "count": 4, "url": "/course/index.php?categoryid=2", "active": false}],
         "searchurl": "/course/search.php",
+        "search": "",
+        "empty": "There are no courses here yet.",
         "canmanage": true,
         "manageurl": "/course/management.php",
         "hassections": true,
@@ -65,12 +71,14 @@
         {{/hastabs}}
         <form class="ismos-catalogue__search" action="{{{searchurl}}}" method="get" role="search">
             <label class="visually-hidden" for="ismos-catalogue-search">{{#str}}catalogsearch, theme_ismos{{/str}}</label>
-            <input id="ismos-catalogue-search" type="search" name="search" placeholder="{{#str}}catalogsearch, theme_ismos{{/str}}" autocomplete="off">
+            <input id="ismos-catalogue-search" type="search" name="search" value="{{search}}" placeholder="{{#str}}catalogsearch, theme_ismos{{/str}}" autocomplete="off">
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
         </form>
     </div>
     {{#sections}}
-        <section class="ismos-level" aria-label="{{name}}">
+        <section class="ismos-level{{#plain}} ismos-level--plain{{/plain}}" aria-label="{{name}}">
+            {{#plain}}<h2 class="visually-hidden">{{name}}</h2>{{/plain}}
+            {{^plain}}
             <div class="ismos-level__head">
                 <div>
                     {{#haslevel}}
@@ -82,6 +90,7 @@
                 </div>
                 {{#showonly}}<a href="{{{url}}}">{{#str}}catalogonly, theme_ismos{{/str}}</a>{{/showonly}}
             </div>
+            {{/plain}}
             {{#hascards}}
                 <ul class="ismos-cards">
                     {{#cards}}
@@ -116,7 +125,7 @@
             {{/hascards}}
         </section>
     {{/sections}}
-    {{^hassections}}
-        <p class="ismos-catalogue__empty">{{#str}}catalogempty, theme_ismos{{/str}}</p>
-    {{/hassections}}
+    {{^hassections}}{{#empty}}
+        <p class="ismos-catalogue__empty">{{empty}}</p>
+    {{/empty}}{{/hassections}}
 </div>

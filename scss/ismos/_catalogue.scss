@@ -168,6 +168,11 @@ body.ismos-catalog {
     margin-block-start: 56px;
 }
 
+// The search results have no heading of their own: the cards follow the tools closer.
+.ismos-level--plain {
+    margin-block-start: 32px;
+}
+
 .ismos-level__head {
     align-items: end;
     display: grid;

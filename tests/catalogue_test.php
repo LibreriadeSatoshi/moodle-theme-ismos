@@ -285,4 +285,67 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertStringContainsString('ismos-catalog', $PAGE->bodyclasses);
         $this->assertSame('', $PAGE->get_renderer('core', null, RENDERER_TARGET_GENERAL)->full_header());
     }
+
+    public function test_search_lists_the_matching_visible_courses_in_catalogue_order(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        [$one, $two] = $this->setup_levels();
+        $this->course('Bitcoin later', $one, 5);
+        $this->course('Bitcoin sooner', $two, 1);
+        $this->course('Nostr', $one, 2);
+        $this->course('Bitcoin hidden', $one, 3, ['visible' => 0]);
+        $data = (new catalogue())->export_search('bitcoin');
+        $this->assertSame('Results for “bitcoin”', $data['title']);
+        $this->assertSame('2 courses found.', $data['lead']);
+        $this->assertSame('bitcoin', $data['search']);
+        $this->assertStringEndsWith('/course/index.php', $data['browseurl']);
+        $this->assertCount(1, $data['sections']);
+        $this->assertSame(['Bitcoin sooner', 'Bitcoin later'], array_column($data['sections'][0]['cards'], 'name'));
+        $this->assertSame([false, false, false], array_column($data['tabs'], 'active'));
+        $this->assertSame(3, $data['tabs'][0]['count']);
+    }
+
+    public function test_search_without_results_says_so_and_links_to_all_courses(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        [$one] = $this->setup_levels();
+        $this->course('Nostr', $one, 2);
+        $data = (new catalogue())->export_search('cashu');
+        $this->assertFalse($data['hassections']);
+        $this->assertSame('No course matches your search.', $data['lead']);
+        $this->assertSame('', $data['empty']);
+        $this->assertSame('1 course found.', (new catalogue())->export_search('nostr')['lead']);
+    }
+
+    public function test_course_search_renders_the_catalogue_and_other_searches_keep_core(): void {
+        global $PAGE, $SITE;
+        $this->resetAfterTest();
+        $PAGE->set_course($SITE);
+        $PAGE->set_url('/course/search.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->set_pagetype('course-search');
+        $PAGE->force_theme('ismos');
+        $this->setAdminUser();
+        [$one] = $this->setup_levels();
+        $this->course('Bitcoin <b>basics</b>', $one, 1);
+        $renderer = $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL);
+
+        $_GET = [];
+        $this->assertTrue(catalogue::is_empty_search($PAGE));
+        $this->assertFalse(catalogue::is_search_page($PAGE));
+
+        $_GET = ['search' => '"><b>bitcoin'];
+        $this->assertTrue(catalogue::is_search_page($PAGE));
+        $html = $renderer->search_courses(['search' => '"><b>bitcoin']);
+        $this->assertStringContainsString('class="ismos-catalogue"', $html);
+        $this->assertStringContainsString('value="&quot;&gt;bitcoin"', $html);
+        $this->assertStringNotContainsString('"><b>bitcoin', $html);
+        $this->assertSame('', $PAGE->get_renderer('core', null, RENDERER_TARGET_GENERAL)->full_header());
+
+        $_GET = ['search' => 'bitcoin', 'tagid' => 3];
+        $this->assertFalse(catalogue::is_search_page($PAGE));
+        $this->assertFalse(catalogue::is_empty_search($PAGE));
+        $this->assertStringNotContainsString('ismos-catalogue', $renderer->search_courses(['search' => 'bitcoin', 'tagid' => 3]));
+        $_GET = [];
+    }
 }
