@@ -199,9 +199,8 @@ final class landing {
     }
 
     /**
-     * The paths: one card per visible top-level category, in the site's order.
-     *
-     * With exactly three categories the cards get a three segment level bar and a kicker.
+     * The paths: one card per visible top-level category, in the site's order. Any number of categories works the
+     * same way: no card depends on its position or on how many there are.
      *
      * @return array[]
      */
@@ -217,8 +216,6 @@ final class landing {
                 $owncourses[] = $own;
             }
         }
-        $levels = count($categories) === 3;
-        $kickers = ['pathkicker1', 'pathkicker2', 'pathkicker3'];
         $paths = [];
         foreach ($categories as $index => $category) {
             $own = $owncourses[$index];
@@ -238,9 +235,6 @@ final class landing {
                 'courses' => array_slice($names, 0, self::PATH_COURSES),
                 'hascourses' => !empty($names),
                 'url' => (new \moodle_url('/course/index.php', ['categoryid' => $category->id]))->out(false),
-                'haslevel' => $levels,
-                'level' => $levels ? array_map(fn(int $i): array => ['on' => $i <= $index], [0, 1, 2]) : [],
-                'kicker' => $levels ? get_string($kickers[$index], 'theme_ismos') : '',
             ];
         }
         return $paths;

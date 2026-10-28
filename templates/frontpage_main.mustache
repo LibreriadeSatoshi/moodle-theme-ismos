@@ -24,7 +24,7 @@
     Context variables required for this template:
     * hero - label, title, titleem, hastitleem, lead, cta, ctaurl, signup, signupurl (null when not offered), hasnext, next
     * facts - value and label
-    * paths, haspaths - name, description, hasdescription, courses (name, url), hascourses, url, haslevel, level (on), kicker
+    * paths, haspaths - name, description, hasdescription, courses (name, url), hascourses, url
     * calendar, hascalendar - day, month, year, name, category, code, hascode, url
     * steps - number ("01"), title, text, and one of form, room, cert for its drawing
     * testimonials, hastestimonials - quote and name
@@ -63,10 +63,7 @@
             "hasdescription": true,
             "courses": [{"name": "Get and use Bitcoin", "url": "/course/view.php?id=3"}],
             "hascourses": true,
-            "url": "/course/index.php?categoryid=1",
-            "haslevel": true,
-            "level": [{"on": true}, {"on": false}, {"on": false}],
-            "kicker": "To start"
+            "url": "/course/index.php?categoryid=1"
         }],
         "hascalendar": true,
         "calendar": [{
@@ -125,10 +122,7 @@
         <ul class="ismos-paths">
             {{#paths}}
                 <li class="ismos-path">
-                    {{#haslevel}}
-                        <span class="ismos-path__level" aria-hidden="true">{{#level}}<i{{#on}} class="on"{{/on}}></i>{{/level}}</span>
-                        <span class="ismos-label ismos-path__kicker">{{kicker}}</span>
-                    {{/haslevel}}
+                    <span class="ismos-bar" aria-hidden="true"></span>
                     <h3>{{name}}</h3>
                     {{#hasdescription}}<p>{{description}}</p>{{/hasdescription}}
                     {{#hascourses}}

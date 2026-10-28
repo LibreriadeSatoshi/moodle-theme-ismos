@@ -90,24 +90,21 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertSame([3, 2, 1], array_column($data['tabs'], 'count'));
         $this->assertSame(['One', 'Three'], array_column($data['sections'], 'name'));
         $this->assertSame('All courses', $data['title']);
-        $this->assertSame('3 courses in 2 levels, live or at your own pace. Start with the one that fits you.', $data['lead']);
-        // Two levels: no level bars and no kickers.
-        $this->assertFalse($data['sections'][0]['haslevel']);
+        $this->assertSame('3 courses in 2 categories, live or at your own pace. Start with the one that fits you.', $data['lead']);
         $this->assertTrue($data['tabs'][0]['active']);
         $this->assertTrue($data['sections'][0]['showonly']);
         $this->assertTrue($data['sections'][0]['showname']);
     }
 
-    public function test_exactly_three_levels_have_bars_and_kickers(): void {
+    public function test_three_levels_have_no_level_bars_or_kickers(): void {
         $this->resetAfterTest();
         [$one, $two, $three] = $this->setup_levels();
         foreach ([$one, $two, $three] as $cat) {
             $this->course('Course ' . $cat->name, $cat, 1);
         }
         $sections = (new catalogue())->export()['sections'];
-        $this->assertSame([true, false, false], array_column($sections[0]['level'], 'on'));
-        $this->assertSame([true, true, true], array_column($sections[2]['level'], 'on'));
-        $this->assertSame('To start', $sections[0]['kicker']);
+        $this->assertArrayNotHasKey('level', $sections[0]);
+        $this->assertArrayNotHasKey('kicker', $sections[0]);
         $this->assertSame('First level', $sections[0]['description']);
     }
 

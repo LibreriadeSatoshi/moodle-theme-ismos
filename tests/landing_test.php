@@ -131,7 +131,7 @@ final class landing_test extends \advanced_testcase {
         $this->assertSame('', landing::language_code(''));
     }
 
-    public function test_paths_with_three_categories_have_levels_kickers_and_picks(): void {
+    public function test_paths_have_descriptions_and_picks(): void {
         $this->resetAfterTest();
         $gen = $this->getDataGenerator();
         $a = $gen->create_category(['name' => 'Bitcoin 4 Everyone', 'description' => '<p>Start <b>here</b></p>']);
@@ -158,24 +158,21 @@ final class landing_test extends \advanced_testcase {
         $this->assertNotNull($default);
     }
 
-    public function test_exactly_three_categories_get_level_bars_and_kickers(): void {
+    public function test_any_number_of_categories_gives_the_same_cards(): void {
         $this->resetAfterTest();
         \core_course_category::get_default()->hide();
         $gen = $this->getDataGenerator();
-        $this->course('In one', $gen->create_category(['name' => 'One']), 3);
-        $this->course('In two', $gen->create_category(['name' => 'Two']), 4);
+        foreach (['One', 'Two', 'Three', 'Four'] as $i => $name) {
+            $this->course('In ' . $name, $gen->create_category(['name' => $name]), $i + 3);
+        }
         $paths = (new landing())->get_paths();
-        $this->assertCount(2, $paths);
-        $this->assertFalse($paths[0]['haslevel']);
-        $this->assertSame('', $paths[0]['kicker']);
-        $this->course('In three', $gen->create_category(['name' => 'Three']), 5);
-        $paths = (new landing())->get_paths();
-        $this->assertCount(3, $paths);
-        $this->assertSame([true, false, false], array_column($paths[0]['level'], 'on'));
-        $this->assertSame([true, true, true], array_column($paths[2]['level'], 'on'));
-        $this->assertSame('To start', $paths[0]['kicker']);
-        $this->assertSame('To build', $paths[1]['kicker']);
-        $this->assertSame('To go deep', $paths[2]['kicker']);
+        $this->assertSame(['One', 'Two', 'Three', 'Four'], array_column($paths, 'name'));
+        $keys = array_keys($paths[0]);
+        foreach ($paths as $path) {
+            $this->assertSame($keys, array_keys($path));
+        }
+        $this->assertNotContains('kicker', $keys);
+        $this->assertNotContains('level', $keys);
     }
 
     public function test_categories_without_visible_courses_are_not_paths(): void {
@@ -246,7 +243,7 @@ final class landing_test extends \advanced_testcase {
         $this->assertTrue($data['steps'][2]['cert']);
         $string = [];
         include(__DIR__ . '/../lang/es/theme_ismos.php');
-        foreach (['heroleadlive', 'nextcohort', 'factlive', 'pathkicker1', 'calendarheading', 'step3text', 'finalcta'] as $key) {
+        foreach (['heroleadlive', 'nextcohort', 'factlive', 'pathslabel', 'calendarheading', 'step3text', 'finalcta'] as $key) {
             $this->assertArrayHasKey($key, $string);
         }
     }

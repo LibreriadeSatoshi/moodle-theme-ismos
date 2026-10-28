@@ -27,7 +27,7 @@
     * searchurl, search - Moodle's course search and the words searched for
     * empty - the message without sections (none on a search, its lead says it)
     * canmanage, manageurl - the "Manage courses" link, for people who can manage
-    * sections, hassections - name, description, url, showonly, haslevel, level, kicker, cards; plain for a section
+    * sections, hassections - name, description, url, showonly, cards; plain for a section
       with no visible heading (the search results)
       * cards - url, image, hasimage, name, summary, when, haswhen, open, past, code, hascode, teacher (name, initials, picture), hasfoot, enrolled
 
@@ -35,7 +35,7 @@
     {
         "label": "Courses",
         "title": "All courses",
-        "lead": "9 courses in 3 levels, live or at your own pace.",
+        "lead": "9 courses in 3 categories, live or at your own pace.",
         "haslead": true,
         "hastabs": true,
         "tabs": [{"name": "All", "count": 9, "url": "/course/index.php", "active": true},
@@ -48,7 +48,7 @@
         "hassections": true,
         "sections": [{
             "name": "Bitcoin Dev", "description": "Nodes and Nostr.", "hasdescription": true, "url": "/course/index.php?categoryid=2",
-            "showonly": true, "haslevel": true, "level": [{"on": true}, {"on": false}, {"on": false}], "kicker": "To start",
+            "showonly": true,
             "hascards": true,
             "cards": [{
                 "url": "/course/view.php?id=3", "image": "/pluginfile.php/1/course/overviewfiles/a.jpg", "hasimage": true, "name": "Nostr", "summary": "Build a client.", "when": "Starts 5 Nov", "haswhen": true,
@@ -81,10 +81,6 @@
             {{^plain}}
             <div class="ismos-level__head">
                 <div>
-                    {{#haslevel}}
-                        <span class="ismos-path__level" aria-hidden="true">{{#level}}<i{{#on}} class="on"{{/on}}></i>{{/level}}</span>
-                        <span class="ismos-label ismos-level__kicker">{{kicker}}</span>
-                    {{/haslevel}}
                     {{#showname}}<h2>{{name}}</h2>{{/showname}}{{^showname}}<h2 class="visually-hidden">{{name}}</h2>{{/showname}}
                     {{#hasdescription}}<p class="ismos-level__text">{{description}}</p>{{/hasdescription}}
                 </div>

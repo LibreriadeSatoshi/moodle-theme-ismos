@@ -202,8 +202,9 @@ final class scss_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression('/\.ismos-next\{[^}]*background:var\(--ismos-paper\);border-block-start:6pxsolidvar\(--ismos-madder\)/', $flat);
         // The card heading beats Hacker mode's white headings.
         $this->assertMatchesRegularExpression('/\.ismos-next\.ismos-next__title\{color:var\(--ismos-ink\)/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-paths\{[^}]*grid-template-columns:minmax\(0,1fr\)/', $flat);
-        $this->assertMatchesRegularExpression('/\.ismos-path__leveli\.on\{background:var\(--ismos-bar\)/', $flat);
+        $this->assertMatchesRegularExpression('/\.ismos-paths\{[^}]*flex-wrap:wrap;[^}]*justify-content:center/', $flat);
+        $this->assertStringContainsString(
+            '.ismos-paths:has(>:nth-child(2)):not(:has(>:nth-child(4)))>.ismos-path{flex-grow:1}', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-cal\{border-block-start:2pxsolidvar\(--ismos-rule-strong\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-quote\{border-inline-start:3pxsolidvar\(--ismos-bar\)/', $flat);
         $this->assertMatchesRegularExpression('/\.ismos-final\{background:var\(--ismos-block\)/', $flat);
