@@ -53,7 +53,7 @@ final class login_layout_test extends \advanced_testcase {
             'forgot password' => ['login-forgot_password', 'Welcome back. Pick up where you left off.', null],
             'signup' => [
                 'login-signup',
-                'Free, in your own language.',
+                "Freedom Tech,\nin your own language.",
                 'Create your account in a minute. You don\'t need to know anything yet.',
             ],
         ];
