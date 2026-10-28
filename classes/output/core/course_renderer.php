@@ -118,6 +118,46 @@ class course_renderer extends \core_course_renderer {
     }
 
     /**
+     * Enrolment page. When the course's only way in is manual enrolment, the student can't do anything on the page:
+     * instead of core's "You cannot enrol yourself in this course", they get the address to write to (the theme's
+     * enrolment contact setting), with the course name as the subject. Any other case keeps core's output.
+     *
+     * @param \stdClass $course
+     * @param string[] $widgets the enrolment methods' forms
+     * @param \core\url|null $returnurl
+     * @return string
+     */
+    public function enrolment_options(\stdClass $course, array $widgets, ?\core\url $returnurl = null): string {
+        $email = trim((string) get_config('theme_ismos', 'enrolcontactemail'));
+        if ($widgets || isguestuser() || $email === '' || !self::only_manual_enrolment((int) $course->id)) {
+            return parent::enrolment_options($course, $widgets, $returnurl);
+        }
+        $name = format_string($course->fullname, true, ['context' => \context_course::instance($course->id), 'escape' => false]);
+        $contact = $this->render_from_template('theme_ismos/enrol_contact', [
+            'email' => $email,
+            'mailto' => 'mailto:' . $email . '?subject=' . rawurlencode($name),
+        ]);
+        return parent::enrolment_options($course, [$contact], $returnurl);
+    }
+
+    /**
+     * Whether manual enrolment is the course's only enabled enrolment method.
+     *
+     * @param int $courseid
+     * @return bool
+     */
+    private static function only_manual_enrolment(int $courseid): bool {
+        $enabled = enrol_get_plugins(true);
+        $methods = [];
+        foreach (enrol_get_instances($courseid, true) as $instance) {
+            if (isset($enabled[$instance->enrol])) {
+                $methods[$instance->enrol] = true;
+            }
+        }
+        return array_keys($methods) === ['manual'];
+    }
+
+    /**
      * Front page main content: the landing page (hero with the next cohort, facts, paths, calendar, steps,
      * testimonials, final band) with the parts core renders that the landing does not replace. Everything is
      * inside the main landmark, after the skip link target, so the single h1 (the hero title) and its buttons

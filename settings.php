@@ -42,6 +42,17 @@ if ($ADMIN->fulltree) {
     $page->add($setting);
     $settings->add($page);
 
+    $page = new admin_settingpage('theme_ismos_enrolment', get_string('enrolmentsettings', 'theme_ismos'));
+    $setting = new admin_setting_configtext(
+        'theme_ismos/enrolcontactemail',
+        get_string('enrolcontactemail', 'theme_ismos'),
+        get_string('enrolcontactemail_desc', 'theme_ismos'),
+        'cursos@ismos.xyz',
+        PARAM_EMAIL
+    );
+    $page->add($setting);
+    $settings->add($page);
+
     $page = new admin_settingpage('theme_ismos_maintenance', get_string('maintenancesettings', 'theme_ismos'));
     $setting = new admin_setting_configcheckbox(
         'theme_ismos/neutralmaintenance',
