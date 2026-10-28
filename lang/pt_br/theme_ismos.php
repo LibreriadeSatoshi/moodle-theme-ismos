@@ -114,7 +114,8 @@ $string['showpassword'] = 'Mostrar senha';
 $string['showshort'] = 'Mostrar';
 $string['signupheading'] = 'Crie sua conta';
 $string['signuplead'] = 'Crie sua conta em um minuto. Você não precisa saber nada ainda.';
-$string['signupline'] = 'Grátis, no seu próprio idioma.';
+$string['signupline'] = 'Freedom Tech,
+no seu próprio idioma.';
 $string['sitenews'] = 'Novidades do site';
 $string['step1text'] = 'Com seu e-mail ou com a conta que você já usa. Um minuto.';
 $string['step1title'] = 'Crie sua conta';
