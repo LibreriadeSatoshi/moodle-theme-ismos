@@ -147,7 +147,7 @@ final class landing {
         $course = $upcoming[0];
         $context = \context_course::instance($course['id']);
         $summary = format_text($course['summary'], $course['summaryformat'], ['context' => $context, 'noclean' => false]);
-        $summary = shorten_text(trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($summary)))), self::EXCERPT);
+        $summary = shorten_text(card::plain_text($summary), self::EXCERPT);
         $enrolled = $this->count_enrolled((int) $course['id']);
         return [
             'startslabel' => get_string('cardstarts', 'theme_ismos', self::short_date((int) $course['startdate'])),
@@ -226,7 +226,7 @@ final class landing {
             $description = '';
             if (!empty($category->description)) {
                 $description = format_text($category->description, $category->descriptionformat, ['context' => $category->get_context()]);
-                $description = shorten_text(trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($description)))), self::EXCERPT);
+                $description = shorten_text(card::plain_text($description), self::EXCERPT);
             }
             $paths[] = [
                 'name' => $category->get_formatted_name(['escape' => false]),

@@ -156,8 +156,17 @@ final class card {
         if (!$course->has_summary()) {
             return '';
         }
-        $html = format_text($course->summary, $course->summaryformat, ['context' => $context, 'para' => false]);
-        $text = html_entity_decode(strip_tags(preg_replace('~</(p|div|li|h\d)>~i', ' ', $html)), ENT_QUOTES);
+        return self::plain_text(format_text($course->summary, $course->summaryformat, ['context' => $context, 'para' => false]));
+    }
+
+    /**
+     * HTML as one line of plain text: blocks and line breaks become spaces, so paragraphs don't run together.
+     *
+     * @param string $html
+     * @return string
+     */
+    public static function plain_text(string $html): string {
+        $text = html_entity_decode(strip_tags(preg_replace('~</(p|div|li|h\d|ul|ol)>|<br\s*/?>~i', ' ', $html)), ENT_QUOTES);
         return trim(preg_replace('/\s+/u', ' ', $text));
     }
 
