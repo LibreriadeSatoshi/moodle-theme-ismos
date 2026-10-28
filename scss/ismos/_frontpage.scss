@@ -432,27 +432,39 @@ body.ismos-frontpage {
     }
 }
 
-// Paths: three cards, an optional three segment level bar.
+// Paths: one card per category, however many there are (as on ismos.xyz). Two or three share the row; more keep a
+// third each and the last row is centred instead of one card stretching across it. Two per row on tablets.
 .ismos-paths {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    grid-template-columns: minmax(0, 1fr);
+    justify-content: center;
     list-style: none;
     margin: 0;
     padding: 0;
-
-    @media (min-width: 1001px) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
 }
 
 .ismos-path {
     border: 1px solid var(--ismos-hairline);
     border-radius: 8px;
     display: flex;
+    flex: 0 0 100%;
     flex-direction: column;
     gap: 12px;
+    min-width: 0;
     padding: 24px;
+
+    @media (min-width: 640px) {
+        flex-basis: calc((100% - 20px) / 2);
+    }
+
+    @media (min-width: 1001px) {
+        flex-basis: calc((100% - 40px) / 3);
+
+        .ismos-paths:has(> :nth-child(2)):not(:has(> :nth-child(4))) > & {
+            flex-grow: 1;
+        }
+    }
 
     h3 {
         font-family: var(--ismos-font-serif);
@@ -467,21 +479,6 @@ body.ismos-frontpage {
         font-size: 15px;
         line-height: 24px;
         margin: 0;
-    }
-}
-
-.ismos-path__level {
-    display: flex;
-    gap: 4px;
-
-    i {
-        background: var(--ismos-track);
-        block-size: 6px;
-        inline-size: 18px;
-
-        &.on {
-            background: var(--ismos-bar);
-        }
     }
 }
 

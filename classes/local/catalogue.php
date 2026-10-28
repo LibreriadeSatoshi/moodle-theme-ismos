@@ -198,11 +198,9 @@ final class catalogue {
         }
 
         $showlevels = $selected ? array_values(array_filter($levels, fn($c) => (int) $c->id === $activetop)) : $levels;
-        $threelevels = count($levels) === 3;
-        $kickers = ['pathkicker1', 'pathkicker2', 'pathkicker3'];
         $tabs = $this->tabs($levels, $bylevel, count($courses), $selected ? $activetop : null);
         $sections = [];
-        foreach ($levels as $index => $cat) {
+        foreach ($levels as $cat) {
             if (!in_array($cat, $showlevels, true)) {
                 continue;
             }
@@ -226,9 +224,6 @@ final class catalogue {
                 'hasdescription' => $description !== '',
                 'url' => (new \moodle_url('/course/index.php', ['categoryid' => $cat->id]))->out(false),
                 'showonly' => !$selected,
-                'haslevel' => $threelevels,
-                'level' => $threelevels ? array_map(fn(int $i): array => ['on' => $i <= $index], [0, 1, 2]) : [],
-                'kicker' => $threelevels ? get_string($kickers[$index], 'theme_ismos') : '',
                 'cards' => $cards,
                 'hascards' => !empty($cards),
             ];
@@ -240,7 +235,7 @@ final class catalogue {
             $lead = $this->excerpt((string) $selected->description, (int) $selected->descriptionformat, $selected->get_context(), 300);
         } else {
             $title = get_string('catalogtitle', 'theme_ismos');
-            $lead = get_string('cataloglead', 'theme_ismos', ['courses' => $total, 'levels' => count($levels)]);
+            $lead = get_string('cataloglead', 'theme_ismos', ['courses' => $total, 'categories' => count($levels)]);
         }
         return [
             'title' => $title,
@@ -285,9 +280,6 @@ final class catalogue {
             'hasdescription' => false,
             'url' => '',
             'showonly' => false,
-            'haslevel' => false,
-            'level' => [],
-            'kicker' => '',
             'cards' => $cards,
             'hascards' => true,
         ]] : [];
