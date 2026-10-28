@@ -90,7 +90,7 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertSame([3, 2, 1], array_column($data['tabs'], 'count'));
         $this->assertSame(['One', 'Three'], array_column($data['sections'], 'name'));
         $this->assertSame('All courses', $data['title']);
-        $this->assertSame('3 courses in 2 categories, live or at your own pace. Start with the one that fits you.', $data['lead']);
+        $this->assertSame('3 courses in 2 categories, live with a teacher. Start with the one that fits you.', $data['lead']);
         $this->assertTrue($data['tabs'][0]['active']);
         $this->assertTrue($data['sections'][0]['showonly']);
         $this->assertTrue($data['sections'][0]['showname']);
