@@ -432,6 +432,60 @@ body.ismos-frontpage {
     }
 }
 
+// About ISMOS: a link card to the ISMOS site with its artwork (mark and books, from the site's share image).
+.ismos-about,
+.ismos-about:hover {
+    background: #2a2550;
+    border-radius: 8px;
+    color: #fff;
+    display: grid;
+    overflow: hidden;
+    text-decoration: none;
+
+    @media (min-width: 800px) {
+        align-items: center;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.ismos-about__img {
+    align-self: end; // The books stand on the card's bottom edge.
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+}
+
+.ismos-about__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+
+    @media (min-width: 800px) {
+        padding: 32px 40px;
+    }
+}
+
+.ismos-about__title {
+    font-family: var(--ismos-font-serif);
+    font-size: 28px;
+    line-height: 36px;
+}
+
+.ismos-about__text {
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.ismos-about__more {
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.ismos-about:hover .ismos-about__more {
+    text-decoration-thickness: 2px;
+}
+
 // Paths: one card per category, however many there are (as on ismos.xyz). Two or three share the row; more keep a
 // third each and the last row is centred instead of one card stretching across it. Two per row on tablets.
 .ismos-paths {
@@ -952,26 +1006,6 @@ body.ismos-frontpage {
             font-size: 40px;
             line-height: 48px;
         }
-    }
-}
-
-.ismos-final__copy {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.ismos-final__about {
-    font-size: 15px;
-    line-height: 24px;
-    margin: 0;
-    max-inline-size: 52ch;
-
-    a,
-    a:hover {
-        color: var(--ismos-on-block);
-        text-decoration: underline;
-        white-space: nowrap;
     }
 }
 

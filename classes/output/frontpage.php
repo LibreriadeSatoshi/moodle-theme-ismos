@@ -67,13 +67,17 @@ class frontpage implements \renderable, \templatable {
             ],
             'testimonials' => $testimonials,
             'hastestimonials' => !empty($testimonials),
+            'about' => [
+                'heading' => get_string('aboutheading', 'theme_ismos'),
+                'text' => get_string('abouttext', 'theme_ismos'),
+                'link' => get_string('aboutlink', 'theme_ismos'),
+                'url' => get_string('siteurl', 'theme_ismos'),
+                'image' => (new \moodle_url('/theme/ismos/pix/ismos-about.png'))->out(false),
+            ],
             'final' => [
                 'heading' => get_string('finalheading', 'theme_ismos'),
                 'cta' => $signupurl ? get_string('finalcta', 'theme_ismos') : get_string('herocta', 'theme_ismos'),
                 'url' => $signupurl ?? $courseindex,
-                'about' => get_string('finalabout', 'theme_ismos'),
-                'aboutlink' => get_string('finalaboutlink', 'theme_ismos'),
-                'siteurl' => get_string('siteurl', 'theme_ismos'),
             ],
         ];
     }

@@ -28,7 +28,8 @@
     * calendar, hascalendar - day, month, year, name, category, code, hascode, url
     * steps - number ("01"), title, text, and one of form, room, cert for its drawing
     * testimonials, hastestimonials - quote and name
-    * final - heading, cta, url, about, aboutlink, siteurl (the ISMOS site in the current language)
+    * about - heading, text, link, url (the ISMOS site in the current language), image
+    * final - heading, cta, url
     * hasextra, section1, content - HTML of the other front page parts, empty when there is none
 
     Example context (json):
@@ -73,7 +74,8 @@
         "steps": [{"number": "01", "title": "Create your account", "text": "One minute.", "form": true}],
         "hastestimonials": true,
         "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}],
-        "final": {"heading": "Your first class starts here.", "cta": "Create a free account", "url": "/login/signup.php", "about": "Courses are one part of ISMOS, which also runs programs, residencies and fellowships.", "aboutlink": "Visit ismos.xyz", "siteurl": "https://ismos.xyz/en"}
+        "about": {"heading": "Meet ISMOS", "text": "Courses are one part of ISMOS.", "link": "Visit ismos.xyz", "url": "https://ismos.xyz/en", "image": "/theme/ismos/pix/ismos-about.png"},
+        "final": {"heading": "Your first class starts here.", "cta": "Create a free account", "url": "/login/signup.php"}
     }
 }}
 {{#hero}}
@@ -229,13 +231,24 @@
     </div>
 </section>
 {{/hastestimonials}}
+{{#about}}
+<section class="ismos-landing-sec" aria-labelledby="ismos-about-title">
+    <div class="ismos-frontpage-column">
+        <a class="ismos-about" href="{{url}}" target="_blank" rel="noopener">
+            <img class="ismos-about__img" src="{{{image}}}" width="1200" height="375" alt="">
+            <span class="ismos-about__copy">
+                <span id="ismos-about-title" class="ismos-about__title">{{heading}}</span>
+                <span class="ismos-about__text">{{text}}</span>
+                <span class="ismos-about__more">{{link}}<span aria-hidden="true"> ↗</span><span class="visually-hidden"> {{#str}}opensinnewwindowbracketed, core{{/str}}</span></span>
+            </span>
+        </a>
+    </div>
+</section>
+{{/about}}
 {{#final}}
 <section class="ismos-final" aria-labelledby="ismos-final-title">
     <div class="ismos-frontpage-column ismos-final__inner">
-        <div class="ismos-final__copy">
-            <h2 id="ismos-final-title">{{heading}}</h2>
-            <p class="ismos-final__about">{{about}} <a href="{{siteurl}}" target="_blank" rel="noopener">{{aboutlink}}<span aria-hidden="true"> ↗</span><span class="visually-hidden"> {{#str}}opensinnewwindowbracketed, core{{/str}}</span></a></p>
-        </div>
+        <h2 id="ismos-final-title">{{heading}}</h2>
         <a class="ismos-final__btn" href="{{{url}}}">{{cta}}</a>
     </div>
 </section>

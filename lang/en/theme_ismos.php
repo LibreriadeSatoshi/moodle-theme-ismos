@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['aboutheading'] = 'Meet ISMOS';
+$string['aboutlink'] = 'Visit ismos.xyz';
+$string['abouttext'] = 'Courses are one part of ISMOS, which also runs programs, residencies and fellowships.';
 $string['address'] = 'ISMOS.XYZ';
 $string['alreadyhaveaccount'] = 'Already have an account?';
 $string['browseby'] = 'Browse by category';
@@ -61,8 +64,6 @@ $string['factlive'] = 'Live';
 $string['factlivelabel'] = 'and recorded to review';
 $string['facts'] = 'Facts';
 $string['factstudents'] = 'students in the school';
-$string['finalabout'] = 'Courses are one part of ISMOS, which also runs programs, residencies and fellowships.';
-$string['finalaboutlink'] = 'Visit ismos.xyz';
 $string['finalcta'] = 'Create a free account';
 $string['finalheading'] = 'Your first class starts here.';
 $string['forgotshort'] = 'Forgot it?';
