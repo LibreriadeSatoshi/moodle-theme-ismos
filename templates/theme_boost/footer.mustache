@@ -43,7 +43,7 @@
     <div class="ismos-footer-inner">
         <div class="ismos-footer-brand">
             <img src="{{#footermark}}{{{ . }}}{{/footermark}}{{^footermark}}{{{ output.get_ismos_mark_url }}}{{/footermark}}" class="ismos-mark" width="20" height="20" alt="" aria-hidden="true">
-            <a class="ismos-footer-address" href="{{#str}}siteurl, theme_ismos{{/str}}" target="_blank" rel="noopener">{{#str}}address, theme_ismos{{/str}}<span class="visually-hidden"> {{#str}}opensinnewwindowbracketed, core{{/str}}</span></a>
+            <a class="ismos-footer-address" href="{{#str}}siteurl, theme_ismos{{/str}}" target="_blank" rel="noopener">{{#str}}address, theme_ismos{{/str}}<span aria-hidden="true"> ↗</span><span class="visually-hidden"> {{#str}}opensinnewwindowbracketed, core{{/str}}</span></a>
         </div>
         <div class="ismos-footer-lang">
             {{{ output.lang_menu }}}
