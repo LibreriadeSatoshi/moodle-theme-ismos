@@ -37,8 +37,9 @@ $ismos-state-cell-list: '[class*="overridden"]', '[class*="excluded"]', '[class*
     .card,
     .card-header,
     .card-footer,
-    // notice() messages (#notice: sign-up confirmation, expired links) stay on the page ground, as in light mode.
-    #region-main .generalbox:not(#notice),
+    // notice() messages (#notice: sign-up confirmation, expired links) stay on the page ground, as in light mode;
+    // :where() keeps the specificity unchanged for every other box.
+    #region-main .generalbox:not(:where(#notice)),
     .que .info,
     .que .formulation {
         background-color: var(--ismos-surface-raised);
