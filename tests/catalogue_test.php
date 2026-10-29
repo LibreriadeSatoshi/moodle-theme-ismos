@@ -245,6 +245,15 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertStringNotContainsString('<', $cards['Lang']['summary']);
     }
 
+    public function test_summary_excerpt_keeps_a_space_between_paragraphs(): void {
+        $this->resetAfterTest();
+        [$one] = $this->setup_levels();
+        $this->course('Paragraphs', $one, 1, ['summary' => '<p>First line.</p><p><strong>Speaker:</strong> Ana.</p>'
+            . '<ul><li>One</li><li>Two</li></ul>Last<br>word']);
+        $cards = array_column((new catalogue())->export()['sections'][0]['cards'], null, 'name');
+        $this->assertSame('First line. Speaker: Ana. One Two Last word', $cards['Paragraphs']['summary']);
+    }
+
     public function test_manage_link_needs_the_capability(): void {
         $this->resetAfterTest();
         $this->setup_levels();

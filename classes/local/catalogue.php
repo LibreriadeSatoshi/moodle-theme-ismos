@@ -156,7 +156,7 @@ final class catalogue {
             return '';
         }
         $text = format_text($text, $format, ['context' => $context, 'noclean' => false]);
-        return shorten_text(trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text)))), $max);
+        return shorten_text(card::plain_text($text), $max);
     }
 
     /**
