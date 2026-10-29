@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['aboutheading'] = 'Conheça a ISMOS';
+$string['aboutlink'] = 'Visite ismos.xyz';
+$string['abouttext'] = 'Os cursos são uma parte da ISMOS, que também tem programas, residências e fellowships.';
 $string['address'] = 'ISMOS.XYZ';
 $string['alreadyhaveaccount'] = 'Já tem uma conta?';
 $string['browseby'] = 'Explorar por categoria';
@@ -113,6 +116,7 @@ $string['signuplead'] = 'Crie sua conta em um minuto. Você não precisa saber n
 $string['signupline'] = 'Freedom Tech,
 no seu próprio idioma.';
 $string['sitenews'] = 'Novidades do site';
+$string['siteurl'] = 'https://ismos.xyz/pt';
 $string['step1text'] = 'Com seu e-mail ou com a conta que você já usa. Um minuto.';
 $string['step1title'] = 'Crie sua conta';
 $string['step2text'] = 'Aulas ao vivo com o chat aberto, gravadas para revisar depois.';
