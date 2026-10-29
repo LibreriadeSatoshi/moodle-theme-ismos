@@ -61,6 +61,8 @@ $string['factlive'] = 'Live';
 $string['factlivelabel'] = 'and recorded to review';
 $string['facts'] = 'Facts';
 $string['factstudents'] = 'students in the school';
+$string['finalabout'] = 'Courses are one part of ISMOS, which also runs programs, residencies and fellowships.';
+$string['finalaboutlink'] = 'Visit ismos.xyz';
 $string['finalcta'] = 'Create a free account';
 $string['finalheading'] = 'Your first class starts here.';
 $string['forgotshort'] = 'Forgot it?';
@@ -113,6 +115,7 @@ $string['signuplead'] = 'Create your account in a minute. You don\'t need to kno
 $string['signupline'] = 'Freedom Tech,
 in your own language.';
 $string['sitenews'] = 'Site news';
+$string['siteurl'] = 'https://ismos.xyz/en';
 $string['step1text'] = 'With your email or the account you already use. One minute.';
 $string['step1title'] = 'Create your account';
 $string['step2text'] = 'Live classes with the chat open, recorded so you can review them later.';

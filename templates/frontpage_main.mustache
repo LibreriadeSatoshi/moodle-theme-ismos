@@ -28,7 +28,7 @@
     * calendar, hascalendar - day, month, year, name, category, code, hascode, url
     * steps - number ("01"), title, text, and one of form, room, cert for its drawing
     * testimonials, hastestimonials - quote and name
-    * final - heading, cta, url
+    * final - heading, cta, url, about, aboutlink, siteurl (the ISMOS site in the current language)
     * hasextra, section1, content - HTML of the other front page parts, empty when there is none
 
     Example context (json):
@@ -73,7 +73,7 @@
         "steps": [{"number": "01", "title": "Create your account", "text": "One minute.", "form": true}],
         "hastestimonials": true,
         "testimonials": [{"quote": "A beautiful experience.", "name": "Joni, from Argentina"}],
-        "final": {"heading": "Your first class starts here.", "cta": "Create a free account", "url": "/login/signup.php"}
+        "final": {"heading": "Your first class starts here.", "cta": "Create a free account", "url": "/login/signup.php", "about": "Courses are one part of ISMOS, which also runs programs, residencies and fellowships.", "aboutlink": "Visit ismos.xyz", "siteurl": "https://ismos.xyz/en"}
     }
 }}
 {{#hero}}
@@ -232,7 +232,10 @@
 {{#final}}
 <section class="ismos-final" aria-labelledby="ismos-final-title">
     <div class="ismos-frontpage-column ismos-final__inner">
-        <h2 id="ismos-final-title">{{heading}}</h2>
+        <div class="ismos-final__copy">
+            <h2 id="ismos-final-title">{{heading}}</h2>
+            <p class="ismos-final__about">{{about}} <a href="{{siteurl}}" target="_blank" rel="noopener">{{aboutlink}}<span aria-hidden="true"> ↗</span><span class="visually-hidden"> {{#str}}opensinnewwindowbracketed, core{{/str}}</span></a></p>
+        </div>
         <a class="ismos-final__btn" href="{{{url}}}">{{cta}}</a>
     </div>
 </section>

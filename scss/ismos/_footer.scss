@@ -44,6 +44,15 @@
         inline-size: 20px;
     }
 
+    // The address is the link to the ISMOS site: underlined on hover only, like the brand it sits next to.
+    a.ismos-footer-address {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     .ismos-footer-address {
         font-family: var(--ismos-font-mono);
         font-size: 13px;

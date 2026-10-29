@@ -233,6 +233,13 @@ final class landing_test extends \advanced_testcase {
         $this->assertSame(get_string('herocta', 'theme_ismos'), $final['cta']);
     }
 
+    public function test_final_band_links_to_the_ismos_site_in_the_current_language(): void {
+        $this->resetAfterTest();
+        $final = (new frontpage())->export_for_template($this->get_renderer())['final'];
+        $this->assertSame('https://ismos.xyz/en', $final['siteurl']);
+        $this->assertSame(get_string('finalaboutlink', 'theme_ismos'), $final['aboutlink']);
+    }
+
     public function test_steps_and_copy_strings(): void {
         $this->resetAfterTest();
         $data = (new frontpage())->export_for_template($this->get_renderer());
