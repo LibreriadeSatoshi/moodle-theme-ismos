@@ -1,0 +1,297 @@
+// Overlays that Boost paints with fixed light greys at compile time: form controls inside modals, dropdown items,
+// tooltips, the activity chooser and the YUI dialogs (file picker, file manager). Everything reads the tokens, so
+// one rule serves light and Hacker mode. Modal, dropdown and popover grounds live in _base.scss and _hacker.scss.
+//
+// Only monochrome glyphs take --ismos-icon-filter (the YUI close button). Repository icons, file-type icons,
+// path-bar folders and branded activity icons keep their own colours.
+//
+// Regression check after any change here, in both modes: 1. a Bootstrap modal (course settings), 2. the activity
+// chooser tabs (hover and active), 3. the file picker (active repository and hover), 4. an activity card hover in
+// Firefox and 5. the course index hover and current item (both in _course.scss).
+
+// Form controls inside modals and YUI dialogs: input ground and edge from the tokens, not Boost's white.
+:is(.modal, .moodle-dialogue-base) {
+    .form-control,
+    .form-select,
+    .custom-select,
+    textarea,
+    .input-group-text {
+        background-color: var(--ismos-input-bg);
+        border-color: var(--ismos-border-input);
+        color: var(--ismos-text);
+    }
+
+    .form-control::placeholder {
+        color: var(--ismos-text-muted);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--ismos-focus);
+        box-shadow: 0 0 0 .2rem rgba(var(--ismos-link-rgb), .35);
+    }
+
+    label,
+    legend,
+    .form-label,
+    .col-form-label {
+        color: var(--ismos-text);
+    }
+
+    .form-text {
+        color: var(--ismos-text-muted);
+    }
+
+    ::selection {
+        background: var(--ismos-selection-bg);
+        color: var(--ismos-selection-text);
+    }
+}
+
+// Dropdown items and tooltips.
+.dropdown-menu {
+    --bs-dropdown-color: var(--ismos-text);
+    --bs-dropdown-link-color: var(--ismos-text);
+    --bs-dropdown-link-hover-bg: var(--ismos-hover-bg);
+    --bs-dropdown-link-hover-color: var(--ismos-text);
+    --bs-dropdown-link-active-bg: var(--ismos-active-bg);
+    --bs-dropdown-link-active-color: var(--ismos-on-active);
+    --bs-dropdown-divider-bg: var(--ismos-hairline);
+    --bs-dropdown-header-color: var(--ismos-text-muted);
+}
+
+.tooltip-inner {
+    background-color: var(--ismos-text);
+    color: var(--ismos-surface);
+}
+
+// Activity chooser: Boost bakes $gray-100 and $white into the body, the option cards and the help panel, and
+// paints the purpose tabs black on hover. Option cards and the help panel sit on the raised surface; tabs take
+// the hover ground and the active tab the selected colours.
+.modchooser {
+    .modal-body,
+    .carousel-item,
+    .optionsummary,
+    .searchresultscontainer {
+        background-color: var(--ismos-overlay-bg);
+        color: var(--ismos-text);
+    }
+
+    .option {
+        background-color: var(--ismos-surface-raised);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+
+        .optionname,
+        .optioninfo,
+        .optioninfo a {
+            color: var(--ismos-text);
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+            background-color: var(--ismos-hover-bg);
+            box-shadow: 0 0 0 2px var(--ismos-focus) inset;
+        }
+
+        .optionaction,
+        .optionaction:hover,
+        .optionaction:focus {
+            background-color: transparent;
+            color: var(--ismos-text);
+        }
+    }
+
+    .optionsummary {
+        .optionsummaryheader,
+        .optionsummaryfooter {
+            border-color: var(--ismos-hairline);
+        }
+    }
+
+    .searchbar .form-control,
+    .searchbar .input-group-text {
+        background-color: var(--ismos-input-bg);
+        border-color: var(--ismos-border-input);
+        color: var(--ismos-text);
+    }
+
+    .modchoosernav {
+        .nav-link {
+            --bs-nav-link-color: var(--ismos-text-muted);
+            --bs-nav-link-hover-color: var(--ismos-text);
+            background-color: transparent;
+            border-color: transparent;
+
+            &:hover,
+            &:focus,
+            &:focus-visible {
+                background-color: var(--ismos-hover-bg);
+                color: var(--ismos-text);
+            }
+        }
+
+        .nav-link.active {
+            --bs-nav-pills-link-active-bg: var(--ismos-active-bg);
+            --bs-nav-pills-link-active-color: var(--ismos-on-active);
+        }
+
+        hr {
+            border-color: var(--ismos-hairline);
+        }
+    }
+}
+
+// YUI dialogs: the file picker, the file manager and the legacy confirm boxes. Boost writes these colours in
+// its own partial with literal greys, outside the Bootstrap variables.
+.moodle-dialogue-base {
+    .moodle-dialogue-wrap {
+        background-color: var(--ismos-overlay-bg);
+        border-color: var(--ismos-modal-edge);
+        color: var(--ismos-text);
+    }
+
+    .moodle-dialogue-hd {
+        background-color: var(--ismos-surface-raised);
+        border-bottom-color: var(--ismos-hairline);
+        color: var(--ismos-text-heading);
+
+        .closebutton {
+            filter: var(--ismos-icon-filter);
+        }
+    }
+
+    .moodle-dialogue-bd,
+    .moodle-dialogue-ft {
+        background-color: var(--ismos-overlay-bg);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+}
+
+// File picker.
+.file-picker {
+    &,
+    .fp-content,
+    .fp-navbar,
+    .fp-toolbar,
+    .fp-viewbar,
+    .fp-content-center,
+    .fp-login-form,
+    .fp-upload-form,
+    .fp-setlicense,
+    .fp-select,
+    .fp-formset {
+        background-color: var(--ismos-overlay-bg);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    // Repository list and path bar: one step up from the dialog ground.
+    .fp-repo-area,
+    .fp-pathbar {
+        background-color: var(--ismos-surface-raised);
+        border-color: var(--ismos-hairline);
+    }
+
+    .fp-repo {
+        background-color: transparent;
+        border-color: transparent;
+
+        .nav-link {
+            --bs-nav-link-color: var(--ismos-text);
+            --bs-nav-link-hover-color: var(--ismos-text);
+            background-color: transparent;
+            color: var(--ismos-text);
+
+            &:hover,
+            &:focus {
+                background-color: var(--ismos-hover-bg);
+            }
+        }
+
+        .fp-repo-name {
+            color: var(--ismos-text);
+        }
+
+        &.active,
+        &.active .nav-link,
+        .nav-link.active {
+            --bs-nav-pills-link-active-bg: var(--ismos-active-bg);
+            --bs-nav-pills-link-active-color: var(--ismos-on-active);
+            background-color: var(--ismos-active-bg);
+            color: var(--ismos-on-active);
+
+            .fp-repo-name {
+                color: var(--ismos-on-active);
+            }
+        }
+    }
+
+    .fp-pathbar {
+        .fp-path-folder a {
+            color: var(--ismos-link);
+        }
+
+        .fp-path-folder-name {
+            color: var(--ismos-text-muted);
+        }
+    }
+
+    .fp-iconview .fp-file,
+    .fp-tableview td,
+    .fp-tableview th,
+    .fp-list .fp-file {
+        background-color: transparent;
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+
+        &:hover {
+            background-color: var(--ismos-hover-bg);
+        }
+    }
+
+    .fp-filename,
+    .fp-filename-field,
+    .fp-info,
+    .fp-fileinfo,
+    label {
+        color: var(--ismos-text);
+    }
+
+    input[type="text"],
+    select,
+    textarea,
+    .form-control {
+        background-color: var(--ismos-input-bg);
+        border-color: var(--ismos-border-input);
+        color: var(--ismos-text);
+    }
+}
+
+// File manager (the Files field on forms).
+.filemanager {
+    .filemanager-container,
+    .fp-content,
+    .fp-navbar,
+    .fp-pathbar,
+    .fp-toolbar {
+        background-color: var(--ismos-overlay-bg);
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    .fp-iconview .fp-file,
+    .fp-tableview td {
+        border-color: var(--ismos-hairline);
+        color: var(--ismos-text);
+    }
+
+    .fp-btn-add a,
+    .fp-btn-mkdir a,
+    .fp-btn-download a,
+    .fp-btn-delete a {
+        color: var(--ismos-link);
+    }
+}
