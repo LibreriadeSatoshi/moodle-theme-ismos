@@ -90,6 +90,11 @@
     --ismos-disabled: var(--ismos-logwood-600);
     --ismos-card-bg: var(--ismos-paper);
     --ismos-input-bg: var(--ismos-paper);
+    // Hover ground and the selected item (chooser tabs, file picker repositories, course index) in overlays
+    // and drawers.
+    --ismos-hover-bg: var(--ismos-logwood-100);
+    --ismos-active-bg: var(--ismos-ink);
+    --ismos-on-active: var(--ismos-paper);
     --ismos-surface-rgb: 255, 255, 255;
     --ismos-text-rgb: 0, 0, 0;
     --ismos-muted-rgb: 84, 66, 129;
@@ -182,6 +187,9 @@
     --ismos-disabled: var(--ismos-logwood-400);
     --ismos-card-bg: var(--ismos-logwood);
     --ismos-input-bg: var(--ismos-logwood);
+    --ismos-hover-bg: var(--ismos-logwood-900);
+    --ismos-active-bg: var(--ismos-mauveine-200);
+    --ismos-on-active: var(--ismos-ink);
     --ismos-surface-rgb: 0, 0, 0;
     --ismos-text-rgb: 255, 255, 255;
     --ismos-muted-rgb: 223, 216, 251;

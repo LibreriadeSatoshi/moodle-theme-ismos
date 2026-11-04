@@ -96,6 +96,48 @@
     background-color: transparent;
 }
 
+// Firefox repaints a filtered img black when its activity card is hovered; a compositing layer avoids it.
+.activityiconcontainer:not(.isbranded) .activityicon:not(.nofilter) {
+    transform: translateZ(0);
+    transition: none;
+    will-change: filter;
+}
+
+// Course index (left drawer): Boost fixes $gray-100 and $body-color on hover and the current item, so the hover
+// ground and the selected colours come from the tokens.
+.courseindex {
+    .courseindex-link,
+    .courseindex-section-title,
+    .courseindex-chevron,
+    .completioninfo {
+        color: var(--ismos-text);
+    }
+
+    .courseindex-item:hover,
+    .courseindex-item:focus-within,
+    .courseindex-section-title:hover {
+        background-color: var(--ismos-hover-bg);
+        color: var(--ismos-text);
+
+        .courseindex-link,
+        .courseindex-chevron,
+        .icon {
+            color: var(--ismos-text);
+        }
+    }
+
+    .courseindex-item.pageitem,
+    .courseindex-item.pageitem:hover {
+        background-color: var(--ismos-active-bg);
+
+        .courseindex-link,
+        .courseindex-chevron,
+        .icon {
+            color: var(--ismos-on-active);
+        }
+    }
+}
+
 // Drawer toggles: square, 4 px corners, surface ground and a visible edge.
 .drawer-toggles .drawer-toggler .btn {
     background-color: var(--ismos-surface);
