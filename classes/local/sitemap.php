@@ -19,29 +19,69 @@ namespace theme_ismos\local;
 /**
  * The XML sitemap (sitemaps.org 0.9) that robots.txt points search engines to.
  *
- * Lists the catalogue and each visible course's public information page (/course/info.php). The catalogue
- * links courses to /course/view.php, which sends a visitor who is not signed in to the login page, so this is
- * how search engines find the course descriptions. The list is the same whoever requests it: it reads
- * visibility from the database, not from the current user's view.
+ * Lists the pages a visitor who is not signed in can open and that belong in search results: the landing, the
+ * catalogue and its level pages, and each listable course's public information page (/course/info.php). A
+ * visitor who is not signed in is sent from /course/view.php to the login page, so the information page is
+ * where search engines learn about a course. The list is the same whoever requests it: it is computed for a
+ * visitor who is not signed in, not for the current user.
+ *
+ * Served from the site root (public/sitemap.php in the campus repository), so it may list any URL on the site.
  *
  * @package   theme_ismos
  * @copyright 2026 ISMOS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sitemap {
+    /** @var string Capability /course/info.php checks in the course's category. */
+    private const LISTCAPABILITY = 'moodle/category:viewcourselist';
+
+    /**
+     * Whether the site has public pages to list: not when everyone must sign in, nor during maintenance.
+     *
+     * @return bool
+     */
+    public static function available(): bool {
+        global $CFG;
+        return empty($CFG->forcelogin) && empty($CFG->maintenance_enabled);
+    }
+
+    /**
+     * Send the sitemap, or 404 when the site requires login and 503 during maintenance.
+     */
+    public static function serve(): void {
+        global $CFG;
+        if (!self::available()) {
+            if (!empty($CFG->maintenance_enabled)) {
+                http_response_code(503);
+                header('Retry-After: 3600');
+            } else {
+                http_response_code(404);
+            }
+            return;
+        }
+        header('Content-Type: application/xml; charset=utf-8');
+        header('Cache-Control: public, max-age=3600');
+        echo self::xml();
+    }
+
     /**
      * The sitemap document.
      *
      * @return string XML
      */
     public static function xml(): string {
+        $courses = self::courses();
         $xml = new \XMLWriter();
         $xml->openMemory();
         $xml->startDocument('1.0', 'UTF-8');
         $xml->startElement('urlset');
         $xml->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        self::url($xml, new \moodle_url('/'));
         self::url($xml, new \moodle_url('/course/index.php'));
-        foreach (self::courses() as $course) {
+        foreach (self::categories($courses) as $categoryid) {
+            self::url($xml, new \moodle_url('/course/index.php', ['categoryid' => $categoryid]));
+        }
+        foreach ($courses as $course) {
             self::url($xml, new \moodle_url('/course/info.php', ['id' => $course->id]), (int) $course->timemodified);
         }
         $xml->endElement();
@@ -50,21 +90,45 @@ class sitemap {
     }
 
     /**
-     * Visible courses in visible categories, the front page course excluded. Hiding a category hides its
-     * subcategories too (their visible flag is cleared), so checking the course's own category is enough.
+     * Courses whose information page a visitor who is not signed in can open: visible, in a visible category,
+     * and listable there. Hiding a category hides its subcategories too (their visible flag is cleared), so
+     * checking the course's own category is enough.
      *
-     * @return \stdClass[] id and timemodified
+     * @return \stdClass[] id, category, category path and timemodified, by course id
      */
     private static function courses(): array {
         global $DB;
-        return $DB->get_records_sql(
-            'SELECT c.id, c.timemodified
+        $courses = $DB->get_records_sql(
+            'SELECT c.id, c.category, c.timemodified, cc.path
                FROM {course} c
                JOIN {course_categories} cc ON cc.id = c.category
               WHERE c.id <> :siteid AND c.visible = 1 AND cc.visible = 1
            ORDER BY c.id',
             ['siteid' => SITEID]
         );
+        $listable = [];
+        return array_filter($courses, function (\stdClass $course) use (&$listable): bool {
+            // User 0 is the visitor who is not signed in (the not-logged-in role).
+            return $listable[$course->category] ??= has_capability(self::LISTCAPABILITY,
+                \context_coursecat::instance($course->category), 0);
+        });
+    }
+
+    /**
+     * Catalogue pages worth listing: the categories holding listed courses and the levels above them.
+     *
+     * @param \stdClass[] $courses as from courses()
+     * @return int[] category ids
+     */
+    private static function categories(array $courses): array {
+        $ids = [];
+        foreach ($courses as $course) {
+            foreach (explode('/', trim((string) $course->path, '/')) as $id) {
+                $ids[(int) $id] = (int) $id;
+            }
+        }
+        ksort($ids);
+        return array_values($ids);
     }
 
     /**

@@ -87,4 +87,51 @@ final class sitemap_test extends \advanced_testcase {
 
         $this->assertNotContains($CFG->wwwroot . '/course/info.php?id=' . $SITE->id, $this->urls());
     }
+
+    public function test_lists_the_landing_and_the_catalogue_pages_of_levels_with_courses(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        $level = $this->getDataGenerator()->create_category();
+        $sub = $this->getDataGenerator()->create_category(['parent' => $level->id]);
+        $empty = $this->getDataGenerator()->create_category();
+        $this->getDataGenerator()->create_course(['category' => $sub->id]);
+
+        $urls = $this->urls();
+
+        $this->assertContains($CFG->wwwroot . '/', $urls);
+        $this->assertContains($CFG->wwwroot . '/course/index.php?categoryid=' . $sub->id, $urls);
+        $this->assertContains($CFG->wwwroot . '/course/index.php?categoryid=' . $level->id, $urls);
+        $this->assertNotContains($CFG->wwwroot . '/course/index.php?categoryid=' . $empty->id, $urls);
+    }
+
+    public function test_a_category_whose_courses_the_public_may_not_list_is_left_out(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        $open = $this->getDataGenerator()->create_category();
+        $private = $this->getDataGenerator()->create_category();
+        $listed = $this->getDataGenerator()->create_course(['category' => $open->id]);
+        $unlisted = $this->getDataGenerator()->create_course(['category' => $private->id]);
+        // /course/info.php needs moodle/category:viewcourselist for a visitor who is not signed in.
+        assign_capability('moodle/category:viewcourselist', CAP_PROHIBIT, $CFG->notloggedinroleid,
+            \context_coursecat::instance($private->id)->id, true);
+
+        $urls = $this->urls();
+
+        $this->assertContains($CFG->wwwroot . '/course/info.php?id=' . $listed->id, $urls);
+        $this->assertNotContains($CFG->wwwroot . '/course/info.php?id=' . $unlisted->id, $urls);
+        $this->assertNotContains($CFG->wwwroot . '/course/index.php?categoryid=' . $private->id, $urls);
+    }
+
+    public function test_there_is_no_sitemap_when_the_site_requires_login_or_is_in_maintenance(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        $this->assertTrue(sitemap::available());
+
+        $CFG->forcelogin = 1;
+        $this->assertFalse(sitemap::available());
+        $CFG->forcelogin = 0;
+
+        set_config('maintenance_enabled', 1);
+        $this->assertFalse(sitemap::available());
+    }
 }

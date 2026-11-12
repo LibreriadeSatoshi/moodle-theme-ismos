@@ -450,7 +450,7 @@ final class catalogue {
         $image = $images[(int) $course->id] ?? '';
         $code = landing::language_code((string) $course->lang);
         return [
-            'url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
+            'url' => card::course_url((int) $course->id),
             'image' => $image,
             'hasimage' => $image !== '',
             'name' => format_string($course->fullname, true, ['context' => $context, 'escape' => false]),

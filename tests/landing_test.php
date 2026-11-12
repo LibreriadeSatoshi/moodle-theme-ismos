@@ -66,7 +66,8 @@ final class landing_test extends \advanced_testcase {
         $this->assertSame('Bitcoin Dev', $next['category']);
         $this->assertSame('2 enrolled', $next['enrolled']);
         $this->assertSame('PT', $next['code']);
-        $this->assertStringEndsWith('/course/view.php?id=' . $soon->id, $next['url']);
+        // Not signed in: the card leads to the course description, not to the login page.
+        $this->assertStringEndsWith('/course/info.php?id=' . $soon->id, $next['url']);
         $this->assertLessThanOrEqual(143, \core_text::strlen($next['summary']));
         $this->assertStringNotContainsString('<', $next['summary']);
         $this->assertNotEquals($hidden->id, $soon->id);
