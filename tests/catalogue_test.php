@@ -283,6 +283,57 @@ final class catalogue_test extends \advanced_testcase {
         $this->assertSame('', $PAGE->get_renderer('core', null, RENDERER_TARGET_GENERAL)->full_header());
     }
 
+    public function test_the_catalogue_page_has_a_title_for_browsers_and_search_engines(): void {
+        global $PAGE, $SITE;
+        $this->resetAfterTest();
+        $PAGE->set_course($SITE);
+        $PAGE->set_url('/course/index.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->set_pagetype('course-index-category');
+        $PAGE->force_theme('ismos');
+        $this->setGuestUser();
+        [$one] = $this->setup_levels();
+        $this->course('Visible', $one, 1);
+
+        $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL)->course_category(0);
+
+        $this->assertSame('All courses | ' . get_site()->shortname, $PAGE->title);
+    }
+
+    public function test_a_level_page_is_titled_with_the_level_name(): void {
+        global $PAGE, $SITE;
+        $this->resetAfterTest();
+        $PAGE->set_course($SITE);
+        $PAGE->set_url('/course/index.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->set_pagetype('course-index-category');
+        $PAGE->force_theme('ismos');
+        $this->setGuestUser();
+        [$one] = $this->setup_levels();
+        $this->course('Visible', $one, 1);
+
+        $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL)->course_category($one->id);
+
+        $this->assertSame('One | ' . get_site()->shortname, $PAGE->title);
+    }
+
+    public function test_a_level_name_with_an_ampersand_is_escaped_once_in_the_title(): void {
+        global $PAGE, $SITE;
+        $this->resetAfterTest();
+        $PAGE->set_course($SITE);
+        $PAGE->set_url('/course/index.php');
+        $PAGE->set_context(\context_system::instance());
+        $PAGE->set_pagetype('course-index-category');
+        $PAGE->force_theme('ismos');
+        $this->setGuestUser();
+        $level = $this->getDataGenerator()->create_category(['name' => 'AI & Skills']);
+        $this->course('Visible', $level, 1);
+
+        $PAGE->get_renderer('core', 'course', RENDERER_TARGET_GENERAL)->course_category($level->id);
+
+        $this->assertSame('AI &amp; Skills | ' . get_site()->shortname, $PAGE->title);
+    }
+
     public function test_search_lists_the_matching_visible_courses_in_catalogue_order(): void {
         $this->resetAfterTest();
         $this->setAdminUser();

@@ -25,6 +25,20 @@ namespace theme_ismos\local;
  */
 final class card {
     /**
+     * Where a course card, or a link to a course in a list, takes the current visitor.
+     *
+     * Not signed in (or as guest), /course/view.php only leads to the login page, so the visitor (and a search
+     * engine) gets the course's public information page instead; a signed-in user goes to the course.
+     *
+     * @param int $courseid
+     * @return string URL
+     */
+    public static function course_url(int $courseid): string {
+        $page = (!isloggedin() || isguestuser()) ? '/course/info.php' : '/course/view.php';
+        return (new \moodle_url($page, ['id' => $courseid]))->out(false);
+    }
+
+    /**
      * Export a course for the card template.
      *
      * @param \core_course_list_element $course
@@ -41,7 +55,7 @@ final class card {
             'uid' => 'ismos-card-' . $course->id . '-' . \html_writer::random_id(),
             'hidden' => !$course->visible,
             'hiddenlabel' => get_string('hiddenfromstudents'),
-            'url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
+            'url' => self::course_url((int) $course->id),
             'title' => format_string($course->fullname, true, ['context' => $context]),
             'label' => $category ? format_string($category->name, true, ['context' => $category->get_context(), 'escape' => false]) : '',
             'image' => self::cover($course),

@@ -86,7 +86,23 @@ final class course_card_test extends \advanced_testcase {
         return $user;
     }
 
+    public function test_a_visitor_who_is_not_signed_in_is_sent_to_the_course_description(): void {
+        // Not signed in, /course/view.php ends at the login page; the information page shows the course.
+        $course = $this->getDataGenerator()->create_course();
+        $this->setUser(null);
+        $this->assertStringEndsWith('/course/info.php?id=' . $course->id, card::course_url($course->id));
+        $this->setGuestUser();
+        $this->assertStringEndsWith('/course/info.php?id=' . $course->id, card::course_url($course->id));
+    }
+
+    public function test_a_signed_in_user_is_sent_to_the_course(): void {
+        $course = $this->getDataGenerator()->create_course();
+        $this->setUser($this->getDataGenerator()->create_user());
+        $this->assertStringEndsWith('/course/view.php?id=' . $course->id, card::course_url($course->id));
+    }
+
     public function test_card_has_category_label_title_and_link(): void {
+        $this->setUser($this->getDataGenerator()->create_user());
         $cat = $this->getDataGenerator()->create_category(['name' => 'Privacy']);
         $course = $this->getDataGenerator()->create_course([
             'fullname' => 'Running a node', 'category' => $cat->id, 'summary' => '<p>Run your <b>own</b> node.</p>',

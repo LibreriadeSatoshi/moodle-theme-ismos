@@ -158,7 +158,7 @@ final class landing {
             // A zero count reads as "nobody is coming", so the card only shows it once someone has enrolled.
             'enrolled' => $enrolled > 0 ? get_string('enrolledcount', 'theme_ismos', $enrolled) : null,
             'code' => $course['code'],
-            'url' => (new \moodle_url('/course/view.php', ['id' => $course['id']]))->out(false),
+            'url' => card::course_url((int) $course['id']),
         ];
     }
 
@@ -221,7 +221,7 @@ final class landing {
             $own = $owncourses[$index];
             $names = [];
             foreach ($this->order_for_path($own) as $course) {
-                $names[] = ['name' => $this->course_name($course), 'url' => (new \moodle_url('/course/view.php', ['id' => $course['id']]))->out(false)];
+                $names[] = ['name' => $this->course_name($course), 'url' => card::course_url((int) $course['id'])];
             }
             $description = '';
             if (!empty($category->description)) {
@@ -271,7 +271,7 @@ final class landing {
                 'category' => format_string($course['catname'], true, ['context' => \context_course::instance($course['id']), 'escape' => false]),
                 'code' => $course['code'],
                 'hascode' => $course['code'] !== '',
-                'url' => (new \moodle_url('/course/view.php', ['id' => $course['id']]))->out(false),
+                'url' => card::course_url((int) $course['id']),
             ];
         }
         return $rows;
