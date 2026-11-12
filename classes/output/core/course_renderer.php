@@ -154,6 +154,8 @@ class course_renderer extends \core_course_renderer {
         $id = is_object($category) ? (int) $category->id : (int) $category;
         $data = (new \theme_ismos\local\catalogue())->export($id);
         $data['label'] = get_string('courses', 'theme_ismos');
+        // Core's course_category() titles the page; this replacement must too, or <title> is left empty.
+        $this->page->set_title($data['title']);
         return $this->output->render_from_template('theme_ismos/catalogue', $data);
     }
 
